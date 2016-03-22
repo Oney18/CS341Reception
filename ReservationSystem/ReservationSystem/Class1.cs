@@ -13,10 +13,11 @@ namespace ReservationSystem
         private String name;
         private String specialReq;
         private int phoneNum;
+        private int tableNum;
         private DateTime arrivalTime;
         private DateTime seatedTime;
         private DateTime reservationTime;
-        private DateTime cleanTime;
+        private DateTime leaveTime;
 
         public Party(int partySize, String name, String specialReq, int phoneNum)
         {
@@ -70,14 +71,25 @@ namespace ReservationSystem
             return arrivalTime.ToString("t");
         }
 
-        public void seat()
+        public void seat(int num)
         {
             seatedTime = DateTime.Now;
+            tableNum = num;
         }
 
         public String getSeatedTime()
         {
             return seatedTime.ToString("t");
+        }
+
+        public void leave()
+        {
+            leaveTime = DateTime.Now;
+        }
+
+        public String getLeaveTime()
+        {
+            return leaveTime.ToString("t");
         }
 
         public DateTime getResTime()
@@ -90,16 +102,21 @@ namespace ReservationSystem
 
     class ReservationSystem
     {
-        //private FloorPlan floorPlan;
+        private Table[] tableList;
         private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
         private ArrayList reservations;
 
-        public ReservationSystem()
+        public ReservationSystem(int num)
         {
             reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
             reservations = new ArrayList();
+            tableList = new Table[num];
+            for(int i = 0; i < num; i++)
+            {
+                tableList[i] = new Table(i);
+            }
         }
 
         public void addReservation(int partySize, String name, String specialReq, int phoneNum, int month, int day, int hour, int minute)
@@ -159,6 +176,46 @@ namespace ReservationSystem
             return null;
         }
 
+    }
+
+    class Table
+    {
+        private bool inUse;
+        private int peopleSeated;
+        private bool ableToBeSeated;
+        private Party partySeated;
+        private int tableNum;
+        static public int SIZE_OF_TABLE = 4;
+
+        public Table(int num)
+        {
+            this.tableNum = num;
+            inUse = false;
+            ableToBeSeated = true;
+            partySeated = null;
+        }
+
+        public void seat(Party p)
+        {
+            if (ableToBeSeated)
+            {
+                this.partySeated = p;
+                p.seat(this.tableNum);
+                inUse = true;
+                ableToBeSeated = false;
+            }
+        }
+
+        public void leave()
+        {
+            this.partySeated = null;
+            inUse = false;
+        }
+
+        public void clean()
+        {
+            if(!inUse) ableToBeSeated = true;
+        }
 
 
     }
