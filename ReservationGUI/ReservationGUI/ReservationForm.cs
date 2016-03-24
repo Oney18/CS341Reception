@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace ReservationGUI
 {
-    public partial class Form1 : Form
+    public partial class ReservationsForm : Form
     {
-        public Form1()
+        public ReservationsForm()
         {
             InitializeComponent();
+        }
+
+        private void ReservationsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
