@@ -21,20 +21,5 @@ namespace ReservationGUI
         {
             
         }
-
-        private void table11GroupBox_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox14_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void table1GroupBox_Enter(object sender, EventArgs e)
-        {
-            
-        }
     }
 }
