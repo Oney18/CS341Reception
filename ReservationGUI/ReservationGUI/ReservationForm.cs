@@ -31,28 +31,32 @@ namespace ReservationGUI
 
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            int walkIn = 0;
-            int reservation = 1;
-            int takeOut = 2;
+            //set constants for party type
+            int WALKIN = 0;        
+            int RESERVATION = 1;
+            int TAKEOUT = 2;
+
+            //variable to hold party type
             int partyType = -1;
 
-
+            //update party type
             if(walkInRadioButton.Checked)
             {
-                partyType = walkIn;
+                partyType = WALKIN;
             }
             else if (reservationRadioButton.Checked)
             {
-                partyType = reservation;
+                partyType = RESERVATION;
             }
             else if (takeOutRadioButton.Checked)
             {
-                partyType = takeOut;
+                partyType = TAKEOUT;
             }
 
+            //create party
             Party currentParty = new Party(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text, partyType);          
 
-            partyListBox.Items.Add(partyName); //add party to list
+           // partyListBox.Items.Add(partyName); //add party to list
         }
 
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)
