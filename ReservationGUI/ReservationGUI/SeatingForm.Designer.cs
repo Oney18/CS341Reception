@@ -273,6 +273,7 @@
             this.table2GroupBox.TabIndex = 6;
             this.table2GroupBox.TabStop = false;
             this.table2GroupBox.Text = "Table 2";
+            this.table2GroupBox.MouseCaptureChanged += new System.EventHandler(this.table2GroupBox_click);
             // 
             // requestsTextBox2
             // 
@@ -342,6 +343,7 @@
             this.table3GroupBox.TabIndex = 7;
             this.table3GroupBox.TabStop = false;
             this.table3GroupBox.Text = "Table 3";
+            this.table3GroupBox.MouseCaptureChanged += new System.EventHandler(this.table3GroupBox_click);
             // 
             // requestsTextBox3
             // 
@@ -411,6 +413,7 @@
             this.table4GroupBox.TabIndex = 7;
             this.table4GroupBox.TabStop = false;
             this.table4GroupBox.Text = "Table 4";
+            this.table4GroupBox.MouseCaptureChanged += new System.EventHandler(this.table4GroupBox_click);
             // 
             // requestsTextBox4
             // 
@@ -480,6 +483,7 @@
             this.table8GroupBox.TabIndex = 10;
             this.table8GroupBox.TabStop = false;
             this.table8GroupBox.Text = "Table 8";
+            this.table8GroupBox.MouseCaptureChanged += new System.EventHandler(this.table8GroupBox_click);
             // 
             // requestsTextBox8
             // 
@@ -549,6 +553,7 @@
             this.table7GroupBox.TabIndex = 11;
             this.table7GroupBox.TabStop = false;
             this.table7GroupBox.Text = "Table 7";
+            this.table7GroupBox.MouseCaptureChanged += new System.EventHandler(this.table7GroupBox_click);
             // 
             // requestsTextBox7
             // 
@@ -618,6 +623,7 @@
             this.table6GroupBox.TabIndex = 9;
             this.table6GroupBox.TabStop = false;
             this.table6GroupBox.Text = "Table 6";
+            this.table6GroupBox.MouseCaptureChanged += new System.EventHandler(this.table6GroupBox_click);
             // 
             // requestsTextBox6
             // 
@@ -687,6 +693,7 @@
             this.table5GroupBox.TabIndex = 8;
             this.table5GroupBox.TabStop = false;
             this.table5GroupBox.Text = "Table 5";
+            this.table5GroupBox.MouseCaptureChanged += new System.EventHandler(this.table5GroupBox_click);
             // 
             // requestsTextBox5
             // 
@@ -756,6 +763,7 @@
             this.table12GroupBox.TabIndex = 14;
             this.table12GroupBox.TabStop = false;
             this.table12GroupBox.Text = "Table 12";
+            this.table12GroupBox.MouseCaptureChanged += new System.EventHandler(this.table12GroupBox_click);
             // 
             // requestsTextBox12
             // 
@@ -825,6 +833,7 @@
             this.table11GroupBox.TabIndex = 15;
             this.table11GroupBox.TabStop = false;
             this.table11GroupBox.Text = "Table 11";
+            this.table11GroupBox.MouseCaptureChanged += new System.EventHandler(this.table11GroupBox_click);
             // 
             // requestsTextBox11
             // 
@@ -894,6 +903,7 @@
             this.table10GroupBox.TabIndex = 13;
             this.table10GroupBox.TabStop = false;
             this.table10GroupBox.Text = "Table 10";
+            this.table10GroupBox.MouseCaptureChanged += new System.EventHandler(this.table10GroupBox_click);
             // 
             // requestsTextBox10
             // 
@@ -963,6 +973,7 @@
             this.table9GroupBox.TabIndex = 12;
             this.table9GroupBox.TabStop = false;
             this.table9GroupBox.Text = "Table 9";
+            this.table9GroupBox.MouseCaptureChanged += new System.EventHandler(this.table9GroupBox_click);
             // 
             // requestsTextBox9
             // 
@@ -1032,6 +1043,7 @@
             this.table16GroupBox.TabIndex = 18;
             this.table16GroupBox.TabStop = false;
             this.table16GroupBox.Text = "Table 16";
+            this.table16GroupBox.MouseCaptureChanged += new System.EventHandler(this.table16GroupBox_click);
             // 
             // requestsTextBox16
             // 
@@ -1101,6 +1113,7 @@
             this.table15GroupBox.TabIndex = 19;
             this.table15GroupBox.TabStop = false;
             this.table15GroupBox.Text = "Table 15";
+            this.table15GroupBox.MouseCaptureChanged += new System.EventHandler(this.table15GroupBox_click);
             // 
             // requestsTextBox15
             // 
@@ -1170,6 +1183,7 @@
             this.table14GroupBox.TabIndex = 17;
             this.table14GroupBox.TabStop = false;
             this.table14GroupBox.Text = "Table 14";
+            this.table14GroupBox.MouseCaptureChanged += new System.EventHandler(this.table14GroupBox_click);
             // 
             // requestsTextBox14
             // 
@@ -1239,6 +1253,7 @@
             this.table13GroupBox.TabIndex = 16;
             this.table13GroupBox.TabStop = false;
             this.table13GroupBox.Text = "Table 13";
+            this.table13GroupBox.MouseCaptureChanged += new System.EventHandler(this.table13GroupBox_click);
             // 
             // requestsTextBox13
             // 

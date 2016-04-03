@@ -15,6 +15,7 @@ namespace ReservationGUI
         private string pagerNum;
         private string phoneNum;
         private string tableNum;
+        private bool isSeated = false;
         private DateTime arrivalTime;
         private DateTime seatedTime;
         private DateTime reservationTime;
@@ -71,6 +72,11 @@ namespace ReservationGUI
             return phoneNum;
         }
 
+        public bool getIsSeated()
+        {
+            return isSeated;
+        }
+
         /**
          *  Called when a reservation arrives in restaurant
          *  Input is pager number given to the party
@@ -84,7 +90,8 @@ namespace ReservationGUI
         public void seat(int num)
         {
             seatedTime = DateTime.Now;
-            tableNum = num.ToString(); 
+            tableNum = num.ToString();
+            isSeated = true;
         }
 
         public void leave()
