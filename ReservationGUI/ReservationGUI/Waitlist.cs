@@ -61,7 +61,7 @@ namespace ReservationGUI
          *
          *  Only allows parties that are within one hour to be checked in
          **/
-        public void checkIn(String name)
+        public void checkIn(string name)
         {
             Party partyToCheck = null;
 
@@ -94,9 +94,9 @@ namespace ReservationGUI
         /**
          *  Constructor for adding a walk-in party
          **/
-        public void addWalkIn(int partySize, String name, String specialReq, int pagerNum)
+        public void addWalkIn(string partySize, string name, string specialReq, string pagerNum)
         {
-            walkIns.AddLast(new Party(partySize.ToString(), name, specialReq, pagerNum.ToString()));
+            walkIns.AddLast(new Party(partySize, name, specialReq, pagerNum));
         }
 
         public Party getNextParty()
