@@ -14,6 +14,7 @@ namespace ReservationGUI
         private int tableNum;
         static public int SIZE_OF_TABLE = 4;
 
+        //Constrcutor for the table
         public Table(int num)
         {
             this.tableNum = num;
@@ -21,6 +22,7 @@ namespace ReservationGUI
             partySeated = null;
         }
 
+        //Seats a given party to the table
         public void seat(Party p)
         {
             this.partySeated = p;
@@ -28,6 +30,7 @@ namespace ReservationGUI
             inUse = true;
         }
 
+        //Resets the table for use, updates party status
         public Party leave()
         {
             Party temp = partySeated;

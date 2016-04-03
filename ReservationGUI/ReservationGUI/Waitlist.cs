@@ -12,18 +12,20 @@ namespace ReservationGUI
         private Table[] tableList;
         private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
+        private LinkedList<Party> takeOut;
         private ArrayList reservations;
         private ArrayList pastReservations;
 
         /**
          *  Ctor for the waitlist
          *  
-         *  Inpout: Amount of tables in the restaraunt
+         *  Input: Amount of tables in the restaraunt
          **/
         public Waitlist(int num)
         {
             reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
+            takeOut = new LinkedList<Party>();
             reservations = new ArrayList();
             pastReservations = new ArrayList();
             tableList = new Table[num];
@@ -33,10 +35,23 @@ namespace ReservationGUI
             }
         }
 
-        public void addReservation(string partySize, string name, string specialReq, string phoneNum, int month, int day, int hour, int minute)
+
+        /**
+         * Constructor for adding a reservation
+         **/
+        public void addReservation(string partySize, string name, string specialReq, string phoneNum, int hour, int minute)
         {
             DateTime reservationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
             reservations.Add(new Party(partySize, name, specialReq, phoneNum, reservationTime));
+        }
+
+
+        /**
+         *  Constructor for adding in a takeout order
+         **/
+        public void addTakeOut(string name, string phoneNum)
+        {
+            takeOut.AddLast(new Party(name, phoneNum));
         }
 
 
@@ -147,7 +162,7 @@ namespace ReservationGUI
                 {
                     file.WriteLine(party.managementOutput());
                 }
-    }
+            }
         }
        
     }
