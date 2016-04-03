@@ -54,7 +54,7 @@ namespace ReservationGUI
                     reservationsPresent.AddLast(partyToCheck);
                     reservations.Remove(partyToCheck);
                 }
-                else Console.WriteLine("Party {0} cannot be checked in; more than 15 minutes out.", name);
+                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace ReservationGUI
 
         public void seatNextParty(int tableNum)
         {
-            if (tableList[tableNum].getAbleToBeSeated())
+            if (!tableList[tableNum].getInUse())
             {
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
@@ -98,7 +98,8 @@ namespace ReservationGUI
         {
             if (tableList[tableNum].getInUse())
             {
-                
+                Party temp = tableList[tableNum].leave();
+                pastReservations.Add(temp);
             }
         }
 
@@ -115,6 +116,21 @@ namespace ReservationGUI
             }
         }
 
+    }
 
+    class unitTest
+    {
+        public static void main(string[] args)
+        {
+            Waitlist wl = new Waitlist(16);
+            wl.addWalkIn(3, "Oney", "", 89);
+            wl.addWalkIn(2, "SOmebody", "", 5);
+            wl.seatNextParty(5);
+            wl.seatNextParty(3);
+            wl.resetTable(3);
+            wl.resetTable(5);
+            wl.ToManagement();
+        }
+       
     }
 }
