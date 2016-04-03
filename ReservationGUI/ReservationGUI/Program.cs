@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace ReservationGUI
 {
-    static class Test
+    static class Program
     {
         /// <summary>
         /// The main entry point for the application.
