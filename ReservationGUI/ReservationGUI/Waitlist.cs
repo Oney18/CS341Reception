@@ -15,6 +15,11 @@ namespace ReservationGUI
         private ArrayList reservations;
         private ArrayList pastReservations;
 
+        /**
+         *  Ctor for the waitlist
+         *  
+         *  Inpout: Amount of tables in the restaraunt
+         **/
         public Waitlist(int num)
         {
             reservationsPresent = new LinkedList<Party>();
@@ -30,15 +35,21 @@ namespace ReservationGUI
 
         public void addReservation(string partySize, string name, string specialReq, string phoneNum, int month, int day, int hour, int minute)
         {
-            DateTime reservationTime = new DateTime(DateTime.Now.Year, month, day, hour, minute, 0);
+            DateTime reservationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
             reservations.Add(new Party(partySize, name, specialReq, phoneNum, reservationTime));
         }
 
+
+        /**
+         *  Checks in the given party based on name
+         *
+         *  Only allows parties that are within one hour to be checked in
+         **/
         public void checkIn(String name)
         {
             Party partyToCheck = null;
 
-            foreach (Party res in reservations)
+            foreach (Party res in reservations) //finds the party
             {
                 if (res.getName().Equals(name))
                 {
@@ -49,20 +60,24 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
-                if (Int32.Parse(partyToCheck.getResTime().Subtract(DateTime.Now).ToString().Substring(3, 2)) <= 15)
+                if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
                     reservationsPresent.AddLast(partyToCheck);
                     reservations.Remove(partyToCheck);
                 }
-                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name);
+                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name); //too far out to check in
             }
             else
             {
-                Console.WriteLine("Could not find party under name {0}.", name);
+                Console.WriteLine("Could not find party under name {0}.", name); //could not find reservation
             }
 
         }
 
+
+        /**
+         *  Constructor for adding a walk-in party
+         **/
         public void addWalkIn(int partySize, String name, String specialReq, int phoneNum)
         {
             walkIns.AddLast(new Party(partySize, name, specialReq, ));
@@ -85,18 +100,26 @@ namespace ReservationGUI
             return null;
         }
 
+
+        /**
+         *  Seats the next party at the indicated table
+         **/
         public void seatNextParty(int tableNum)
         {
-            if (!tableList[tableNum].getInUse())
+            if (!tableList[tableNum].getInUse()) //checks to make sure not already being used
             {
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
             }
         }
 
+
+        /**
+         *  Resets the table value and adds party to the list to be output to management
+         **/
         public void resetTable(int tableNum)
         {
-            if (tableList[tableNum].getInUse())
+            if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
                 pastReservations.Add(temp);
@@ -104,8 +127,19 @@ namespace ReservationGUI
         }
 
 
+        /**
+         *  Creates a file under C:\Reception files to be outputted to Management
+         * 
+         *  Needs to be put into dropbox
+         **/
         public void ToManagement()
         {
+
+            if (!System.IO.Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
+            {
+                System.IO.Directory.CreateDirectory(@"C:\ReceptionFiles");
+            }
+
             using (System.IO.StreamWriter file =
             new System.IO.StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
             {
@@ -113,23 +147,7 @@ namespace ReservationGUI
                 {
                     file.WriteLine(party.managementOutput());
                 }
-            }
-        }
-
     }
-
-    class unitTest
-    {
-        public static void main(string[] args)
-        {
-            Waitlist wl = new Waitlist(16);
-            wl.addWalkIn(3, "Oney", "", 89);
-            wl.addWalkIn(2, "SOmebody", "", 5);
-            wl.seatNextParty(5);
-            wl.seatNextParty(3);
-            wl.resetTable(3);
-            wl.resetTable(5);
-            wl.ToManagement();
         }
        
     }
