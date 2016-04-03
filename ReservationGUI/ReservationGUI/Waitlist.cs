@@ -77,13 +77,12 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
+                reservationsPresent.AddLast(partyToCheck);
                 if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
                     walkIns.AddFirst(partyToCheck);
                     reservations.Remove(partyToCheck);
                 }
-                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name); //too far out to check in
-            }
             else
             {
                 Console.WriteLine("Could not find party under name {0}.", name); //could not find reservation
@@ -156,7 +155,7 @@ namespace ReservationGUI
                 pastParties.Add(temp);
                 tablesSeated.Remove(tableNum);
             }
-        }
+            }
 
 
         /**
