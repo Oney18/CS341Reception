@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,27 +13,27 @@ namespace ReservationSystem
         private int partySize;
         private String name;
         private String specialReq;
-        private int phoneNum;
+        private int pagerNum;
         private int tableNum;
         private DateTime arrivalTime;
         private DateTime seatedTime;
         private DateTime reservationTime;
         private DateTime leaveTime;
 
-        public Party(int partySize, String name, String specialReq, int phoneNum)
+        public Party(int partySize, String name, String specialReq, int pagerNum)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
-            this.phoneNum = phoneNum;
+            this.pagerNum = pagerNum;
         }
 
-        public Party(int partySize, String name, String specialReq, int phoneNum, DateTime reservationTime)
+        public Party(int partySize, String name, String specialReq, int pagerNum, DateTime reservationTime)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
-            this.phoneNum = phoneNum;
+            this.pagerNum = pagerNum;
             this.reservationTime = reservationTime;
         }
 
@@ -53,22 +54,17 @@ namespace ReservationSystem
 
         public int getPhoneNum()
         {
-            return phoneNum;
+            return pagerNum;
         }
 
         public void setPhoneNum(int phoneNum)
         {
-            this.phoneNum = phoneNum;
+            this.pagerNum = phoneNum;
         }
 
         public void arrive()
         {
             arrivalTime = DateTime.Now;
-        }
-
-        public String getArrivalTime()
-        {
-            return arrivalTime.ToString("t");
         }
 
         public void seat(int num)
@@ -77,19 +73,9 @@ namespace ReservationSystem
             tableNum = num;
         }
 
-        public String getSeatedTime()
-        {
-            return seatedTime.ToString("t");
-        }
-
         public void leave()
         {
             leaveTime = DateTime.Now;
-        }
-
-        public String getLeaveTime()
-        {
-            return leaveTime.ToString("t");
         }
 
         public DateTime getResTime()
@@ -97,6 +83,21 @@ namespace ReservationSystem
             return reservationTime;
         }
 
+        public string managementOutput()
+        {
+            string temp = "";
+            temp += (arrivalTime.ToString("ddd", CultureInfo.CreateSpecificCulture("en-US")).ToUpper());
+            temp += ",";
+            temp += arrivalTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + arrivalTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += ",";
+            temp += seatedTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + seatedTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += ",";
+            temp += leaveTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += ",";
+            temp += tableNum;
+
+            return temp;
+        }
 
     }
 
@@ -106,12 +107,14 @@ namespace ReservationSystem
         private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
         private ArrayList reservations;
+        private ArrayList pastReservations;
 
         public ReservationSystem(int num)
         {
             reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
             reservations = new ArrayList();
+            pastReservations = new ArrayList();
             tableList = new Table[num];
             for(int i = 0; i < num; i++)
             {
@@ -176,6 +179,28 @@ namespace ReservationSystem
             return null;
         }
 
+        public void seatNextParty(int tableNum)
+        {
+            if(tableList[tableNum].getAbleToBeSeated())
+            {
+                Party temp = getNextParty();
+                tableList[tableNum].seat(temp);
+            }
+        }
+
+        public void ToManagement()
+        {
+            using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+            {
+                foreach (Party party in pastReservations)
+                {
+                    file.WriteLine(party.managementOutput());
+                }
+            }
+        }
+
+
     }
 
     class Table
@@ -206,15 +231,22 @@ namespace ReservationSystem
             }
         }
 
-        public void leave()
+        public Party leave()
         {
-            this.partySeated = null;
+            Party temp = partySeated;
+            partySeated = null;
             inUse = false;
+            return temp;
         }
 
         public void clean()
         {
             if(!inUse) ableToBeSeated = true;
+        }
+
+        public bool getAbleToBeSeated()
+        {
+            return ableToBeSeated;
         }
 
 
