@@ -13,9 +13,9 @@ namespace ReservationGUI
         private Table[] tableList;
         private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
-        private LinkedList<Party> takeOut;
+        private ArrayList takeOut;
         private ArrayList reservations;
-        private ArrayList pastReservations;
+        private ArrayList pastParties;
 
         /**
          *  Ctor for the waitlist
@@ -26,9 +26,9 @@ namespace ReservationGUI
         {
             reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
-            takeOut = new LinkedList<Party>();
+            takeOut = new ArrayList();
             reservations = new ArrayList();
-            pastReservations = new ArrayList();
+            pastParties = new ArrayList();
             tableList = new Table[num];
             for (int i = 0; i < num; i++)
             {
@@ -52,7 +52,7 @@ namespace ReservationGUI
          **/
         public void addTakeOut(string name, string phoneNum)
         {
-            takeOut.AddLast(new Party(name, phoneNum));
+            takeOut.Add(new Party(name, phoneNum));
         }
 
 
@@ -88,6 +88,21 @@ namespace ReservationGUI
                 Console.WriteLine("Could not find party under name {0}.", name); //could not find reservation
             }
 
+        }
+
+
+        /**
+         * Removes a party from the takeout list based on the name inputted
+         **/
+        public void removeTakeOut(string name)
+        {
+            foreach(Party p in takeOut)
+            {
+                if (p.getName().Equals(name))
+                {
+                    takeOut.Remove(p);
+                }
+            }
         }
 
 
@@ -138,7 +153,7 @@ namespace ReservationGUI
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-                pastReservations.Add(temp);
+                pastParties.Add(temp);
             }
         }
 
@@ -151,15 +166,15 @@ namespace ReservationGUI
         public void ToManagement()
         {
 
-            if (!System.IO.Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
+            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
             {
-                System.IO.Directory.CreateDirectory(@"C:\ReceptionFiles");
+                Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
 
-            using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+            using (StreamWriter file =
+            new StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
             {
-                foreach (Party party in pastReservations)
+                foreach (Party party in pastParties)
                 {
                     file.WriteLine(party.managementOutput());
                 }
