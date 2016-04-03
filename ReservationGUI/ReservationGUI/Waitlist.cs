@@ -93,9 +93,9 @@ namespace ReservationGUI
         /**
          *  Constructor for adding a walk-in party
          **/
-        public void addWalkIn(int partySize, String name, String specialReq, int phoneNum)
+        public void addWalkIn(int partySize, String name, String specialReq, int pagerNum)
         {
-            walkIns.AddLast(new Party(partySize, name, specialReq, ));
+            walkIns.AddLast(new Party(partySize.ToString(), name, specialReq, pagerNum.ToString()));
         }
 
         public Party getNextParty()

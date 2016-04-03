@@ -14,7 +14,6 @@ namespace ReservationGUI
         private string specialReq;
         private string pagerNum;
         private string phoneNum;
-        private int partyType;
         private string tableNum;
         private DateTime arrivalTime;
         private DateTime seatedTime;
@@ -22,13 +21,12 @@ namespace ReservationGUI
         private DateTime leaveTime;
 
         // Walk-In Constructor
-        public Party(string partySize, string name, string specialReq, string pagerNum, int partyType)
+        public Party(string partySize, string name, string specialReq, string pagerNum)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
             this.pagerNum = pagerNum;
-            this.partyType = partyType;
         }
 
         //Reservation Constructor
