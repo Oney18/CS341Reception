@@ -155,7 +155,7 @@ namespace ReservationGUI
                 pastParties.Add(temp);
                 tablesSeated.Remove(tableNum);
             }
-            }
+        }
 
 
         /**

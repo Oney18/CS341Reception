@@ -14,10 +14,7 @@ namespace ReservationGUI
         private string specialReq;
         private string pagerNum;
         private string phoneNum;
-        private string tableNum;
         private bool isSeated = false;
-        private DateTime arrivalTime;
-        private DateTime seatedTime;
         public string tableNum;
         public DateTime arrivalTime;
         public DateTime seatedTime;
