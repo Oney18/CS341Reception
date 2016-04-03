@@ -177,7 +177,6 @@
             this.table1GroupBox.TabIndex = 0;
             this.table1GroupBox.TabStop = false;
             this.table1GroupBox.Text = "Table 1";
-            this.table1GroupBox.Enter += new System.EventHandler(this.table1GroupBox_Enter);
             // 
             // requestsTextBox1
             // 
@@ -755,7 +754,6 @@
             this.requestsTextBox12.ReadOnly = true;
             this.requestsTextBox12.Size = new System.Drawing.Size(100, 64);
             this.requestsTextBox12.TabIndex = 5;
-            this.requestsTextBox12.TextChanged += new System.EventHandler(this.textBox14_TextChanged);
             // 
             // requestsLabel12
             // 
@@ -816,7 +814,6 @@
             this.table11GroupBox.TabIndex = 15;
             this.table11GroupBox.TabStop = false;
             this.table11GroupBox.Text = "Table 11";
-            this.table11GroupBox.Enter += new System.EventHandler(this.table11GroupBox_Enter);
             // 
             // requestsTextBox11
             // 

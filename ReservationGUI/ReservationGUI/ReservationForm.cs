@@ -19,7 +19,13 @@ namespace ReservationGUI
 
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        private void seatPartyButton_Click(object sender, EventArgs e)
+        {
+            SeatingForm seat = new SeatingForm();
+            seat.Show();
         }
     }
 }
