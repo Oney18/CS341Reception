@@ -148,7 +148,6 @@ namespace ReservationGUI
                 {
                     file.WriteLine(party.managementOutput());
                 }
-<<<<<<< HEAD
             }
         }
 
@@ -187,11 +186,5 @@ namespace ReservationGUI
                 }
             }
         }
-
-=======
->>>>>>> origin/master
-    }
-        }
-       
     }
 }
