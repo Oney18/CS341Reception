@@ -184,7 +184,6 @@
             this.takeOutRadioButton.Name = "takeOutRadioButton";
             this.takeOutRadioButton.Size = new System.Drawing.Size(91, 26);
             this.takeOutRadioButton.TabIndex = 3;
-            this.takeOutRadioButton.TabStop = true;
             this.takeOutRadioButton.Text = "Take Out";
             this.takeOutRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -195,13 +194,13 @@
             this.reservationRadioButton.Name = "reservationRadioButton";
             this.reservationRadioButton.Size = new System.Drawing.Size(109, 26);
             this.reservationRadioButton.TabIndex = 2;
-            this.reservationRadioButton.TabStop = true;
             this.reservationRadioButton.Text = "Reservation";
             this.reservationRadioButton.UseVisualStyleBackColor = true;
             // 
             // walkInRadioButton
             // 
             this.walkInRadioButton.AutoSize = true;
+            this.walkInRadioButton.Checked = true;
             this.walkInRadioButton.Location = new System.Drawing.Point(16, 19);
             this.walkInRadioButton.Name = "walkInRadioButton";
             this.walkInRadioButton.Size = new System.Drawing.Size(86, 26);
