@@ -94,6 +94,13 @@ namespace ReservationGUI
             }
         }
 
+        public void resetTable(int tableNum)
+        {
+            if (tableList[tableNum].getInUse()) ;
+            {
+                
+            }
+        }
 
 
         public void ToManagement()
