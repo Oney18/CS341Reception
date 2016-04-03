@@ -13,6 +13,7 @@ namespace ReservationGUI
     public partial class ReservationsForm : Form
     {
         private Waitlist wait = new Waitlist(16); //creates lists for current and past reservations, walk ins
+        private SeatingForm seat = new SeatingForm();
 
         public ReservationsForm()
         {
@@ -26,7 +27,6 @@ namespace ReservationGUI
 
         private void seatPartyButton_Click(object sender, EventArgs e)
         {
-            SeatingForm seat = new SeatingForm();
             seat.Show();
         }
 
@@ -47,16 +47,18 @@ namespace ReservationGUI
             else if (reservationRadioButton.Checked) //if reservation
             {
                 //get time of reservation
-                string hour = reservationHourTextBox.Text; 
+                string hour = reservationHourTextBox.Text;
                 string min = reservationMinTextBox.Text;
 
                 if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check)) {
                     resHour = Convert.ToInt32(hour);            //hour of reservation
                     resMin = Convert.ToInt32(min);              //minute of reservation
                     contactNum = contactTextBox.Text;           //contact phone number for party 
-
-                    //check if reservation is in restaurant operating hours and the phone number is a 7 digit number
-                    if (resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61 && contactNum.Length == 7 && int.TryParse(contactNum, out check))
+                    
+                    //check if reservation is at an appropriate time and the phone number is a 7 digit number
+                    if (resHour - DateTime.Now.Hour > 0 && resHour < 21 && resHour > 10 && 
+                        resMin > -1 && resMin < 61 && contactNum.Length == 7 && 
+                        int.TryParse(contactNum, out check))
                     {
                         //add party to reservation list
                         wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
@@ -64,7 +66,7 @@ namespace ReservationGUI
                     else //invalid inputs
                     {
                         MessageBox.Show("The contact number must be 7 digits and the reservation " +
-                            "must be between 11:00 and 21:00. This reservation was not made, try again.");
+                            "must be between 11:00 and 21:00 and more than an hour prior to dining. This reservation was not made, try again.");
                     }
                 }
                 else //invalid inputs
@@ -119,10 +121,10 @@ namespace ReservationGUI
             if(int.TryParse(guestNum, out check))
             {
                 addPartyButton.Enabled = true;
-                //if all tables are full show wait time
-                //No wait time for party of 4 or less if all tables are empty
-                waitEstimateTextBox.Text = "None";
-            }
+            //if all tables are full show wait time
+            //No wait time for party of 4 or less if all tables are empty
+            waitEstimateTextBox.Text = "None"; 
+        }
             else
             {
                 addPartyButton.Enabled = false;
@@ -154,7 +156,7 @@ namespace ReservationGUI
         {
             //show contact box so can get contact phone number for take out order
             contactLabel.Visible = true;
-            contactTextBox.Visible = true;            
+            contactTextBox.Visible = true;
         }
 
         /*hide contact and time input fields when walk in*/

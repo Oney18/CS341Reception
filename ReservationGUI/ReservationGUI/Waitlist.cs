@@ -76,12 +76,8 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
-                if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
-                {
-                    reservationsPresent.AddLast(partyToCheck);
-                    reservations.Remove(partyToCheck);
-                }
-                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name); //too far out to check in
+                reservationsPresent.AddLast(partyToCheck);
+                reservations.Remove(partyToCheck);
             }
             else
             {
