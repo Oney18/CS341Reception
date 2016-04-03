@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ReservationGUI
 {
-    [Serializable()]
     class Party
     {
         private string partySize;
@@ -94,8 +93,7 @@ namespace ReservationGUI
         public void seat(int num)
         {
             seatedTime = DateTime.Now;
-            tableNum = num.ToString(); 
-           // isSeated = true;
+            tableNum = num.ToString();
         }
 
         public void leave()
