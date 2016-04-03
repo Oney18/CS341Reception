@@ -13,6 +13,7 @@ namespace ReservationGUI
     public partial class ReservationsForm : Form
     {
         private Waitlist wait = new Waitlist(16); //creates lists for current and past reservations, walk ins
+        private SeatingForm seat = new SeatingForm(wait);
 
         public ReservationsForm()
         {
@@ -26,7 +27,6 @@ namespace ReservationGUI
 
         private void seatPartyButton_Click(object sender, EventArgs e)
         {
-            SeatingForm seat = new SeatingForm();
             seat.Show();
         }
 
@@ -98,5 +98,8 @@ namespace ReservationGUI
             contactLabel.Visible = true;
             contactTextBox.Visible = true;
         }
+
+     
+
     }
 }
