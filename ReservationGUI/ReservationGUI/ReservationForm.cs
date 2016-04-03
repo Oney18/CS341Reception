@@ -12,7 +12,8 @@ namespace ReservationGUI
 {
     public partial class ReservationsForm : Form
     {
-        
+        private Waitlist wait = new Waitlist(16); //creates lists for current and past reservations, walk ins
+
         public ReservationsForm()
         {
             InitializeComponent();
@@ -20,7 +21,7 @@ namespace ReservationGUI
 
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void seatPartyButton_Click(object sender, EventArgs e)
@@ -36,25 +37,30 @@ namespace ReservationGUI
             int RESERVATION = 1;
             int TAKEOUT = 2;
 
-            //variable to hold party type
-            int partyType = -1;
+            string resTime = ""; //time of reservation
+            string contactNum = ""; //contact phone number
+            int partyType = -1; //variable to hold party type
 
             //update party type
-            if(walkInRadioButton.Checked)
+            if (walkInRadioButton.Checked)
             {
-                partyType = WALKIN;
+                partyType = WALKIN; //party is a walk in 
             }
             else if (reservationRadioButton.Checked)
             {
-                partyType = RESERVATION;
+                partyType = RESERVATION; //party is a reservation
+                resTime = reservationTimeTextBox.Text; //time of reservation
+                contactNum = contactTextBox.Text; //contact phone number for party
+                
+                
+                Party currentParty = new Party(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text, partyType);
             }
             else if (takeOutRadioButton.Checked)
             {
                 partyType = TAKEOUT;
             }
-
-            //create party
-            Party currentParty = new Party(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text, partyType);          
+            
+            
 
            // partyListBox.Items.Add(partyName); //add party to list
         }
@@ -65,6 +71,15 @@ namespace ReservationGUI
            
             //No wait time for party of 4 or less if all tables are empty
             waitEstimateTextBox.Text = "None"; 
+        }
+
+        private void reservationRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            //show reservation boxes to get time and contact for reservation
+            reservationTimeLabel.Visible = true;
+            reservationTimeTextBox.Visible = true;
+            contactLabel.Visible = true;
+            contactTextBox.Visible = true;
         }
     }
 }

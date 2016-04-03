@@ -10,7 +10,6 @@ namespace ReservationGUI
     {
         private bool inUse;
         private int peopleSeated;
-        private bool ableToBeSeated;
         private Party partySeated;
         private int tableNum;
         static public int SIZE_OF_TABLE = 4;
@@ -19,19 +18,14 @@ namespace ReservationGUI
         {
             this.tableNum = num;
             inUse = false;
-            ableToBeSeated = true;
             partySeated = null;
         }
 
         public void seat(Party p)
         {
-            if (ableToBeSeated)
-            {
-                this.partySeated = p;
-                p.seat(this.tableNum);
-                inUse = true;
-                ableToBeSeated = false;
-            }
+            this.partySeated = p;
+            p.seat(this.tableNum);
+            inUse = true;
         }
 
         public Party leave()
@@ -41,16 +35,6 @@ namespace ReservationGUI
             partySeated = null;
             inUse = false;
             return temp;
-        }
-
-        public void clean()
-        {
-            if (!inUse) ableToBeSeated = true;
-        }
-
-        public bool getAbleToBeSeated()
-        {
-            return ableToBeSeated;
         }
 
         public bool getInUse()

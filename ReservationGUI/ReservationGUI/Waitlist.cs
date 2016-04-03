@@ -33,11 +33,7 @@ namespace ReservationGUI
             }
         }
 
-
-        /**
-         *  Constructor for adding a reservation for the day
-         **/
-        public void addReservation(int partySize, String name, String specialReq, int phoneNum, int hour, int minute)
+        public void addReservation(string partySize, string name, string specialReq, string phoneNum, int month, int day, int hour, int minute)
         {
             DateTime reservationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
             reservations.Add(new Party(partySize, name, specialReq, phoneNum, reservationTime));
@@ -84,7 +80,7 @@ namespace ReservationGUI
          **/
         public void addWalkIn(int partySize, String name, String specialReq, int phoneNum)
         {
-            walkIns.AddLast(new Party(partySize, name, specialReq, phoneNum));
+            walkIns.AddLast(new Party(partySize, name, specialReq, ));
         }
 
         public Party getNextParty()
@@ -151,8 +147,8 @@ namespace ReservationGUI
                 {
                     file.WriteLine(party.managementOutput());
                 }
-            }
+    }
         }
-
+       
     }
 }
