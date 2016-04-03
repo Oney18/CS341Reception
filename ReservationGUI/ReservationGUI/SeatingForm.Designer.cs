@@ -253,7 +253,7 @@
             // seatTableToolStripMenuItem
             // 
             this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
-            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.seatTableToolStripMenuItem.Text = "Seat Table";
             this.seatTableToolStripMenuItem.Click += new System.EventHandler(this.seatParty_Click);
             // 
@@ -843,6 +843,7 @@
             this.requestsTextBox11.ReadOnly = true;
             this.requestsTextBox11.Size = new System.Drawing.Size(100, 64);
             this.requestsTextBox11.TabIndex = 5;
+            this.requestsTextBox11.TextChanged += new System.EventHandler(this.requestsTextBox11_TextChanged);
             // 
             // requestsLabel11
             // 
