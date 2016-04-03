@@ -35,7 +35,7 @@ namespace ReservationGUI
             int resHour = 0;            //time of reservation
             int resMin = 0;             //time of reservation
             string contactNum = "";     //contact phone number for party
-            int check;                  //int to check if phone number is an int
+            int check;                  //int to check if phone number is an int            
 
             //update party type
             if (walkInRadioButton.Checked)
@@ -44,7 +44,7 @@ namespace ReservationGUI
                 wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
             }
             else if (reservationRadioButton.Checked)
-            {                
+            {
                 resHour = Convert.ToInt32(reservationHourTextBox.Text); //hour of reservation
                 resMin = Convert.ToInt32(reservationMinTextBox.Text);   //minute of reservation
                 contactNum = contactTextBox.Text;                       //contact phone number for party                
@@ -61,7 +61,7 @@ namespace ReservationGUI
                 }                
             }
             else if (takeOutRadioButton.Checked)
-            {                
+            {
                 contactNum = contactTextBox.Text;   //contact phone number for party                
                 if (contactNum.Length == 7 && int.TryParse(contactNum, out check))  //check for length of phone number and if a valid number
                 {
@@ -71,7 +71,7 @@ namespace ReservationGUI
                 {
                     MessageBox.Show("The contact number must be 7 digits, try again.");
                 }                
-            }            
+            }
         }
 
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)
@@ -87,6 +87,7 @@ namespace ReservationGUI
             //show reservation boxes to get time and contact for reservation
             reservationTimeLabel.Visible = true;
             reservationHourTextBox.Visible = true;
+            reservationMinTextBox.Visible = true;
             contactLabel.Visible = true;
             contactTextBox.Visible = true;
         }

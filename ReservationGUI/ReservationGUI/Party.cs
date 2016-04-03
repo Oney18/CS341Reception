@@ -13,29 +13,37 @@ namespace ReservationGUI
         private string name;
         private string specialReq;
         private string pagerNum;
-        private int partyType;
+        private string phoneNum;
         private string tableNum;
         private DateTime arrivalTime;
         private DateTime seatedTime;
         private DateTime reservationTime;
         private DateTime leaveTime;
 
-        public Party(string partySize, string name, string specialReq, string pagerNum, int partyType)
+        // Walk-In Constructor
+        public Party(string partySize, string name, string specialReq, string pagerNum)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
             this.pagerNum = pagerNum;
-            this.partyType = partyType; 
         }
 
-        public Party(string partySize, string name, string specialReq, string pagerNum, DateTime reservationTime)
+        //Reservation Constructor
+        public Party(string partySize, string name, string specialReq, string phoneNum, DateTime reservationTime)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
-            this.pagerNum = pagerNum;
+            this.phoneNum = phoneNum;
             this.reservationTime = reservationTime;
+        }
+
+        //Takeout Constructor
+        public Party(string name, string phoneNum)
+        {
+            this.name = name;
+            this.phoneNum = phoneNum;
         }
 
         public string getPartySize()
@@ -53,14 +61,20 @@ namespace ReservationGUI
             return specialReq;
         }
 
-        public string getPhoneNum()
+        public string getPagerNum()
         {
             return pagerNum;
-        }        
+        }
 
-        public void arrive()
+        public string getPhoneNum()
+        {
+            return phoneNum;
+        }
+
+        public void arrive(string pagerNum)
         {
             arrivalTime = DateTime.Now;
+            this.pagerNum = pagerNum;
         }
 
         public void seat(int num)
@@ -84,11 +98,11 @@ namespace ReservationGUI
             string temp = "";
             temp += (arrivalTime.ToString("ddd", CultureInfo.CreateSpecificCulture("en-US")).ToUpper());
             temp += ",";
-            temp += arrivalTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + arrivalTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += arrivalTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + arrivalTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
-            temp += seatedTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + seatedTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += seatedTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + seatedTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
-            temp += leaveTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += leaveTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
             temp += tableNum;
 

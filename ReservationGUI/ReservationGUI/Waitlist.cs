@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,18 +13,20 @@ namespace ReservationGUI
         private Table[] tableList;
         private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
+        private LinkedList<Party> takeOut;
         private ArrayList reservations;
         private ArrayList pastReservations;
 
         /**
          *  Ctor for the waitlist
          *  
-         *  Inpout: Amount of tables in the restaraunt
+         *  Input: Amount of tables in the restaraunt
          **/
         public Waitlist(int num)
         {
             reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
+            takeOut = new LinkedList<Party>();
             reservations = new ArrayList();
             pastReservations = new ArrayList();
             tableList = new Table[num];
@@ -33,10 +36,23 @@ namespace ReservationGUI
             }
         }
 
-        public void addReservation(string partySize, string name, string specialReq, string phoneNum, int month, int day, int hour, int minute)
+
+        /**
+         * Constructor for adding a reservation
+         **/
+        public void addReservation(string partySize, string name, string specialReq, string phoneNum, int hour, int minute)
         {
             DateTime reservationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
             reservations.Add(new Party(partySize, name, specialReq, phoneNum, reservationTime));
+        }
+
+
+        /**
+         *  Constructor for adding in a takeout order
+         **/
+        public void addTakeOut(string name, string phoneNum)
+        {
+            takeOut.AddLast(new Party(name, phoneNum));
         }
 
 
@@ -78,9 +94,9 @@ namespace ReservationGUI
         /**
          *  Constructor for adding a walk-in party
          **/
-        public void addWalkIn(int partySize, String name, String specialReq, int phoneNum)
+        public void addWalkIn(int partySize, String name, String specialReq, int pagerNum)
         {
-            walkIns.AddLast(new Party(partySize, name, specialReq, ));
+            walkIns.AddLast(new Party(partySize.ToString(), name, specialReq, pagerNum.ToString()));
         }
 
         public Party getNextParty()
@@ -150,5 +166,40 @@ namespace ReservationGUI
     }
         }
        
+        /*
+         * cleanReportFromWaitstaff
+         * 
+         * Reads through the file from Wait Staff (recWait.txt currently) in order to reset tables
+         * reads through each line looking for a number, then resets any table that is deemed clean by Wait Staff
+         * 
+         * currently does not catch File Does Not Exist errors - can cause crash!!!
+         */
+        public void cleanReportFromWaitstaff()
+        {
+            foreach (string line in File.ReadLines(@"C:\ReceptionFiles\recWait.txt"))
+            {
+                if(line.Contains("0") ||
+                   line.Contains("1") ||
+                   line.Contains("2") ||
+                   line.Contains("3") ||
+                   line.Contains("4") ||
+                   line.Contains("5") ||
+                   line.Contains("6") ||
+                   line.Contains("7") ||
+                   line.Contains("8") ||
+                   line.Contains("9") ||
+                   line.Contains("10") ||
+                   line.Contains("11") ||
+                   line.Contains("12") ||
+                   line.Contains("13") ||
+                   line.Contains("14") ||
+                   line.Contains("15") ||
+                   line.Contains("16"))
+                {
+                    int tableNum = Int32.Parse(line);
+                    resetTable(tableNum);
+                }
+            }
+        }
     }
 }
