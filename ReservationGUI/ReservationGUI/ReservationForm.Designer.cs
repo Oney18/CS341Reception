@@ -57,6 +57,7 @@
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
+            this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -368,12 +369,25 @@
             this.reservationsListBox.Size = new System.Drawing.Size(144, 92);
             this.reservationsListBox.TabIndex = 11;
             // 
+            // seatResCheckBox
+            // 
+            this.seatResCheckBox.AutoSize = true;
+            this.seatResCheckBox.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seatResCheckBox.Location = new System.Drawing.Point(177, 235);
+            this.seatResCheckBox.Name = "seatResCheckBox";
+            this.seatResCheckBox.Size = new System.Drawing.Size(171, 26);
+            this.seatResCheckBox.TabIndex = 22;
+            this.seatResCheckBox.Text = "seat reservation next";
+            this.seatResCheckBox.UseVisualStyleBackColor = true;
+            this.seatResCheckBox.Visible = false;
+            // 
             // ReservationsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(608, 439);
+            this.Controls.Add(this.seatResCheckBox);
             this.Controls.Add(this.reservationsGroupBox);
             this.Controls.Add(this.takeOutGroupBox);
             this.Controls.Add(this.timeDescriptionLabel);
@@ -442,6 +456,7 @@
         private System.Windows.Forms.GroupBox takeOutGroupBox;
         private System.Windows.Forms.GroupBox reservationsGroupBox;
         private System.Windows.Forms.ListBox reservationsListBox;
+        private System.Windows.Forms.CheckBox seatResCheckBox;
     }
 }
 
