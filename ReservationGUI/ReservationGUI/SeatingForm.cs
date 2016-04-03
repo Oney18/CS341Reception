@@ -51,6 +51,7 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Select 2 tables");
             }
+
             else
             {
                 System.Windows.Forms.MessageBox.Show("Select a table");
@@ -62,6 +63,9 @@ namespace ReservationGUI
             if (table1.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true){
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
@@ -80,6 +84,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table2.seat(currentParty);
@@ -97,6 +105,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table3.seat(currentParty);
@@ -113,6 +125,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table4.seat(currentParty);
@@ -128,6 +144,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table1.seat(currentParty);
@@ -142,6 +162,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table1.seat(currentParty);
@@ -155,6 +179,10 @@ namespace ReservationGUI
             if (table7.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
@@ -171,6 +199,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table1.seat(currentParty);
@@ -185,6 +217,10 @@ namespace ReservationGUI
             if (table9.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
@@ -201,6 +237,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table10.seat(currentParty);
@@ -215,6 +255,10 @@ namespace ReservationGUI
             if (table11.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
@@ -231,6 +275,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table12.seat(currentParty);
@@ -245,6 +293,10 @@ namespace ReservationGUI
             if (table13.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
@@ -261,6 +313,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table1.seat(currentParty);
@@ -276,6 +332,10 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
             }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
+            }
             else
             {
                 table15.seat(currentParty);
@@ -290,6 +350,10 @@ namespace ReservationGUI
             if (table16.getInUse())
             {
                 System.Windows.Forms.MessageBox.Show("Already in use");
+            }
+            else if (currentParty.getIsSeated() == true)
+            {
+                System.Windows.Forms.MessageBox.Show("Already seated");
             }
             else
             {
