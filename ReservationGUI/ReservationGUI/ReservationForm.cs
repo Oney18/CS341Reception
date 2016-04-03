@@ -79,7 +79,7 @@ namespace ReservationGUI
             //if all tables are full show wait time
            
             //No wait time for party of 4 or less if all tables are empty
-            waitEstimateTextBox.Text = "None"; 
+            waitEstimateTextBox.Text = wait.getWaitTime(); 
         }
 
         private void reservationRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -98,5 +98,6 @@ namespace ReservationGUI
             contactLabel.Visible = true;
             contactTextBox.Visible = true;
         }
+     
     }
 }

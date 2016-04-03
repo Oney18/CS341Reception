@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReservationGUI
 {
+    [Serializable()]
     class Party
     {
         private string partySize;
@@ -14,11 +15,11 @@ namespace ReservationGUI
         private string specialReq;
         private string pagerNum;
         private string phoneNum;
-        private string tableNum;
-        private DateTime arrivalTime;
-        private DateTime seatedTime;
+        public string tableNum;
+        public DateTime arrivalTime;
+        public DateTime seatedTime;
         private DateTime reservationTime;
-        private DateTime leaveTime;
+        public DateTime leaveTime;
 
         // Walk-In Constructor
         public Party(string partySize, string name, string specialReq, string pagerNum)
@@ -95,6 +96,11 @@ namespace ReservationGUI
         public DateTime getResTime()
         {
             return reservationTime;
+        }
+
+        public DateTime getSeatTime()
+        {
+            return seatedTime;
         }
 
 
