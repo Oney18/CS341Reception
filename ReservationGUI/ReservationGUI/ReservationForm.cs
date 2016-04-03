@@ -45,20 +45,28 @@ namespace ReservationGUI
             }
             else if (reservationRadioButton.Checked)
             {
-                resHour = Convert.ToInt32(reservationHourTextBox.Text); //hour of reservation
-                resMin = Convert.ToInt32(reservationMinTextBox.Text);   //minute of reservation
-                contactNum = contactTextBox.Text;                       //contact phone number for party                
+                string hour = reservationHourTextBox.Text;
+                string min = reservationMinTextBox.Text;
+                if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check) {
+                    resHour = Convert.ToInt32(hour);            //hour of reservation
+                    resMin = Convert.ToInt32(min);              //minute of reservation
+                    contactNum = contactTextBox.Text;           //contact phone number for party 
 
-                //check if reservation is in restaurant operating hours and the phone number is a 7 digit number
-                if(resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61 && contactNum.Length == 7 && int.TryParse(contactNum, out check))
-                {
-                    wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);                   
+                    //check if reservation is in restaurant operating hours and the phone number is a 7 digit number
+                    if (resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61 && contactNum.Length == 7 && int.TryParse(contactNum, out check))
+                    {
+                        wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
+                    }
+                    else
+                    {
+                        MessageBox.Show("The contact number must be 7 digits and the reservation " +
+                            "must be between 11:00 and 21:00. This reservation was not made, try again.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("The contact number must be 7 digits and the reservation " +
-                        "must be between 11:00 and 21:00. This reservation was not made, try again.");
-                }
+                    MessageBox.Show("You must fill in a contact number and reservation time! This reservation was not made, try again.");
+                }                        
 
                 //hide time and contact input fields
                 hideTime();
