@@ -142,6 +142,7 @@
             this.sizeLabel13 = new System.Windows.Forms.Label();
             this.nameTextBox13 = new System.Windows.Forms.TextBox();
             this.nameLabel13 = new System.Windows.Forms.Label();
+            this.seatTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.table1GroupBox.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.table2GroupBox.SuspendLayout();
@@ -233,12 +234,14 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.seatTableToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(734, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // toolStripMenuItem1
             // 
@@ -1281,6 +1284,12 @@
             this.nameLabel13.TabIndex = 0;
             this.nameLabel13.Text = "Name:";
             // 
+            // seatTableToolStripMenuItem
+            // 
+            this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
+            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.seatTableToolStripMenuItem.Text = "Seat Table";
+            // 
             // SeatingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1464,5 +1473,6 @@
         private System.Windows.Forms.Label sizeLabel13;
         private System.Windows.Forms.TextBox nameTextBox13;
         private System.Windows.Forms.Label nameLabel13;
+        private System.Windows.Forms.ToolStripMenuItem seatTableToolStripMenuItem;
     }
 }
