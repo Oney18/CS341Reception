@@ -77,12 +77,12 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
-                reservationsPresent.AddLast(partyToCheck);
                 if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
                     walkIns.AddFirst(partyToCheck);
                     reservations.Remove(partyToCheck);
                 }
+            }
             else
             {
                 Console.WriteLine("Could not find party under name {0}.", name); //could not find reservation
