@@ -12,6 +12,7 @@ namespace ReservationGUI
 {
     public partial class ReservationsForm : Form
     {
+        
         public ReservationsForm()
         {
             InitializeComponent();
@@ -19,7 +20,7 @@ namespace ReservationGUI
 
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void seatPartyButton_Click(object sender, EventArgs e)
@@ -30,20 +31,32 @@ namespace ReservationGUI
 
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            string partyName = nameTextBox.Text;
-            string guestNum = guestNumTextBox.Text;
-            string pagerNum = pagerNumTextBox.Text;
-            string requests = requestsTextBox.Text;
-            bool walkIn = walkInRadioButton.Checked;
-            bool reservation = reservationRadioButton.Checked;
-            bool takeout = takeOutRadioButton.Checked;
+            //set constants for party type
+            int WALKIN = 0;        
+            int RESERVATION = 1;
+            int TAKEOUT = 2;
 
-            if(takeout)
+            //variable to hold party type
+            int partyType = -1;
+
+            //update party type
+            if(walkInRadioButton.Checked)
             {
-                
+                partyType = WALKIN;
+            }
+            else if (reservationRadioButton.Checked)
+            {
+                partyType = RESERVATION;
+            }
+            else if (takeOutRadioButton.Checked)
+            {
+                partyType = TAKEOUT;
             }
 
-            partyListBox.Items.Add(partyName); //add party to list
+            //create party
+            Party currentParty = new Party(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text, partyType);          
+
+           // partyListBox.Items.Add(partyName); //add party to list
         }
 
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)

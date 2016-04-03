@@ -9,25 +9,27 @@ namespace ReservationGUI
 {
     class Party
     {
-        private int partySize;
-        private String name;
-        private String specialReq;
-        private int pagerNum;
-        private int tableNum;
+        private string partySize;
+        private string name;
+        private string specialReq;
+        private string pagerNum;
+        private int partyType;
+        private string tableNum;
         private DateTime arrivalTime;
         private DateTime seatedTime;
         private DateTime reservationTime;
         private DateTime leaveTime;
 
-        public Party(int partySize, String name, String specialReq, int pagerNum)
+        public Party(string partySize, string name, string specialReq, string pagerNum, int partyType)
         {
             this.name = name;
             this.partySize = partySize;
             this.specialReq = specialReq;
             this.pagerNum = pagerNum;
+            this.partyType = partyType; 
         }
 
-        public Party(int partySize, String name, String specialReq, int pagerNum, DateTime reservationTime)
+        public Party(string partySize, string name, string specialReq, string pagerNum, DateTime reservationTime)
         {
             this.name = name;
             this.partySize = partySize;
@@ -36,30 +38,25 @@ namespace ReservationGUI
             this.reservationTime = reservationTime;
         }
 
-        public int getPartySize()
+        public string getPartySize()
         {
             return partySize;
         }
 
-        public String getName()
+        public string getName()
         {
             return name;
         }
 
-        public String getSpecialReq()
+        public string getSpecialReq()
         {
             return specialReq;
         }
 
-        public int getPhoneNum()
+        public string getPhoneNum()
         {
             return pagerNum;
-        }
-
-        public void setPhoneNum(int phoneNum)
-        {
-            this.pagerNum = phoneNum;
-        }
+        }        
 
         public void arrive()
         {
@@ -69,7 +66,7 @@ namespace ReservationGUI
         public void seat(int num)
         {
             seatedTime = DateTime.Now;
-            tableNum = num;
+            tableNum = num.ToString(); 
         }
 
         public void leave()
