@@ -96,7 +96,7 @@ namespace ReservationGUI
 
         public void resetTable(int tableNum)
         {
-            if (tableList[tableNum].getInUse()) ;
+            if (tableList[tableNum].getInUse())
             {
                 
             }

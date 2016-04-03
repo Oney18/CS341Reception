@@ -37,6 +37,7 @@ namespace ReservationGUI
         public Party leave()
         {
             Party temp = partySeated;
+            temp.leave();
             partySeated = null;
             inUse = false;
             return temp;
@@ -50,6 +51,11 @@ namespace ReservationGUI
         public bool getAbleToBeSeated()
         {
             return ableToBeSeated;
+        }
+
+        public bool getInUse()
+        {
+            return inUse;
         }
 
 
