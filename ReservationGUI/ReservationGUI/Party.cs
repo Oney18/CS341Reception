@@ -91,7 +91,6 @@ namespace ReservationGUI
         {
             seatedTime = DateTime.Now;
             tableNum = num.ToString();
-            isSeated = true;
         }
 
         public void leave()
