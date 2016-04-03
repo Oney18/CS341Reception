@@ -46,7 +46,7 @@
             this.walkInRadioButton = new System.Windows.Forms.RadioButton();
             this.addPartyButton = new System.Windows.Forms.Button();
             this.reservationFormTitleLabel = new System.Windows.Forms.Label();
-            this.seatPartyButton = new System.Windows.Forms.Button();
+            this.seeTablesButton = new System.Windows.Forms.Button();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -86,6 +86,7 @@
             this.guestNumTextBox.Name = "guestNumTextBox";
             this.guestNumTextBox.Size = new System.Drawing.Size(131, 25);
             this.guestNumTextBox.TabIndex = 2;
+            this.guestNumTextBox.TextChanged += new System.EventHandler(this.guestNumTextBox_TextChanged);
             // 
             // requestsTextBox
             // 
@@ -109,6 +110,7 @@
             this.waitEstimateTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.waitEstimateTextBox.Location = new System.Drawing.Point(390, 157);
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
+            this.waitEstimateTextBox.ReadOnly = true;
             this.waitEstimateTextBox.Size = new System.Drawing.Size(131, 25);
             this.waitEstimateTextBox.TabIndex = 4;
             // 
@@ -223,6 +225,7 @@
             this.addPartyButton.TabIndex = 7;
             this.addPartyButton.Text = "Add Party";
             this.addPartyButton.UseVisualStyleBackColor = false;
+            this.addPartyButton.Click += new System.EventHandler(this.addPartyButton_Click);
             // 
             // reservationFormTitleLabel
             // 
@@ -234,22 +237,22 @@
             this.reservationFormTitleLabel.TabIndex = 14;
             this.reservationFormTitleLabel.Text = "Waitlist Handler";
             // 
-            // seatPartyButton
+            // seeTablesButton
             // 
-            this.seatPartyButton.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.seatPartyButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.seatPartyButton.FlatAppearance.BorderSize = 2;
-            this.seatPartyButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.seatPartyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.seatPartyButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.seatPartyButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.seatPartyButton.Location = new System.Drawing.Point(10, 313);
-            this.seatPartyButton.Name = "seatPartyButton";
-            this.seatPartyButton.Size = new System.Drawing.Size(136, 32);
-            this.seatPartyButton.TabIndex = 10;
-            this.seatPartyButton.Text = "Seat Party";
-            this.seatPartyButton.UseVisualStyleBackColor = false;
-            this.seatPartyButton.Click += new System.EventHandler(this.seatPartyButton_Click);
+            this.seeTablesButton.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.seeTablesButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.seeTablesButton.FlatAppearance.BorderSize = 2;
+            this.seeTablesButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.seeTablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.seeTablesButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seeTablesButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.seeTablesButton.Location = new System.Drawing.Point(10, 313);
+            this.seeTablesButton.Name = "seeTablesButton";
+            this.seeTablesButton.Size = new System.Drawing.Size(136, 32);
+            this.seeTablesButton.TabIndex = 10;
+            this.seeTablesButton.Text = "See Tables";
+            this.seeTablesButton.UseVisualStyleBackColor = false;
+            this.seeTablesButton.Click += new System.EventHandler(this.seatPartyButton_Click);
             // 
             // ReservationsForm
             // 
@@ -258,7 +261,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(591, 372);
-            this.Controls.Add(this.seatPartyButton);
+            this.Controls.Add(this.seeTablesButton);
             this.Controls.Add(this.reservationFormTitleLabel);
             this.Controls.Add(this.addPartyButton);
             this.Controls.Add(this.partyTypeGroupBox);
@@ -305,7 +308,7 @@
         private System.Windows.Forms.RadioButton walkInRadioButton;
         private System.Windows.Forms.Button addPartyButton;
         private System.Windows.Forms.Label reservationFormTitleLabel;
-        private System.Windows.Forms.Button seatPartyButton;
+        private System.Windows.Forms.Button seeTablesButton;
     }
 }
 
