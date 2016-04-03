@@ -5,17 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ReservationGUI
 {
     class Waitlist
     {
         private Table[] tableList;
-        private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
         private ArrayList takeOut;
         private ArrayList reservations;
         private ArrayList pastParties;
+        private LinkedList<int> tablesSeated;
 
         /**
          *  Ctor for the waitlist
@@ -24,11 +25,11 @@ namespace ReservationGUI
          **/
         public Waitlist(int num)
         {
-            reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
             takeOut = new ArrayList();
             reservations = new ArrayList();
             pastParties = new ArrayList();
+            tablesSeated = new LinkedList<int>();
             tableList = new Table[num];
             for (int i = 0; i < num; i++)
             {
@@ -76,8 +77,11 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
-                reservationsPresent.AddLast(partyToCheck);
-                reservations.Remove(partyToCheck);
+                if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
+                {
+                    walkIns.AddFirst(partyToCheck);
+                    reservations.Remove(partyToCheck);
+                }
             }
             else
             {
@@ -110,15 +114,13 @@ namespace ReservationGUI
             walkIns.AddLast(new Party(partySize, name, specialReq, pagerNum));
         }
 
+
+        /**
+         *  Returns the enxt party to be seated
+         **/
         public Party getNextParty()
         {
-            if (reservationsPresent.Count() > 0)
-            {
-                Party temp = reservationsPresent.First();
-                reservationsPresent.RemoveFirst();
-                return temp;
-            }
-            else if (walkIns.Count() > 0)
+            if (walkIns.Count() > 0)
             {
                 Party temp = walkIns.First();
                 walkIns.RemoveFirst();
@@ -137,6 +139,7 @@ namespace ReservationGUI
             {
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
+                tablesSeated.AddLast(tableNum);
             }
         }
 
@@ -150,7 +153,30 @@ namespace ReservationGUI
             {
                 Party temp = tableList[tableNum].leave();
                 pastParties.Add(temp);
+                tablesSeated.Remove(tableNum);
             }
+            }
+
+
+        /**
+         *  Gives the estimated waiting time for a party
+         **/
+        public string getWaitTime()
+        {
+            foreach (Table t in tableList) //finds an empty table 
+            {
+                if(!t.getInUse())
+                {
+                    return "None";
+                }
+            }
+
+            //no empty tables, need to estimate based on first table seated
+            int amtWaiting = walkIns.Count();
+            int cyles = amtWaiting / 16; //represents amount of cyles of people neding to be seated
+            amtWaiting = amtWaiting % 16;
+
+            return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
         }
 
 
@@ -212,5 +238,6 @@ namespace ReservationGUI
                 }
             }
         }
+
     }
 }

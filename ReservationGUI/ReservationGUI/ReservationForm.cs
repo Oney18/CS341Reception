@@ -59,20 +59,20 @@ namespace ReservationGUI
                     if (resHour - DateTime.Now.Hour > 0 && resHour < 21 && resHour > 10 && 
                         resMin > -1 && resMin < 61 && contactNum.Length == 7 && 
                         int.TryParse(contactNum, out check))
-                    {
+                {
                         //add party to reservation list
-                        wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
-                    }
+                    wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
+                }
                     else //invalid inputs
-                    {
-                        MessageBox.Show("The contact number must be 7 digits and the reservation " +
+                {
+                    MessageBox.Show("The contact number must be 7 digits and the reservation " +
                             "must be between 11:00 and 21:00 and more than an hour prior to dining. This reservation was not made, try again.");
                     }
                 }
                 else //invalid inputs
                 {
                     MessageBox.Show("You must fill in a contact number and reservation time! This reservation was not made, try again.");
-                }                        
+                }                
 
                 //hide time and contact input fields
                 hideTime();
@@ -88,7 +88,7 @@ namespace ReservationGUI
                 else
                 {
                     MessageBox.Show("The contact number must be 7 digits, try again.");
-                }
+                }                
 
                 //hide contact input field
                 hideContact();
@@ -102,7 +102,7 @@ namespace ReservationGUI
             timeDescriptionLabel.Visible = false;
             reservationHourTextBox.Visible = false;
             reservationMinTextBox.Visible = false;
-        }
+            }
 
         /*hides the contact input fields*/
         private void hideContact()
@@ -123,7 +123,7 @@ namespace ReservationGUI
                 addPartyButton.Enabled = true;
             //if all tables are full show wait time
             //No wait time for party of 4 or less if all tables are empty
-            waitEstimateTextBox.Text = "None"; 
+            waitEstimateTextBox.Text = wait.getWaitTime(); 
         }
             else
             {

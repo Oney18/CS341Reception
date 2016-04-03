@@ -125,7 +125,7 @@
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
             this.waitEstimateTextBox.ReadOnly = true;
             this.waitEstimateTextBox.Size = new System.Drawing.Size(131, 25);
-            this.waitEstimateTextBox.TabIndex = 4;
+            this.waitEstimateTextBox.TabIndex = 4;            
             // 
             // waitEstimateLabel
             // 

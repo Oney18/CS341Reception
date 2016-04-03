@@ -48,6 +48,14 @@ namespace ReservationGUI
             return inUse;
         }
 
+        /**
+         *  Returns the party seated at the table
+         **/
+         public Party getParty()
+        {
+            return partySeated;
+        }
+
 
     }
 }

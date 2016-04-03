@@ -18,8 +18,11 @@ namespace ReservationGUI
         private bool isSeated = false;
         private DateTime arrivalTime;
         private DateTime seatedTime;
+        public string tableNum;
+        public DateTime arrivalTime;
+        public DateTime seatedTime;
         private DateTime reservationTime;
-        private DateTime leaveTime;
+        public DateTime leaveTime;
 
         // Walk-In Constructor
         public Party(string partySize, string name, string specialReq, string pagerNum)
@@ -91,7 +94,6 @@ namespace ReservationGUI
         {
             seatedTime = DateTime.Now;
             tableNum = num.ToString();
-           // isSeated = true;
         }
 
         public void leave()
@@ -102,6 +104,11 @@ namespace ReservationGUI
         public DateTime getResTime()
         {
             return reservationTime;
+        }
+
+        public DateTime getSeatTime()
+        {
+            return seatedTime;
         }
 
 
