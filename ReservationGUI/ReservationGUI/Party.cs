@@ -71,6 +71,10 @@ namespace ReservationGUI
             return phoneNum;
         }
 
+        /**
+         *  Called when a reservation arrives in restaurant
+         *  Input is pager number given to the party
+         **/
         public void arrive(string pagerNum)
         {
             arrivalTime = DateTime.Now;
@@ -93,16 +97,20 @@ namespace ReservationGUI
             return reservationTime;
         }
 
+
+        /**
+         *  Outputs a string describing the associated times/tableNum with each party
+         **/
         public string managementOutput()
         {
             string temp = "";
             temp += (arrivalTime.ToString("ddd", CultureInfo.CreateSpecificCulture("en-US")).ToUpper());
             temp += ",";
-            temp += arrivalTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + arrivalTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += arrivalTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + arrivalTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
-            temp += seatedTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + seatedTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += seatedTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + seatedTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
-            temp += leaveTime.ToString("MM", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
+            temp += leaveTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
             temp += tableNum;
 
