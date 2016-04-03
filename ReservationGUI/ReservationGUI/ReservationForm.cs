@@ -32,29 +32,25 @@ namespace ReservationGUI
 
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            //set constants for party type
-            int WALKIN = 0;        
-            int RESERVATION = 1;
-            int TAKEOUT = 2;
-
-            int resHour = 0; //time of reservation
-            int resMin = 0; //time of reservation
-            string contactNum = ""; //contact phone number for party
-            int partyType = -1; //variable to hold party type
+            int resHour = 0;            //time of reservation
+            int resMin = 0;             //time of reservation
+            string contactNum = "";     //contact phone number for party
+            int check;                  //int to check if phone number is an int
 
             //update party type
             if (walkInRadioButton.Checked)
             {
-                partyType = WALKIN; //party is a walk in 
+                //add walk in party to waitlist
+                wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
             }
             else if (reservationRadioButton.Checked)
-            {
-                partyType = RESERVATION; //party is a reservation
+            {                
                 resHour = Convert.ToInt32(reservationHourTextBox.Text); //hour of reservation
-                resMin = Convert.ToInt32(reservationMinTextBox.Text); //minute of reservation
-                contactNum = contactTextBox.Text; //contact phone number for party
+                resMin = Convert.ToInt32(reservationMinTextBox.Text);   //minute of reservation
+                contactNum = contactTextBox.Text;                       //contact phone number for party                
 
-                if(resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61 && contactNum.Length == 7)
+                //check if reservation is in restaurant operating hours and the phone number is a 7 digit number
+                if(resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61 && contactNum.Length == 7 && int.TryParse(contactNum, out check))
                 {
                     wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
                 }
@@ -62,18 +58,20 @@ namespace ReservationGUI
                 {
                     MessageBox.Show("The contact number must be 7 digits and the reservation " +
                         "must be between 11:00 and 21:00. This reservation was not made, try again.");
-                }
-
-                
+                }                
             }
             else if (takeOutRadioButton.Checked)
-            {
-                partyType = TAKEOUT;
-            }
-            
-            
-
-           // partyListBox.Items.Add(partyName); //add party to list
+            {                
+                contactNum = contactTextBox.Text;   //contact phone number for party                
+                if (contactNum.Length == 7 && int.TryParse(contactNum, out check))  //check for length of phone number and if a valid number
+                {
+                    wait.addTakeOut(nameTextBox.Text, contactNum);
+                }
+                else
+                {
+                    MessageBox.Show("The contact number must be 7 digits, try again.");
+                }                
+            }            
         }
 
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)
@@ -89,6 +87,13 @@ namespace ReservationGUI
             //show reservation boxes to get time and contact for reservation
             reservationTimeLabel.Visible = true;
             reservationHourTextBox.Visible = true;
+            contactLabel.Visible = true;
+            contactTextBox.Visible = true;
+        }
+
+        private void takeOutRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            //show contact box so can get contact phone number for take out order
             contactLabel.Visible = true;
             contactTextBox.Visible = true;
         }
