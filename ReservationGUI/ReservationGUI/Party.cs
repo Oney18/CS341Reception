@@ -28,6 +28,7 @@ namespace ReservationGUI
             this.partySize = partySize;
             this.specialReq = specialReq;
             this.pagerNum = pagerNum;
+            this.arrivalTime = DateTime.Now;
         }
 
         //Reservation Constructor

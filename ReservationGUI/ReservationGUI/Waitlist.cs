@@ -35,6 +35,11 @@ namespace ReservationGUI
             {
                 tableList[i] = new Table(i);
             }
+
+            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
+            {
+                Directory.CreateDirectory(@"C:\ReceptionFiles");
+            }
         }
 
 
@@ -186,21 +191,15 @@ namespace ReservationGUI
          *  Needs to be put into dropbox
          **/
         public void ToManagement()
-        {
-
-            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
-            {
-                Directory.CreateDirectory(@"C:\ReceptionFiles");
-            }
-
+        { 
             using (StreamWriter file =
-            new StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+            File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
             {
                 foreach (Party party in pastParties)
                 {
                     file.WriteLine(party.managementOutput());
                 }
-    }
+            }
         }
        
         /*
