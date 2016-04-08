@@ -45,7 +45,7 @@ namespace ReservationGUI
             list.addWalkIn("4", "Ally", "None", "4443332222");
             list.addWalkIn("5", "Bob", "None", "4443332222");
             list.addWalkIn("2", "Robin", "None", "4443332222");
-            list.addWalkIn("2", "Tyler", "None", "4443332222");
+            list.addWalkIn("7", "Tyler", "None", "4443332222");
 
         }
 
@@ -63,7 +63,7 @@ namespace ReservationGUI
             {
                 System.Windows.Forms.MessageBox.Show("There is no party to seat");
             }
-            else if (Int32.Parse(currentParty.getPartySize()) > 4)
+            else if (currentParty.isBigParty())
             {
                 isBigParty = true;
                 System.Windows.Forms.MessageBox.Show("Select 2 tables");
@@ -92,13 +92,21 @@ namespace ReservationGUI
             {
                 if (tableSelectedForEdit == true)
                 {
-                    table1.seat(currentParty);
-                    nameTextBox1.Text = currentParty.getName();
-                    sizeTextBox1.Text = currentParty.getPartySize().ToString();
-                    requestsTextBox1.Text = currentParty.getSpecialReq();
-                    currentParty.setIsSeated(true);
-                    currentParty = null;
-                    edit = false;
+                    if (table1.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table1.seat(currentParty);
+                        nameTextBox1.Text = currentParty.getName();
+                        sizeTextBox1.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox1.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
                 }
                 else
                 {
@@ -125,9 +133,11 @@ namespace ReservationGUI
                 else if (isBigParty == true && selcted1Table == false)
                 {
                     table1.seat(currentParty);
-                    
+                    nameTextBox1.Text = currentParty.getName();
+                    sizeTextBox1.Text = currentParty.getPartySize().ToString();
+                    requestsTextBox1.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
-
+                    isBigParty = false;
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
 
@@ -138,6 +148,7 @@ namespace ReservationGUI
                     sizeTextBox1.Text = currentParty.getPartySize().ToString();
                     requestsTextBox1.Text = currentParty.getSpecialReq();
                     currentParty.setIsSeated(true);
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
                 }
@@ -149,13 +160,21 @@ namespace ReservationGUI
             {
                 if (tableSelectedForEdit == true)
                 {
-                    table2.seat(currentParty);
-                    nameTextBox2.Text = currentParty.getName();
-                    sizeTextBox2.Text = currentParty.getPartySize().ToString();
-                    requestsTextBox2.Text = currentParty.getSpecialReq();
-                    currentParty.setIsSeated(true);
-                    currentParty = null;
-                    edit = false;
+                    if (table2.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table2.seat(currentParty);
+                        nameTextBox2.Text = currentParty.getName();
+                        sizeTextBox2.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox2.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
                 }
                 else
                 {
@@ -197,12 +216,45 @@ namespace ReservationGUI
                     requestsTextBox2.Text = currentParty.getSpecialReq();
                     currentParty.setIsSeated(true);
                     currentParty = null;
+                    selcted1Table = false;
                     seat = false;
                 }
             }
         }
         private void table3GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table3.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table3.seat(currentParty);
+                        nameTextBox3.Text = currentParty.getName();
+                        sizeTextBox3.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox3.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table3.getParty();
+                    nameTextBox3.Text = null;
+                    sizeTextBox3.Text = null;
+                    requestsTextBox3.Text = null;
+                    table3.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table3.getInUse())
@@ -220,6 +272,7 @@ namespace ReservationGUI
                     sizeTextBox3.Text = currentParty.getPartySize().ToString();
                     requestsTextBox3.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -230,6 +283,7 @@ namespace ReservationGUI
                     sizeTextBox3.Text = currentParty.getPartySize().ToString();
                     requestsTextBox3.Text = currentParty.getSpecialReq();
                     currentParty.setIsSeated(true);
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
                 }
@@ -237,6 +291,38 @@ namespace ReservationGUI
         }
         private void table4GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table4.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table4.seat(currentParty);
+                        nameTextBox4.Text = currentParty.getName();
+                        sizeTextBox4.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox4.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table4.getParty();
+                    nameTextBox4.Text = null;
+                    sizeTextBox4.Text = null;
+                    requestsTextBox4.Text = null;
+                    table4.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table4.getInUse())
@@ -254,6 +340,7 @@ namespace ReservationGUI
                     sizeTextBox4.Text = currentParty.getPartySize().ToString();
                     requestsTextBox4.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -263,7 +350,7 @@ namespace ReservationGUI
                     nameTextBox4.Text = currentParty.getName();
                     sizeTextBox4.Text = currentParty.getPartySize().ToString();
                     requestsTextBox4.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -272,6 +359,38 @@ namespace ReservationGUI
         }
         private void table5GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table5.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table5.seat(currentParty);
+                        nameTextBox5.Text = currentParty.getName();
+                        sizeTextBox5.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox5.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table5.getParty();
+                    nameTextBox5.Text = null;
+                    sizeTextBox5.Text = null;
+                    requestsTextBox5.Text = null;
+                    table5.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table5.getInUse())
@@ -289,6 +408,7 @@ namespace ReservationGUI
                     sizeTextBox5.Text = currentParty.getPartySize().ToString();
                     requestsTextBox5.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -298,7 +418,7 @@ namespace ReservationGUI
                     nameTextBox5.Text = currentParty.getName();
                     sizeTextBox5.Text = currentParty.getPartySize().ToString();
                     requestsTextBox5.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -307,6 +427,38 @@ namespace ReservationGUI
         }
         private void table6GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table6.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table6.seat(currentParty);
+                        nameTextBox6.Text = currentParty.getName();
+                        sizeTextBox6.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox6.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table6.getParty();
+                    nameTextBox6.Text = null;
+                    sizeTextBox6.Text = null;
+                    requestsTextBox6.Text = null;
+                    table6.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table6.getInUse())
@@ -324,6 +476,7 @@ namespace ReservationGUI
                     sizeTextBox6.Text = currentParty.getPartySize().ToString();
                     requestsTextBox6.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -333,7 +486,7 @@ namespace ReservationGUI
                     nameTextBox6.Text = currentParty.getName();
                     sizeTextBox6.Text = currentParty.getPartySize().ToString();
                     requestsTextBox6.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -342,6 +495,38 @@ namespace ReservationGUI
         }
         private void table7GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table7.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table7.seat(currentParty);
+                        nameTextBox7.Text = currentParty.getName();
+                        sizeTextBox7.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox7.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table7.getParty();
+                    nameTextBox7.Text = null;
+                    sizeTextBox7.Text = null;
+                    requestsTextBox7.Text = null;
+                    table7.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table7.getInUse())
@@ -359,6 +544,7 @@ namespace ReservationGUI
                     sizeTextBox7.Text = currentParty.getPartySize().ToString();
                     requestsTextBox7.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -368,7 +554,7 @@ namespace ReservationGUI
                     nameTextBox7.Text = currentParty.getName();
                     sizeTextBox7.Text = currentParty.getPartySize().ToString();
                     requestsTextBox7.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -377,6 +563,38 @@ namespace ReservationGUI
         }
         private void table8GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table8.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table8.seat(currentParty);
+                        nameTextBox8.Text = currentParty.getName();
+                        sizeTextBox8.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox8.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table8.getParty();
+                    nameTextBox8.Text = null;
+                    sizeTextBox8.Text = null;
+                    requestsTextBox8.Text = null;
+                    table8.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table8.getInUse())
@@ -394,6 +612,7 @@ namespace ReservationGUI
                     sizeTextBox8.Text = currentParty.getPartySize().ToString();
                     requestsTextBox8.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -403,7 +622,7 @@ namespace ReservationGUI
                     nameTextBox8.Text = currentParty.getName();
                     sizeTextBox8.Text = currentParty.getPartySize().ToString();
                     requestsTextBox8.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -412,6 +631,38 @@ namespace ReservationGUI
         }
         private void table9GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table9.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table9.seat(currentParty);
+                        nameTextBox9.Text = currentParty.getName();
+                        sizeTextBox9.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox9.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table9.getParty();
+                    nameTextBox9.Text = null;
+                    sizeTextBox9.Text = null;
+                    requestsTextBox9.Text = null;
+                    table9.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table9.getInUse())
@@ -429,6 +680,7 @@ namespace ReservationGUI
                     sizeTextBox9.Text = currentParty.getPartySize().ToString();
                     requestsTextBox9.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -438,7 +690,7 @@ namespace ReservationGUI
                     nameTextBox9.Text = currentParty.getName();
                     sizeTextBox9.Text = currentParty.getPartySize().ToString();
                     requestsTextBox9.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -447,6 +699,38 @@ namespace ReservationGUI
         }
         private void table10GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table10.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table1.seat(currentParty);
+                        nameTextBox10.Text = currentParty.getName();
+                        sizeTextBox10.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox10.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table10.getParty();
+                    nameTextBox10.Text = null;
+                    sizeTextBox10.Text = null;
+                    requestsTextBox10.Text = null;
+                    table10.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table10.getInUse())
@@ -464,6 +748,7 @@ namespace ReservationGUI
                     sizeTextBox10.Text = currentParty.getPartySize().ToString();
                     requestsTextBox10.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -473,7 +758,7 @@ namespace ReservationGUI
                     nameTextBox10.Text = currentParty.getName();
                     sizeTextBox10.Text = currentParty.getPartySize().ToString();
                     requestsTextBox10.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -482,6 +767,38 @@ namespace ReservationGUI
         }
         private void table11GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table11.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table11.seat(currentParty);
+                        nameTextBox11.Text = currentParty.getName();
+                        sizeTextBox11.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox11.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table11.getParty();
+                    nameTextBox11.Text = null;
+                    sizeTextBox11.Text = null;
+                    requestsTextBox11.Text = null;
+                    table11.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table11.getInUse())
@@ -499,6 +816,7 @@ namespace ReservationGUI
                     sizeTextBox11.Text = currentParty.getPartySize().ToString();
                     requestsTextBox11.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -508,7 +826,7 @@ namespace ReservationGUI
                     nameTextBox11.Text = currentParty.getName();
                     sizeTextBox11.Text = currentParty.getPartySize().ToString();
                     requestsTextBox11.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -517,6 +835,38 @@ namespace ReservationGUI
         }
         private void table12GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table12.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table12.seat(currentParty);
+                        nameTextBox12.Text = currentParty.getName();
+                        sizeTextBox12.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox12.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table12.getParty();
+                    nameTextBox12.Text = null;
+                    sizeTextBox12.Text = null;
+                    requestsTextBox12.Text = null;
+                    table12.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table12.getInUse())
@@ -534,6 +884,7 @@ namespace ReservationGUI
                     sizeTextBox12.Text = currentParty.getPartySize().ToString();
                     requestsTextBox12.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -543,7 +894,7 @@ namespace ReservationGUI
                     nameTextBox12.Text = currentParty.getName();
                     sizeTextBox12.Text = currentParty.getPartySize().ToString();
                     requestsTextBox12.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -552,6 +903,38 @@ namespace ReservationGUI
         }
         private void table13GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table13.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table13.seat(currentParty);
+                        nameTextBox13.Text = currentParty.getName();
+                        sizeTextBox13.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox13.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table13.getParty();
+                    nameTextBox13.Text = null;
+                    sizeTextBox13.Text = null;
+                    requestsTextBox13.Text = null;
+                    table13.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table13.getInUse())
@@ -569,6 +952,7 @@ namespace ReservationGUI
                     sizeTextBox13.Text = currentParty.getPartySize().ToString();
                     requestsTextBox13.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -578,7 +962,7 @@ namespace ReservationGUI
                     nameTextBox13.Text = currentParty.getName();
                     sizeTextBox13.Text = currentParty.getPartySize().ToString();
                     requestsTextBox13.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -587,6 +971,38 @@ namespace ReservationGUI
         }
         private void table14GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table14.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table14.seat(currentParty);
+                        nameTextBox14.Text = currentParty.getName();
+                        sizeTextBox14.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox14.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table14.getParty();
+                    nameTextBox14.Text = null;
+                    sizeTextBox14.Text = null;
+                    requestsTextBox14.Text = null;
+                    table14.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table14.getInUse())
@@ -604,6 +1020,7 @@ namespace ReservationGUI
                     sizeTextBox14.Text = currentParty.getPartySize().ToString();
                     requestsTextBox14.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -613,7 +1030,7 @@ namespace ReservationGUI
                     nameTextBox14.Text = currentParty.getName();
                     sizeTextBox14.Text = currentParty.getPartySize().ToString();
                     requestsTextBox14.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -622,6 +1039,38 @@ namespace ReservationGUI
         }
         private void table15GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table15.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table15.seat(currentParty);
+                        nameTextBox15.Text = currentParty.getName();
+                        sizeTextBox15.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox15.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table15.getParty();
+                    nameTextBox15.Text = null;
+                    sizeTextBox15.Text = null;
+                    requestsTextBox15.Text = null;
+                    table15.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table15.getInUse())
@@ -639,6 +1088,7 @@ namespace ReservationGUI
                     sizeTextBox15.Text = currentParty.getPartySize().ToString();
                     requestsTextBox15.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -648,7 +1098,7 @@ namespace ReservationGUI
                     nameTextBox15.Text = currentParty.getName();
                     sizeTextBox15.Text = currentParty.getPartySize().ToString();
                     requestsTextBox15.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 
@@ -657,6 +1107,38 @@ namespace ReservationGUI
         }
         private void table16GroupBox_click(object sender, EventArgs e)
         {
+            if (edit == true)
+            {
+                if (tableSelectedForEdit == true)
+                {
+                    if (table16.getInUse())
+                    {
+                        System.Windows.Forms.MessageBox.Show("Already in use");
+                    }
+                    else
+                    {
+                        table16.seat(currentParty);
+                        nameTextBox16.Text = currentParty.getName();
+                        sizeTextBox16.Text = currentParty.getPartySize().ToString();
+                        requestsTextBox16.Text = currentParty.getSpecialReq();
+                        currentParty.setIsSeated(true);
+                        currentParty = null;
+                        edit = false;
+                        tableSelectedForEdit = false;
+                    }
+                }
+                else
+                {
+                    currentParty = table16.getParty();
+                    nameTextBox16.Text = null;
+                    sizeTextBox16.Text = null;
+                    requestsTextBox16.Text = null;
+                    table16.leave();
+                    tableSelectedForEdit = true;
+                    System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
+
+                }
+            }
             if (seat == true)
             {
                 if (table16.getInUse())
@@ -674,6 +1156,7 @@ namespace ReservationGUI
                     sizeTextBox16.Text = currentParty.getPartySize().ToString();
                     requestsTextBox16.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
+                    isBigParty = false;
 
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
@@ -683,7 +1166,7 @@ namespace ReservationGUI
                     nameTextBox16.Text = currentParty.getName();
                     sizeTextBox16.Text = currentParty.getPartySize().ToString();
                     requestsTextBox16.Text = currentParty.getSpecialReq();
-
+                    selcted1Table = false;
                     currentParty = null;
                     seat = false;
 

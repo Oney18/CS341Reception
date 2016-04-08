@@ -20,6 +20,7 @@ namespace ReservationGUI
         public DateTime seatedTime;
         private DateTime reservationTime;
         public DateTime leaveTime;
+        private DateTime pickUpTime;
 
         // Walk-In Constructor
         public Party(string partySize, string name, string specialReq, string pagerNum)
@@ -42,10 +43,11 @@ namespace ReservationGUI
         }
 
         //Takeout Constructor
-        public Party(string name, string phoneNum)
+        public Party(string name, string phoneNum, DateTime pickUptime)
         {
             this.name = name;
             this.phoneNum = phoneNum;
+            this.pickUpTime = pickUptime;
         }
 
         public string getPartySize()
@@ -81,6 +83,18 @@ namespace ReservationGUI
         public void setIsSeated(bool seated)
         {
             isSeated = seated;
+        }
+
+        public bool isBigParty()
+        {
+            if (Int32.Parse(partySize) > 4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /**

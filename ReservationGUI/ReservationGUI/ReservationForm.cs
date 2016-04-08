@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,9 @@ namespace ReservationGUI
 {
     public partial class ReservationsForm : Form
     {
-        private Waitlist wait = new Waitlist(16); //creates lists for current and past reservations, walk ins
-        private SeatingForm seat = new SeatingForm();
+        private Waitlist wait = new Waitlist(16);                     //lists for current and past reservations, walk ins
+        private SeatingForm seat = new SeatingForm();                 //creates seating form
+        private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
 
         public ReservationsForm()
         {
@@ -23,18 +25,13 @@ namespace ReservationGUI
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
             
-        }
-
-        private void seatPartyButton_Click(object sender, EventArgs e)
-        {
-            seat.Show();
-        }
+        }        
 
         /*add party to appropriate list for reservations, walkins, and take outs*/
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            int resHour = 0;            //time of reservation
-            int resMin = 0;             //time of reservation
+            string hour = "";          //time of reservation
+            string min = "";          //time of reservation
             string contactNum = "";     //contact phone number for party
             int check;                  //int to check if phone number is an int            
 
@@ -43,29 +40,27 @@ namespace ReservationGUI
             {
                 //add walk in party to waitlist
                 wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
+                partyListBox.Items.Add(nameTextBox.Text); //add name to waitlist on GUI
             }
             else if (reservationRadioButton.Checked) //if reservation
             {
                 //get time of reservation
-                string hour = reservationHourTextBox.Text;
-                string min = reservationMinTextBox.Text;
+                hour = hourTextBox.Text;
+                min = minTextBox.Text;
 
-                if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check)) {
-                    resHour = Convert.ToInt32(hour);            //hour of reservation
-                    resMin = Convert.ToInt32(min);              //minute of reservation
+                if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check)) {                    
                     contactNum = contactTextBox.Text;           //contact phone number for party 
                     
                     //check if reservation is at an appropriate time and the phone number is a 7 digit number
-                    if (resHour - DateTime.Now.Hour > 0 && resHour < 21 && resHour > 10 && 
-                        resMin > -1 && resMin < 61 && contactNum.Length == 7 && 
-                        int.TryParse(contactNum, out check))
-                {
+                    if ( checkTime(hour, min) && checkContact(contactNum))
+                    {
                         //add party to reservation list
-                    wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, resHour, resMin);
-                }
+                        wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
+                        reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list
+                    }
                     else //invalid inputs
-                {
-                    MessageBox.Show("The contact number must be 7 digits and the reservation " +
+                    {
+                         MessageBox.Show("The contact number must be 7 digits and the reservation " +
                             "must be between 11:00 and 21:00 and more than an hour prior to dining. This reservation was not made, try again.");
                     }
                 }
@@ -74,39 +69,74 @@ namespace ReservationGUI
                     MessageBox.Show("You must fill in a contact number and reservation time! This reservation was not made, try again.");
                 }                
 
-                //hide time and contact input fields
-                hideTime();
-                hideContact();
+                //reset time and contact input fields
+                resetTimeField();
+                resetContactField();
             }
             else if (takeOutRadioButton.Checked) //if take out 
             {
+                hour = hourTextBox.Text;
+                min = minTextBox.Text;    
                 contactNum = contactTextBox.Text;   //contact phone number for party                
-                if (contactNum.Length == 7 && int.TryParse(contactNum, out check))  //check for length of phone number and if a valid number
+                if (checkTime(hour, min) && checkContact(contactNum))  //check for length of phone number and if a valid number
                 {
-                    wait.addTakeOut(nameTextBox.Text, contactNum); //add party to take out list
+                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
                 }
                 else
                 {
                     MessageBox.Show("The contact number must be 7 digits, try again.");
                 }                
 
-                //hide contact input field
-                hideContact();
+                //hide contact and time input fields
+                resetContactField();
+                resetTimeField(); 
             }
         }
 
-        /*hides the reservation time input fields*/
-        private void hideTime()
+        private bool checkContact(string contactNum)
         {
-            reservationTimeLabel.Visible = false;
-            timeDescriptionLabel.Visible = false;
-            reservationHourTextBox.Visible = false;
-            reservationMinTextBox.Visible = false;
+            int check; //counter to check if value is an integer
+            bool validForm = false; //valid form is false unless proved correct
+
+            if(contactNum.Length == 7 && int.TryParse(contactNum, out check)) { validForm = true; }
+            return validForm;                    
+        }
+
+        private bool checkTime(string hour, string min)
+        {
+            int check; //counter to check if value is an integer
+            bool timeInBounds = false; //time is not in restaurant operating hours unless proved otherwise
+
+            if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check))
+            {
+                int resHour = Convert.ToInt32(hour);            //hour of reservation
+                int resMin = Convert.ToInt32(min);              //minute of reservation
+
+                //check if reservation is at an appropriate time and the phone number is a 7 digit number
+                if (resHour - DateTime.Now.Hour > 0 && resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61)
+                {
+                    timeInBounds = true;
+                }
             }
 
-        /*hides the contact input fields*/
-        private void hideContact()
+            return timeInBounds; //true if time is during restaurant hours of operation
+        }
+
+        /*hides the reservation time input fields*/
+        private void resetTimeField()
         {
+            hourTextBox.Text = "";
+            minTextBox.Text = "";
+            timeLabel.Visible = false;
+            timeDescriptionLabel.Visible = false;
+            hourTextBox.Visible = false;
+            minTextBox.Visible = false;
+        }
+
+        /*hides and clears the contact input fields*/
+        private void resetContactField()
+        {
+            contactTextBox.Text = ""; 
             contactLabel.Visible = false;
             contactTextBox.Visible = false;
         }
@@ -137,18 +167,25 @@ namespace ReservationGUI
         private void reservationRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             //show reservation boxes to get time and contact for reservation
-            reservationTimeLabel.Visible = true;
-            timeDescriptionLabel.Visible = true;
-            reservationHourTextBox.Visible = true;
-            reservationMinTextBox.Visible = true;
+            timeDescriptionLabel.Text = "Reservation Time:";
+            showTimeFields();
             showContact();
         }
 
         /*makes contact input fields visible when takeout radio button is selected*/
         private void takeOutRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            showContact(); //show contact input fields to get input
-            hideTime(); //hide time input fields
+            timeDescriptionLabel.Text = "Pick Up Time:";    //change time label
+            showTimeFields();                               //show time fields
+            showContact();                                  //show contact input fields to get input
+        }
+
+        private void showTimeFields()
+        {
+            timeLabel.Visible = true;
+            timeDescriptionLabel.Visible = true;
+            hourTextBox.Visible = true;
+            minTextBox.Visible = true;
         }
 
         /*makes contact input fields visible*/
@@ -159,12 +196,86 @@ namespace ReservationGUI
             contactTextBox.Visible = true;
         }
 
-        /*hide contact and time input fields when walk in*/
+        /*
+         * infoFromWaitStaff_updateTakeOutListBox()
+         * 
+         * reads through each line in recWait.txt in order to find names (not a number)
+         * once we find a currently existing legal name, color it green
+         */
+        private void infoFromWaitStaff_updateTakeOutListView()
+        {
+            //color every name red to start off
+            foreach(ListViewItem item in takeOutListBox.Items)
+            {
+                item.BackColor = Color.Red;
+            }
+
+            //read through the file given to us by waitstaff
+            string line = null;
+            using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
+            {
+                using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
+                {
+                    // While not eof
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        //if the line is not a number corresponding to a table, then it must be a name
+                        if (!(line.Contains("1") ||
+                               line.Contains("2") ||
+                               line.Contains("3") ||
+                               line.Contains("4") ||
+                               line.Contains("5") ||
+                               line.Contains("6") ||
+                               line.Contains("7") ||
+                               line.Contains("8") ||
+                               line.Contains("9") ||
+                               line.Contains("10") ||
+                               line.Contains("11") ||
+                               line.Contains("12") ||
+                               line.Contains("13") ||
+                               line.Contains("14") ||
+                               line.Contains("15") ||
+                               line.Contains("16")))
+                        {
+                            line.Trim(); //removes excess whitespace so that we only have the name
+                            foreach (ListViewItem item in takeOutListBox.Items)  //look through every item
+                            {
+                                if (item.ToString().Equals(line))   //if the item == line (the name we are looking for)
+                                {
+                                    //set Item.BackColor = Green
+                                    item.BackColor = Color.Green;
+                                    continue;   //continue here so that the already handled names are erased
+                                }
+                            }
+                        }
+                        writer.WriteLine(line); //write every line that contains a number back into the file,
+                                                //thereby erasing already handled names
+                    }
+                }
+            }
+        }
+
+
+        /*hide and clear contact and time input fields when walk in*/
         private void walkInRadioButton_CheckedChanged(object sender, EventArgs e)
         {          
-            hideContact();
-            hideTime();
+            resetContactField();
+            resetTimeField();
+
         }
-        
+
+        /*Display the seat form GUI*/
+        private void seeTablesButton_Click(object sender, EventArgs e)
+        {
+            seat.Show();
+        }
+
+        //called when reservation list is selected
+        //calls an IO function so might cause slowdown/hang **untested TODO**
+        //Might want to use the inner function of this when the Take Out Radio button is selected
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            infoFromWaitStaff_updateTakeOutListView();
+        }
     }
 }
