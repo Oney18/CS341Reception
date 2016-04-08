@@ -33,8 +33,8 @@ namespace ReservationGUI
             string hour = "";           //time of reservation
             string min = "";            //time of reservation
             string contactNum = "";     //contact phone number for party            
-            bool reservation = reservationRadioButton.Checked; //if reservation selected then true
-            bool takeout = takeOutRadioButton.Checked; //if takeout order then true
+            bool reservation = reservationRadioButton.Checked;  //if reservation selected then true
+            bool takeout = takeOutRadioButton.Checked;          //if takeout order then true
 
             //update party type
             if (walkInRadioButton.Checked) //if walk in
@@ -45,29 +45,31 @@ namespace ReservationGUI
             }
             else if (reservation) //if reservation
             {
-                //get time of reservation
+                //get time of reservation and contact phone number
                 hour = hourTextBox.Text;
                 min = minTextBox.Text;
+                contactNum = contactTextBox.Text; 
 
+                //check if time is in proper form
                 if (checkTime(hour, min, reservation, takeout)) {                    
-                    contactNum = contactTextBox.Text;           //contact phone number for party 
-                    
-                    //check if reservation is at an appropriate time and the phone number is a 7 digit number
+                                        
+                    //check if the phone number is in proper form
                     if (checkContact(contactNum))
                     {
                         //add party to reservation list
                         wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
                         reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list
                     }
-                    else //invalid inputs
+                    else //invalid phone number form
                     {
-                         MessageBox.Show("The contact number must be 7 digits and the reservation " +
-                            "must be between 11:00 and 21:00 and more than an hour prior to dining. This reservation was not made, try again.");
+                         MessageBox.Show("The contact number must be 7 digits with no special characters. " +
+                            "This reservation was not made, try again.");
                     }
                 }
                 else //invalid inputs
                 {
-                    MessageBox.Show("You must fill in a reservation time! This reservation was not made, try again.");
+                    MessageBox.Show("You must fill in a valid reservation time " +
+                        "between 11:00 and 21:00 and more than an hour prior to dining! This reservation was not made, try again.");
                 }                
 
                 //reset time and contact input fields
@@ -76,17 +78,26 @@ namespace ReservationGUI
             }
             else if (takeout) //if take out 
             {
-                hour = hourTextBox.Text;
-                min = minTextBox.Text;    
-                contactNum = contactTextBox.Text;   //contact phone number for party                
-                if (checkTime(hour, min, reservation, takeout) && checkContact(contactNum))  //check for length of phone number and if a valid number
+                hour = hourTextBox.Text;            //order pick up hour
+                min = minTextBox.Text;              //order pick up minute
+                contactNum = contactTextBox.Text;   //contact phone number for party   
+                             
+                if (checkTime(hour, min, reservation, takeout))  //check if pick up time is valid
                 {
-                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
-                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
+                    if (checkContact(contactNum)) //check phone number is in valid form
+                    {
+                        takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
+                        wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
+                    }
+                    else
+                    {
+                        MessageBox.Show("The contact number must be 7 digits with no special characters. " +
+                            "This order was not placed, try again.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("The contact number must be 7 digits, try again.");
+                    MessageBox.Show("That isn't a vaild time to pick up the order. The order was not placed. Try again.");
                 }                
 
                 //hide contact and time input fields
