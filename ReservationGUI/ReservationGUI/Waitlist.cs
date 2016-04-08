@@ -234,7 +234,12 @@ namespace ReservationGUI
             int one_minute_in_ms = 60000;
             await Task.Delay(one_minute_in_ms);
             cleanReportFromWaitstaff();
-	}
+	    }
+
+        public ArrayList getReservations()
+        {
+            return reservations;
+        }
 
         public LinkedList<Party> getWalkIns()
         {

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -59,6 +59,7 @@
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
+            this.newPartyButton = new System.Windows.Forms.Button();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -126,7 +127,7 @@
             this.waitEstimateTextBox.Location = new System.Drawing.Point(439, 168);
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
             this.waitEstimateTextBox.ReadOnly = true;
-            this.waitEstimateTextBox.Size = new System.Drawing.Size(99, 25);
+            this.waitEstimateTextBox.Size = new System.Drawing.Size(131, 25);
             this.waitEstimateTextBox.TabIndex = 40;
             // 
             // waitEstimateLabel
@@ -345,7 +346,7 @@
             // takeOutListBox
             // 
             this.takeOutListBox.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem3});
             this.takeOutListBox.LabelWrap = false;
             this.takeOutListBox.Location = new System.Drawing.Point(6, 22);
             this.takeOutListBox.Name = "takeOutListBox";
@@ -373,6 +374,7 @@
             this.reservationsListBox.Name = "reservationsListBox";
             this.reservationsListBox.Size = new System.Drawing.Size(144, 92);
             this.reservationsListBox.TabIndex = 11;
+            this.reservationsListBox.SelectedIndexChanged += new System.EventHandler(this.reservationsListBox_SelectedIndexChanged);
             // 
             // seatResCheckBox
             // 
@@ -386,12 +388,31 @@
             this.seatResCheckBox.UseVisualStyleBackColor = true;
             this.seatResCheckBox.Visible = false;
             // 
+            // newPartyButton
+            // 
+            this.newPartyButton.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.newPartyButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.newPartyButton.FlatAppearance.BorderSize = 2;
+            this.newPartyButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.newPartyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.newPartyButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.newPartyButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.newPartyButton.Location = new System.Drawing.Point(439, 12);
+            this.newPartyButton.Name = "newPartyButton";
+            this.newPartyButton.Size = new System.Drawing.Size(136, 32);
+            this.newPartyButton.TabIndex = 41;
+            this.newPartyButton.Text = "New Party";
+            this.newPartyButton.UseVisualStyleBackColor = false;
+            this.newPartyButton.Visible = false;
+            this.newPartyButton.Click += new System.EventHandler(this.newPartyButton_Click);
+            // 
             // ReservationsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(608, 439);
+            this.Controls.Add(this.newPartyButton);
             this.Controls.Add(this.seatResCheckBox);
             this.Controls.Add(this.reservationsGroupBox);
             this.Controls.Add(this.takeOutGroupBox);
@@ -462,6 +483,7 @@
         private System.Windows.Forms.ListBox reservationsListBox;
         private System.Windows.Forms.CheckBox seatResCheckBox;
         private System.Windows.Forms.ListView takeOutListBox;
+        private System.Windows.Forms.Button newPartyButton;
     }
 }
 

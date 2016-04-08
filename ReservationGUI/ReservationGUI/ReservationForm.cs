@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -16,6 +17,7 @@ namespace ReservationGUI
         private Waitlist wait = new Waitlist(16);                     //lists for current and past reservations, walk ins
         private SeatingForm seat = new SeatingForm();                 //creates seating form
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
+        private ArrayList reservations = new ArrayList();
 
         //determine type of guest to check input fields
         private int CHECK_WALKIN = 0;
@@ -229,6 +231,7 @@ namespace ReservationGUI
                 guestNumTextBox.Text = "";
                 pagerNumTextBox.Text = "";
                 waitEstimateTextBox.Text = "";
+                waitEstimateLabel.Text = "Wait Time Estimate: ";
                 requestsTextBox.Text = "";
                 walkInRadioButton.Checked = true;       //reset radio button selection to walk in
             }
@@ -402,6 +405,91 @@ namespace ReservationGUI
             //get selected name in party wait list
             string selected = partyListBox.GetItemText(partyListBox.SelectedItem);
 
+            walkIns = wait.getWalkIns();
+
+            newPartyButton.Visible = true; //if user wants to add a new new party
+
+            foreach (Party p in walkIns)
+            {
+                if(p.getName().Equals(selected))
+                {                                           
+
+                    readOnlyFields(); //make input fields ready only and do not add to list
+
+                    showPartyInfo(p, selected); //show party info
+                }
+            }
+
+        }
+
+        private void showPartyInfo(Party p, string name)
+        {
+            //fill in party info
+            nameTextBox.Text = name;
+            guestNumTextBox.Text = p.getPartySize() + "";
+            pagerNumTextBox.Text = p.getPagerNum() + "";
+            waitEstimateLabel.Text = "Party Arrived At: ";
+            waitEstimateTextBox.Text = p.getArrivalTime() + "";
+            requestsTextBox.Text = p.getSpecialReq();
+        }
+
+        private void reservationsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //get selected name in resevation waitlist
+            string selected = reservationsListBox.GetItemText(reservationsListBox.SelectedItem);
+
+            selected = selected.Remove(selected.IndexOf(" ")); //crops string so only has name
+
+            newPartyButton.Visible = true; //if user wants to add a new new party
+
+            reservations = wait.getReservations(); 
+
+            foreach (Party p in reservations)
+            {
+                if (p.getName().Equals(selected))
+                {
+
+                    readOnlyFields(); //make input fields read only and do not readd to list
+                    seatResCheckBox.Visible = true;
+                    showPartyInfo(p, selected); //show party info
+                    showTimeFields(); //show time input fields
+                    showContact(); //show contact fields
+                    contactTextBox.ReadOnly = true;
+                    contactTextBox.Text = p.getPhoneNum();
+                    hourTextBox.ReadOnly = true;
+                    hourTextBox.ReadOnly = true;
+                    hourTextBox.Text = p.getResTime().Hour + "";
+                    minTextBox.Text = p.getResTime().Minute + "";
+                }
+            }
+        }
+
+        private void readOnlyFields()
+        {
+            //make input fields readonly
+            nameTextBox.ReadOnly = true;
+            guestNumTextBox.ReadOnly = true;
+            pagerNumTextBox.ReadOnly = true;
+            requestsTextBox.ReadOnly = true;
+
+            addPartyButton.Enabled = false; //do not allow party to be added if already added 
+        }
+
+        private void newPartyButton_Click(object sender, EventArgs e)
+        {            
+            resetReservationForm(true);    //reset reservation form to add new party
+            addPartyButton.Enabled = true; //allow new party to be added
+
+            //make input fields editable
+            nameTextBox.ReadOnly = false;
+            guestNumTextBox.ReadOnly = false;
+            pagerNumTextBox.ReadOnly = false;
+            requestsTextBox.ReadOnly = false;
+            contactTextBox.ReadOnly = false;
+            hourTextBox.ReadOnly = false;
+            hourTextBox.ReadOnly = false;
+
+            newPartyButton.Visible = false; //hide new party button
         }
     }
 }
