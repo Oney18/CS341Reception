@@ -293,25 +293,25 @@
             // 
             // timeLabel
             // 
-            this.reservationTimeLabel.AutoSize = true;
-            this.reservationTimeLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reservationTimeLabel.Location = new System.Drawing.Point(399, 398);
-            this.reservationTimeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.reservationTimeLabel.Name = "reservationTimeLabel";
-            this.reservationTimeLabel.Size = new System.Drawing.Size(165, 28);
-            this.reservationTimeLabel.TabIndex = 16;
-            this.reservationTimeLabel.Text = "Reservation Time:";
-            this.reservationTimeLabel.Visible = false;
+            this.timeLabel.AutoSize = true;
+            this.timeLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timeLabel.Location = new System.Drawing.Point(399, 398);
+            this.timeLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.timeLabel.Name = "reservationTimeLabel";
+            this.timeLabel.Size = new System.Drawing.Size(165, 28);
+            this.timeLabel.TabIndex = 16;
+            this.timeLabel.Text = "Reservation Time:";
+            this.timeLabel.Visible = false;
             // 
             // hourTextBox
             // 
-            this.reservationHourTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reservationHourTextBox.Location = new System.Drawing.Point(585, 394);
-            this.reservationHourTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.reservationHourTextBox.Name = "reservationHourTextBox";
-            this.reservationHourTextBox.Size = new System.Drawing.Size(76, 30);
-            this.reservationHourTextBox.TabIndex = 17;
-            this.reservationHourTextBox.Visible = false;
+            this.hourTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hourTextBox.Location = new System.Drawing.Point(585, 394);
+            this.hourTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hourTextBox.Name = "reservationHourTextBox";
+            this.hourTextBox.Size = new System.Drawing.Size(76, 30);
+            this.hourTextBox.TabIndex = 17;
+            this.hourTextBox.Visible = false;
             // 
             // contactLabel
             // 
@@ -337,13 +337,13 @@
             // 
             // minTextBox
             // 
-            this.reservationMinTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reservationMinTextBox.Location = new System.Drawing.Point(683, 393);
-            this.reservationMinTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.reservationMinTextBox.Name = "reservationMinTextBox";
-            this.reservationMinTextBox.Size = new System.Drawing.Size(76, 30);
-            this.reservationMinTextBox.TabIndex = 20;
-            this.reservationMinTextBox.Visible = false;
+            this.minTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.minTextBox.Location = new System.Drawing.Point(683, 393);
+            this.minTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.minTextBox.Name = "reservationMinTextBox";
+            this.minTextBox.Size = new System.Drawing.Size(76, 30);
+            this.minTextBox.TabIndex = 20;
+            this.minTextBox.Visible = false;
             // 
             // timeDescriptionLabel
             // 
