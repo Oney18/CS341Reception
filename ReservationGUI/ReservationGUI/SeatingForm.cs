@@ -39,7 +39,7 @@ namespace ReservationGUI
         private bool tableSelectedForEdit;    //True when user selects a table for edit
 
 
-        public SeatingForm(ReservationsForm form)
+        public SeatingForm()
         {
             InitializeComponent();
             list.addWalkIn("4", "Ally", "None", "4443332222");   //Mock Data for now
