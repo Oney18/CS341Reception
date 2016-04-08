@@ -12,7 +12,7 @@ namespace ReservationGUI
 {
     public partial class SeatingForm : Form
     {
-        private Party currentParty;
+        private Party currentParty;  //Keeps track of current party 
         private Waitlist list = new Waitlist(16);
 
         private Table table1 = new Table(1);
@@ -32,17 +32,17 @@ namespace ReservationGUI
         private Table table15 = new Table(15);
         private Table table16 = new Table(16);
 
-        private bool selcted1Table;
-        private bool isBigParty;
-        private bool edit;
-        private bool seat;
-        private bool tableSelectedForEdit;
+        private bool selcted1Table;  //Bool that helps with seating a big party
+        private bool isBigParty;    //Bool that determines if the party is big
+        private bool edit;          //True when user clicks edit button
+        private bool seat;          //True when user clicks seat button
+        private bool tableSelectedForEdit;    //True when user selects a table for edit
 
 
         public SeatingForm()
         {
             InitializeComponent();
-            list.addWalkIn("4", "Ally", "None", "4443332222");
+            list.addWalkIn("4", "Ally", "None", "4443332222");   //Mock Data for now
             list.addWalkIn("5", "Bob", "None", "4443332222");
             list.addWalkIn("2", "Robin", "None", "4443332222");
             list.addWalkIn("7", "Tyler", "None", "4443332222");
@@ -57,22 +57,28 @@ namespace ReservationGUI
         private void seatParty_Click(object sender, EventArgs e)
         {
             seat = true;
-            currentParty = list.getNextParty();
+            currentParty = list.getNextParty();   //Gets the top table to be seated
 
+            //Checks for null
             if (currentParty == null)
             {
                 System.Windows.Forms.MessageBox.Show("There is no party to seat");
             }
+
+            //Determines if the party needs 2 tables
             else if (currentParty.isBigParty())
             {
                 isBigParty = true;
                 System.Windows.Forms.MessageBox.Show("Select 2 tables");
             }
+             
+            //Determines if the party is already seated
             else if (currentParty.getIsSeated() == true)
             {
                 System.Windows.Forms.MessageBox.Show("Already seated");
             }
 
+            //Prompts the user to select a table
             else
             {
                 System.Windows.Forms.MessageBox.Show("Select a table");
@@ -82,14 +88,18 @@ namespace ReservationGUI
         private void editTable_Click(object sender, EventArgs e)
         {
             edit = true;
-            System.Windows.Forms.MessageBox.Show("Select the party you want to move");
 
+            //Prompts the user to select the table they want to edit/change
+            System.Windows.Forms.MessageBox.Show("Select the party you want to move");
         }
 
         private void table1GroupBox_click(object sender, EventArgs e)
         {
+            //If the user is editing...
             if (edit == true)
             {
+                //If the table that the user wants to change is already selected, the user is then
+                //prompted to click the table they want to move the party to. 
                 if (tableSelectedForEdit == true)
                 {
                     if (table1.getInUse())
@@ -98,38 +108,54 @@ namespace ReservationGUI
                     }
                     else
                     {
-                        table1.seat(currentParty);
+                        table1.seat(currentParty); //seats the party
+
+                        //Updates the textboxes
                         nameTextBox1.Text = currentParty.getName();
                         sizeTextBox1.Text = currentParty.getPartySize().ToString();
                         requestsTextBox1.Text = currentParty.getSpecialReq();
-                        currentParty.setIsSeated(true);
-                        currentParty = null;
-                        edit = false;
-                        tableSelectedForEdit = false;
+
+                        currentParty.setIsSeated(true); //Sets the party to be seated
+                        currentParty = null; //Clears the field
+                        edit = false; //reset bool
+                        tableSelectedForEdit = false; //reset bool
                     }
                 }
+
+                //The user is to click the table they want to change
                 else
                 {
-                    currentParty = table1.getParty();
+                    //Keeps track of the party that was seated at that table
+                    currentParty = table1.getParty(); 
+
+                    //Clears the text fields
                     nameTextBox1.Text = null;
                     sizeTextBox1.Text = null;
                     requestsTextBox1.Text = null;
-                    table1.leave();
-                    tableSelectedForEdit = true;
+
+                    table1.leave(); //removes the party from the table
+                    tableSelectedForEdit = true; //bool changed to true so user can now select new table
+
+                    //Prompts user to select a new table
                     System.Windows.Forms.MessageBox.Show("Select a table to move this party to");
 
                 }
             }
             else if (seat == true)
             {
+                //Checks if the table is in use
                 if (table1.getInUse())
                 {
                     System.Windows.Forms.MessageBox.Show("Already in use");
                 }
+
+                //Checks if the part is already seated
                 else if (currentParty.getIsSeated() == true)
                 {
                     System.Windows.Forms.MessageBox.Show("Already seated");
                 }
+
+                //If the party is a big party, it prompts the user to select another table
                 else if (isBigParty == true && selcted1Table == false)
                 {
                     table1.seat(currentParty);
@@ -137,10 +163,11 @@ namespace ReservationGUI
                     sizeTextBox1.Text = currentParty.getPartySize().ToString();
                     requestsTextBox1.Text = currentParty.getSpecialReq();
                     selcted1Table = true;
-                    isBigParty = false;
+                    isBigParty = false;  //reset bool
                     System.Windows.Forms.MessageBox.Show("Please choose another adjoining table");
                 }
 
+                //Party is seated and text fields are updated accordingly
                 else
                 {
                     table1.seat(currentParty);
