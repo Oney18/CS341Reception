@@ -55,29 +55,33 @@
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
+            this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
+            this.reservationsListBox = new System.Windows.Forms.ListBox();
+            this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
+            this.reservationsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // seatingQueue
             // 
             this.seatingQueue.Controls.Add(this.partyListBox);
             this.seatingQueue.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.seatingQueue.Location = new System.Drawing.Point(15, 12);
+            this.seatingQueue.Location = new System.Drawing.Point(15, 6);
             this.seatingQueue.Name = "seatingQueue";
-            this.seatingQueue.Size = new System.Drawing.Size(156, 263);
+            this.seatingQueue.Size = new System.Drawing.Size(156, 188);
             this.seatingQueue.TabIndex = 12;
             this.seatingQueue.TabStop = false;
-            this.seatingQueue.Text = "Seating Queue";
+            this.seatingQueue.Text = "Walk In Queue";
             // 
             // partyListBox
             // 
             this.partyListBox.FormattingEnabled = true;
             this.partyListBox.ItemHeight = 22;
-            this.partyListBox.Location = new System.Drawing.Point(6, 28);
+            this.partyListBox.Location = new System.Drawing.Point(6, 22);
             this.partyListBox.Name = "partyListBox";
-            this.partyListBox.Size = new System.Drawing.Size(144, 224);
+            this.partyListBox.Size = new System.Drawing.Size(144, 158);
             this.partyListBox.TabIndex = 11;
             // 
             // nameTextBox
@@ -121,13 +125,13 @@
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
             this.waitEstimateTextBox.ReadOnly = true;
             this.waitEstimateTextBox.Size = new System.Drawing.Size(131, 25);
-            this.waitEstimateTextBox.TabIndex = 4;
+            this.waitEstimateTextBox.TabIndex = 4;            
             // 
             // waitEstimateLabel
             // 
             this.waitEstimateLabel.AutoSize = true;
             this.waitEstimateLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.waitEstimateLabel.Location = new System.Drawing.Point(223, 168);
+            this.waitEstimateLabel.Location = new System.Drawing.Point(186, 168);
             this.waitEstimateLabel.Name = "waitEstimateLabel";
             this.waitEstimateLabel.Size = new System.Drawing.Size(155, 22);
             this.waitEstimateLabel.TabIndex = 7;
@@ -137,7 +141,7 @@
             // 
             this.requestsLabel.AutoSize = true;
             this.requestsLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.requestsLabel.Location = new System.Drawing.Point(223, 203);
+            this.requestsLabel.Location = new System.Drawing.Point(186, 203);
             this.requestsLabel.Name = "requestsLabel";
             this.requestsLabel.Size = new System.Drawing.Size(128, 22);
             this.requestsLabel.TabIndex = 8;
@@ -147,7 +151,7 @@
             // 
             this.pagerLabel.AutoSize = true;
             this.pagerLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pagerLabel.Location = new System.Drawing.Point(223, 133);
+            this.pagerLabel.Location = new System.Drawing.Point(186, 133);
             this.pagerLabel.Name = "pagerLabel";
             this.pagerLabel.Size = new System.Drawing.Size(113, 22);
             this.pagerLabel.TabIndex = 9;
@@ -157,7 +161,7 @@
             // 
             this.guestNumLabel.AutoSize = true;
             this.guestNumLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guestNumLabel.Location = new System.Drawing.Point(223, 98);
+            this.guestNumLabel.Location = new System.Drawing.Point(186, 98);
             this.guestNumLabel.Name = "guestNumLabel";
             this.guestNumLabel.Size = new System.Drawing.Size(137, 22);
             this.guestNumLabel.TabIndex = 10;
@@ -167,7 +171,7 @@
             // 
             this.partyNameLabel.AutoSize = true;
             this.partyNameLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.partyNameLabel.Location = new System.Drawing.Point(223, 63);
+            this.partyNameLabel.Location = new System.Drawing.Point(186, 63);
             this.partyNameLabel.Name = "partyNameLabel";
             this.partyNameLabel.Size = new System.Drawing.Size(97, 22);
             this.partyNameLabel.TabIndex = 11;
@@ -219,6 +223,7 @@
             this.walkInRadioButton.TabStop = true;
             this.walkInRadioButton.Text = "Walk In";
             this.walkInRadioButton.UseVisualStyleBackColor = true;
+            this.walkInRadioButton.CheckedChanged += new System.EventHandler(this.walkInRadioButton_CheckedChanged);
             // 
             // addPartyButton
             // 
@@ -328,29 +333,62 @@
             // 
             this.takeOutListBox.FormattingEnabled = true;
             this.takeOutListBox.ItemHeight = 22;
-            this.takeOutListBox.Location = new System.Drawing.Point(6, 28);
+            this.takeOutListBox.Location = new System.Drawing.Point(6, 23);
             this.takeOutListBox.Name = "takeOutListBox";
-            this.takeOutListBox.Size = new System.Drawing.Size(144, 114);
+            this.takeOutListBox.Size = new System.Drawing.Size(144, 92);
             this.takeOutListBox.TabIndex = 12;
             // 
             // takeOutGroupBox
             // 
             this.takeOutGroupBox.Controls.Add(this.takeOutListBox);
             this.takeOutGroupBox.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.takeOutGroupBox.Location = new System.Drawing.Point(15, 281);
+            this.takeOutGroupBox.Location = new System.Drawing.Point(15, 316);
             this.takeOutGroupBox.Name = "takeOutGroupBox";
-            this.takeOutGroupBox.Size = new System.Drawing.Size(156, 154);
+            this.takeOutGroupBox.Size = new System.Drawing.Size(156, 122);
             this.takeOutGroupBox.TabIndex = 13;
             this.takeOutGroupBox.TabStop = false;
-            this.takeOutGroupBox.Text = "Take Out Orders:";
+            this.takeOutGroupBox.Text = "Take Out Orders";
+            // 
+            // reservationsGroupBox
+            // 
+            this.reservationsGroupBox.Controls.Add(this.reservationsListBox);
+            this.reservationsGroupBox.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.reservationsGroupBox.Location = new System.Drawing.Point(15, 194);
+            this.reservationsGroupBox.Name = "reservationsGroupBox";
+            this.reservationsGroupBox.Size = new System.Drawing.Size(156, 122);
+            this.reservationsGroupBox.TabIndex = 13;
+            this.reservationsGroupBox.TabStop = false;
+            this.reservationsGroupBox.Text = "Reservations";
+            // 
+            // reservationsListBox
+            // 
+            this.reservationsListBox.FormattingEnabled = true;
+            this.reservationsListBox.ItemHeight = 22;
+            this.reservationsListBox.Location = new System.Drawing.Point(6, 22);
+            this.reservationsListBox.Name = "reservationsListBox";
+            this.reservationsListBox.Size = new System.Drawing.Size(144, 92);
+            this.reservationsListBox.TabIndex = 11;
+            // 
+            // seatResCheckBox
+            // 
+            this.seatResCheckBox.AutoSize = true;
+            this.seatResCheckBox.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seatResCheckBox.Location = new System.Drawing.Point(177, 235);
+            this.seatResCheckBox.Name = "seatResCheckBox";
+            this.seatResCheckBox.Size = new System.Drawing.Size(171, 26);
+            this.seatResCheckBox.TabIndex = 22;
+            this.seatResCheckBox.Text = "seat reservation next";
+            this.seatResCheckBox.UseVisualStyleBackColor = true;
+            this.seatResCheckBox.Visible = false;
             // 
             // ReservationsForm
             // 
-            this.AcceptButton = this.addPartyButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(608, 439);
+            this.Controls.Add(this.seatResCheckBox);
+            this.Controls.Add(this.reservationsGroupBox);
             this.Controls.Add(this.takeOutGroupBox);
             this.Controls.Add(this.timeDescriptionLabel);
             this.Controls.Add(this.reservationMinTextBox);
@@ -381,6 +419,7 @@
             this.partyTypeGroupBox.ResumeLayout(false);
             this.partyTypeGroupBox.PerformLayout();
             this.takeOutGroupBox.ResumeLayout(false);
+            this.reservationsGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,6 +454,9 @@
         private System.Windows.Forms.Label timeDescriptionLabel;
         private System.Windows.Forms.ListBox takeOutListBox;
         private System.Windows.Forms.GroupBox takeOutGroupBox;
+        private System.Windows.Forms.GroupBox reservationsGroupBox;
+        private System.Windows.Forms.ListBox reservationsListBox;
+        private System.Windows.Forms.CheckBox seatResCheckBox;
     }
 }
 

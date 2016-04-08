@@ -37,6 +37,7 @@
             this.nameLabel1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.seatTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.table2GroupBox = new System.Windows.Forms.GroupBox();
             this.requestsTextBox2 = new System.Windows.Forms.TextBox();
             this.requestsLabel2 = new System.Windows.Forms.Label();
@@ -54,7 +55,7 @@
             this.table4GroupBox = new System.Windows.Forms.GroupBox();
             this.requestsTextBox4 = new System.Windows.Forms.TextBox();
             this.requestsLabel4 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.sizeTextBox4 = new System.Windows.Forms.TextBox();
             this.sizeLabel4 = new System.Windows.Forms.Label();
             this.nameTextBox4 = new System.Windows.Forms.TextBox();
             this.nameLabel4 = new System.Windows.Forms.Label();
@@ -142,7 +143,6 @@
             this.sizeLabel13 = new System.Windows.Forms.Label();
             this.nameTextBox13 = new System.Windows.Forms.TextBox();
             this.nameLabel13 = new System.Windows.Forms.Label();
-            this.seatTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.table1GroupBox.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.table2GroupBox.SuspendLayout();
@@ -178,6 +178,7 @@
             this.table1GroupBox.TabIndex = 0;
             this.table1GroupBox.TabStop = false;
             this.table1GroupBox.Text = "Table 1";
+            this.table1GroupBox.MouseCaptureChanged += new System.EventHandler(this.table1GroupBox_click);
             // 
             // requestsTextBox1
             // 
@@ -249,6 +250,13 @@
             this.toolStripMenuItem1.Size = new System.Drawing.Size(69, 20);
             this.toolStripMenuItem1.Text = "Edit Party";
             // 
+            // seatTableToolStripMenuItem
+            // 
+            this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
+            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.seatTableToolStripMenuItem.Text = "Seat Table";
+            this.seatTableToolStripMenuItem.Click += new System.EventHandler(this.seatParty_Click);
+            // 
             // table2GroupBox
             // 
             this.table2GroupBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -265,6 +273,7 @@
             this.table2GroupBox.TabIndex = 6;
             this.table2GroupBox.TabStop = false;
             this.table2GroupBox.Text = "Table 2";
+            this.table2GroupBox.MouseCaptureChanged += new System.EventHandler(this.table2GroupBox_click);
             // 
             // requestsTextBox2
             // 
@@ -334,6 +343,7 @@
             this.table3GroupBox.TabIndex = 7;
             this.table3GroupBox.TabStop = false;
             this.table3GroupBox.Text = "Table 3";
+            this.table3GroupBox.MouseCaptureChanged += new System.EventHandler(this.table3GroupBox_click);
             // 
             // requestsTextBox3
             // 
@@ -392,7 +402,7 @@
             this.table4GroupBox.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.table4GroupBox.Controls.Add(this.requestsTextBox4);
             this.table4GroupBox.Controls.Add(this.requestsLabel4);
-            this.table4GroupBox.Controls.Add(this.textBox5);
+            this.table4GroupBox.Controls.Add(this.sizeTextBox4);
             this.table4GroupBox.Controls.Add(this.sizeLabel4);
             this.table4GroupBox.Controls.Add(this.nameTextBox4);
             this.table4GroupBox.Controls.Add(this.nameLabel4);
@@ -403,6 +413,7 @@
             this.table4GroupBox.TabIndex = 7;
             this.table4GroupBox.TabStop = false;
             this.table4GroupBox.Text = "Table 4";
+            this.table4GroupBox.MouseCaptureChanged += new System.EventHandler(this.table4GroupBox_click);
             // 
             // requestsTextBox4
             // 
@@ -422,13 +433,13 @@
             this.requestsLabel4.TabIndex = 4;
             this.requestsLabel4.Text = "Requests:";
             // 
-            // textBox5
+            // sizeTextBox4
             // 
-            this.textBox5.Location = new System.Drawing.Point(60, 43);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(100, 25);
-            this.textBox5.TabIndex = 3;
+            this.sizeTextBox4.Location = new System.Drawing.Point(60, 43);
+            this.sizeTextBox4.Name = "sizeTextBox4";
+            this.sizeTextBox4.ReadOnly = true;
+            this.sizeTextBox4.Size = new System.Drawing.Size(100, 25);
+            this.sizeTextBox4.TabIndex = 3;
             // 
             // sizeLabel4
             // 
@@ -472,6 +483,7 @@
             this.table8GroupBox.TabIndex = 10;
             this.table8GroupBox.TabStop = false;
             this.table8GroupBox.Text = "Table 8";
+            this.table8GroupBox.MouseCaptureChanged += new System.EventHandler(this.table8GroupBox_click);
             // 
             // requestsTextBox8
             // 
@@ -541,6 +553,7 @@
             this.table7GroupBox.TabIndex = 11;
             this.table7GroupBox.TabStop = false;
             this.table7GroupBox.Text = "Table 7";
+            this.table7GroupBox.MouseCaptureChanged += new System.EventHandler(this.table7GroupBox_click);
             // 
             // requestsTextBox7
             // 
@@ -610,6 +623,7 @@
             this.table6GroupBox.TabIndex = 9;
             this.table6GroupBox.TabStop = false;
             this.table6GroupBox.Text = "Table 6";
+            this.table6GroupBox.MouseCaptureChanged += new System.EventHandler(this.table6GroupBox_click);
             // 
             // requestsTextBox6
             // 
@@ -679,6 +693,7 @@
             this.table5GroupBox.TabIndex = 8;
             this.table5GroupBox.TabStop = false;
             this.table5GroupBox.Text = "Table 5";
+            this.table5GroupBox.MouseCaptureChanged += new System.EventHandler(this.table5GroupBox_click);
             // 
             // requestsTextBox5
             // 
@@ -748,6 +763,7 @@
             this.table12GroupBox.TabIndex = 14;
             this.table12GroupBox.TabStop = false;
             this.table12GroupBox.Text = "Table 12";
+            this.table12GroupBox.MouseCaptureChanged += new System.EventHandler(this.table12GroupBox_click);
             // 
             // requestsTextBox12
             // 
@@ -817,6 +833,7 @@
             this.table11GroupBox.TabIndex = 15;
             this.table11GroupBox.TabStop = false;
             this.table11GroupBox.Text = "Table 11";
+            this.table11GroupBox.MouseCaptureChanged += new System.EventHandler(this.table11GroupBox_click);
             // 
             // requestsTextBox11
             // 
@@ -826,6 +843,7 @@
             this.requestsTextBox11.ReadOnly = true;
             this.requestsTextBox11.Size = new System.Drawing.Size(100, 64);
             this.requestsTextBox11.TabIndex = 5;
+            this.requestsTextBox11.TextChanged += new System.EventHandler(this.requestsTextBox11_TextChanged);
             // 
             // requestsLabel11
             // 
@@ -886,6 +904,7 @@
             this.table10GroupBox.TabIndex = 13;
             this.table10GroupBox.TabStop = false;
             this.table10GroupBox.Text = "Table 10";
+            this.table10GroupBox.MouseCaptureChanged += new System.EventHandler(this.table10GroupBox_click);
             // 
             // requestsTextBox10
             // 
@@ -955,6 +974,7 @@
             this.table9GroupBox.TabIndex = 12;
             this.table9GroupBox.TabStop = false;
             this.table9GroupBox.Text = "Table 9";
+            this.table9GroupBox.MouseCaptureChanged += new System.EventHandler(this.table9GroupBox_click);
             // 
             // requestsTextBox9
             // 
@@ -1024,6 +1044,7 @@
             this.table16GroupBox.TabIndex = 18;
             this.table16GroupBox.TabStop = false;
             this.table16GroupBox.Text = "Table 16";
+            this.table16GroupBox.MouseCaptureChanged += new System.EventHandler(this.table16GroupBox_click);
             // 
             // requestsTextBox16
             // 
@@ -1093,6 +1114,7 @@
             this.table15GroupBox.TabIndex = 19;
             this.table15GroupBox.TabStop = false;
             this.table15GroupBox.Text = "Table 15";
+            this.table15GroupBox.MouseCaptureChanged += new System.EventHandler(this.table15GroupBox_click);
             // 
             // requestsTextBox15
             // 
@@ -1162,6 +1184,7 @@
             this.table14GroupBox.TabIndex = 17;
             this.table14GroupBox.TabStop = false;
             this.table14GroupBox.Text = "Table 14";
+            this.table14GroupBox.MouseCaptureChanged += new System.EventHandler(this.table14GroupBox_click);
             // 
             // requestsTextBox14
             // 
@@ -1231,6 +1254,7 @@
             this.table13GroupBox.TabIndex = 16;
             this.table13GroupBox.TabStop = false;
             this.table13GroupBox.Text = "Table 13";
+            this.table13GroupBox.MouseCaptureChanged += new System.EventHandler(this.table13GroupBox_click);
             // 
             // requestsTextBox13
             // 
@@ -1283,12 +1307,6 @@
             this.nameLabel13.Size = new System.Drawing.Size(45, 18);
             this.nameLabel13.TabIndex = 0;
             this.nameLabel13.Text = "Name:";
-            // 
-            // seatTableToolStripMenuItem
-            // 
-            this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
-            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
-            this.seatTableToolStripMenuItem.Text = "Seat Table";
             // 
             // SeatingForm
             // 
@@ -1385,7 +1403,7 @@
         private System.Windows.Forms.GroupBox table4GroupBox;
         private System.Windows.Forms.TextBox requestsTextBox4;
         private System.Windows.Forms.Label requestsLabel4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox sizeTextBox4;
         private System.Windows.Forms.Label sizeLabel4;
         private System.Windows.Forms.TextBox nameTextBox4;
         private System.Windows.Forms.Label nameLabel4;

@@ -5,17 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ReservationGUI
 {
     class Waitlist
     {
         private Table[] tableList;
-        private LinkedList<Party> reservationsPresent;
         private LinkedList<Party> walkIns;
         private ArrayList takeOut;
         private ArrayList reservations;
         private ArrayList pastParties;
+        private LinkedList<int> tablesSeated;
 
         /**
          *  Ctor for the waitlist
@@ -24,15 +25,20 @@ namespace ReservationGUI
          **/
         public Waitlist(int num)
         {
-            reservationsPresent = new LinkedList<Party>();
             walkIns = new LinkedList<Party>();
             takeOut = new ArrayList();
             reservations = new ArrayList();
             pastParties = new ArrayList();
+            tablesSeated = new LinkedList<int>();
             tableList = new Table[num];
             for (int i = 0; i < num; i++)
             {
                 tableList[i] = new Table(i);
+            }
+
+            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
+            {
+                Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
         }
 
@@ -61,7 +67,7 @@ namespace ReservationGUI
          *
          *  Only allows parties that are within one hour to be checked in
          **/
-        public void checkIn(String name)
+        public void checkIn(string name)
         {
             Party partyToCheck = null;
 
@@ -78,10 +84,9 @@ namespace ReservationGUI
             {
                 if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
-                    reservationsPresent.AddLast(partyToCheck);
+                    walkIns.AddFirst(partyToCheck);
                     reservations.Remove(partyToCheck);
                 }
-                else Console.WriteLine("Party {0} cannot be checked in; more than 1 hour out.", name); //too far out to check in
             }
             else
             {
@@ -109,20 +114,18 @@ namespace ReservationGUI
         /**
          *  Constructor for adding a walk-in party
          **/
-        public void addWalkIn(int partySize, String name, String specialReq, int pagerNum)
+        public void addWalkIn(string partySize, string name, string specialReq, string pagerNum)
         {
-            walkIns.AddLast(new Party(partySize.ToString(), name, specialReq, pagerNum.ToString()));
+            walkIns.AddLast(new Party(partySize, name, specialReq, pagerNum));
         }
 
+
+        /**
+         *  Returns the enxt party to be seated
+         **/
         public Party getNextParty()
         {
-            if (reservationsPresent.Count() > 0)
-            {
-                Party temp = reservationsPresent.First();
-                reservationsPresent.RemoveFirst();
-                return temp;
-            }
-            else if (walkIns.Count() > 0)
+            if (walkIns.Count() > 0)
             {
                 Party temp = walkIns.First();
                 walkIns.RemoveFirst();
@@ -141,6 +144,7 @@ namespace ReservationGUI
             {
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
+                tablesSeated.AddLast(tableNum);
             }
         }
 
@@ -153,33 +157,43 @@ namespace ReservationGUI
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-                pastParties.Add(temp);
+
+                using (StreamWriter file =
+                    File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+                {
+                    
+                    file.WriteLine(temp.managementOutput());
+                    
+                }
+
+                tablesSeated.Remove(tableNum);
             }
         }
 
 
         /**
-         *  Creates a file under C:\Reception files to be outputted to Management
-         * 
-         *  Needs to be put into dropbox
+         *  Gives the estimated waiting time for a party
          **/
-        public void ToManagement()
+        public string getWaitTime()
         {
-
-            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
+            foreach (Table t in tableList) //finds an empty table 
             {
-                Directory.CreateDirectory(@"C:\ReceptionFiles");
+                if(!t.getInUse())
+                {
+                    return "None";
+                }
             }
 
-            using (StreamWriter file =
-            new StreamWriter(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-            {
-                foreach (Party party in pastParties)
-                {
-                    file.WriteLine(party.managementOutput());
-                }
-    }
+            //no empty tables, need to estimate based on first table seated
+            int amtWaiting = walkIns.Count();
+            int cyles = amtWaiting / 16; //represents amount of cyles of people neding to be seated
+            amtWaiting = amtWaiting % 16;
+
+            return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
         }
+
+
+
        
         /*
          * cleanReportFromWaitstaff
@@ -215,5 +229,6 @@ namespace ReservationGUI
                 }
             }
         }
+
     }
 }

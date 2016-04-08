@@ -14,11 +14,12 @@ namespace ReservationGUI
         private string specialReq;
         private string pagerNum;
         private string phoneNum;
-        private string tableNum;
-        private DateTime arrivalTime;
-        private DateTime seatedTime;
+        private bool isSeated = false;
+        public string tableNum;
+        public DateTime arrivalTime;
+        public DateTime seatedTime;
         private DateTime reservationTime;
-        private DateTime leaveTime;
+        public DateTime leaveTime;
 
         // Walk-In Constructor
         public Party(string partySize, string name, string specialReq, string pagerNum)
@@ -27,6 +28,7 @@ namespace ReservationGUI
             this.partySize = partySize;
             this.specialReq = specialReq;
             this.pagerNum = pagerNum;
+            this.arrivalTime = DateTime.Now;
         }
 
         //Reservation Constructor
@@ -71,6 +73,11 @@ namespace ReservationGUI
             return phoneNum;
         }
 
+        public bool getIsSeated()
+        {
+            return isSeated;
+        }
+
         /**
          *  Called when a reservation arrives in restaurant
          *  Input is pager number given to the party
@@ -84,7 +91,7 @@ namespace ReservationGUI
         public void seat(int num)
         {
             seatedTime = DateTime.Now;
-            tableNum = num.ToString(); 
+            tableNum = num.ToString();
         }
 
         public void leave()
@@ -95,6 +102,11 @@ namespace ReservationGUI
         public DateTime getResTime()
         {
             return reservationTime;
+        }
+
+        public DateTime getSeatTime()
+        {
+            return seatedTime;
         }
 
 
