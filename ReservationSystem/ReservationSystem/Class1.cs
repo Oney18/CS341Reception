@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Text;
+using Dropbox.Api;
+using Dropbox.Api.Files;
 using System.Threading.Tasks;
 
 namespace ReservationSystem
@@ -20,6 +22,8 @@ namespace ReservationSystem
             ws.seatNextParty(9);
             ws.resetTable(5);
             ws.resetTable(9);
+            var task = Task.Run(ws.toManagement);
+            task.Wait();
         }
 
     }
@@ -32,6 +36,7 @@ namespace ReservationSystem
         private ArrayList reservations;
         private ArrayList pastParties;
         private LinkedList<int> tablesSeated;
+        private DropboxClient dropbox;
 
         /**
          *  Ctor for the waitlist
@@ -55,6 +60,10 @@ namespace ReservationSystem
             {
                 Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
+
+            dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
+
+
         }
 
 
@@ -172,13 +181,7 @@ namespace ReservationSystem
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-
-                using (StreamWriter file =
-            File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-                {
-                    file.WriteLine(temp.managementOutput());
-                }
-
+                pastParties.Add(temp);
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -203,6 +206,27 @@ namespace ReservationSystem
             amtWaiting = amtWaiting % 16;
 
             return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1) * 45) - DateTime.Now).ToString();
+        }
+
+
+        /**
+         *  Puts management file onto dropbox
+         **/
+        public async Task toManagement()
+        {
+            string manString = "";
+
+            foreach (Party p in pastParties)
+            {
+                manString += (p.managementOutput() + "\n");
+            }
+
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Management/ReceptionManagement.txt",
+                    WriteMode.Overwrite.Instance, body: mem);
+            }
         }
 
 
@@ -243,8 +267,10 @@ namespace ReservationSystem
         }
 
     }
+}
 
-    class Table
+
+class Table
     {
         private bool inUse;
         private int peopleSeated;
@@ -420,4 +446,3 @@ namespace ReservationSystem
         }
 
     }
-}
