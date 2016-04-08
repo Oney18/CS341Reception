@@ -242,18 +242,18 @@
             this.menuStrip1.Size = new System.Drawing.Size(734, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(69, 20);
-            this.toolStripMenuItem1.Text = "Edit Party";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(71, 20);
+            this.toolStripMenuItem1.Text = "Edit Table";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.editTable_Click);
             // 
             // seatTableToolStripMenuItem
             // 
             this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
-            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
             this.seatTableToolStripMenuItem.Text = "Seat Table";
             this.seatTableToolStripMenuItem.Click += new System.EventHandler(this.seatParty_Click);
             // 
@@ -843,7 +843,6 @@
             this.requestsTextBox11.ReadOnly = true;
             this.requestsTextBox11.Size = new System.Drawing.Size(100, 64);
             this.requestsTextBox11.TabIndex = 5;
-            this.requestsTextBox11.TextChanged += new System.EventHandler(this.requestsTextBox11_TextChanged);
             // 
             // requestsLabel11
             // 
