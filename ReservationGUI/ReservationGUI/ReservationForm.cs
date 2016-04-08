@@ -103,7 +103,7 @@ namespace ReservationGUI
             timeDescriptionLabel.Visible = false;
             reservationHourTextBox.Visible = false;
             reservationMinTextBox.Visible = false;
-            }
+        }
 
         /*hides the contact input fields*/
         private void hideContact()
@@ -228,6 +228,7 @@ namespace ReservationGUI
 
         //called when reservation list is selected
         //calls an IO function so might cause slowdown/hang **untested TODO**
+        //Might want to use the inner function of this when the Take Out Radio button is selected
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             infoFromWaitStaff_updateTakeOutListView();

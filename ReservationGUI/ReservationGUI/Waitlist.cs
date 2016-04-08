@@ -198,7 +198,7 @@ namespace ReservationGUI
          * One minute after this function is called, cleanReportFromWaitstaff is called
          * to check if any spots have opened up
          * 
-         * Use this whenever
+         * Use this whenever is necessary
          */
         public async void cleanTableCheck()
         {
