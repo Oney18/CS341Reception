@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dropbox.Api;
+using Dropbox.Api.Files;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +19,7 @@ namespace ReservationGUI
         private ArrayList reservations;
         private ArrayList pastParties;
         private LinkedList<int> tablesSeated;
+        private DropboxClient dropbox;
 
         /**
          *  Ctor for the waitlist
@@ -40,6 +43,11 @@ namespace ReservationGUI
             {
                 Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
+
+            //DO NOT MODIFY THIS LINE
+            dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
+
+
         }
 
 
@@ -157,15 +165,7 @@ namespace ReservationGUI
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-
-                using (StreamWriter file =
-                    File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-                {
-                    
-                    file.WriteLine(temp.managementOutput());
-                    
-                }
-
+                pastParties.Add(temp);
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -206,7 +206,27 @@ namespace ReservationGUI
             await Task.Delay(one_minute_in_ms);
             cleanReportFromWaitstaff();
         }
-       
+
+        /**
+         *  Puts management file onto dropbox
+         **/
+        public async Task toManagement()
+        {
+            string manString = "";
+
+            foreach (Party p in pastParties)
+            {
+                manString += (p.managementOutput() + "\n");
+            }
+
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Management/ReceptionManagement.txt",
+                    WriteMode.Overwrite.Instance, body: mem);
+            }
+        }
+
         /*
          * cleanReportFromWaitstaff
          * 
