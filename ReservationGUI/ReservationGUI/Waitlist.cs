@@ -208,8 +208,7 @@ namespace ReservationGUI
                    line.Contains("12") ||
                    line.Contains("13") ||
                    line.Contains("14") ||
-                   line.Contains("15") ||
-                   line.Contains("16"))
+                   line.Contains("15"))
                 {
                     int tableNum = Int32.Parse(line);
                     resetTable(tableNum);
