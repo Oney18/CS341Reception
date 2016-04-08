@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dropbox.Api;
+using Dropbox.Api.Files;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +19,7 @@ namespace ReservationGUI
         private ArrayList reservations;
         private ArrayList pastParties;
         private LinkedList<int> tablesSeated;
+        private DropboxClient dropbox;
 
         /**
          *  Ctor for the waitlist
@@ -40,6 +43,11 @@ namespace ReservationGUI
             {
                 Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
+
+            //DO NOT MODIFY THIS LINE
+            dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
+
+
         }
 
 
@@ -56,9 +64,10 @@ namespace ReservationGUI
         /**
          *  Constructor for adding in a takeout order
          **/
-        public void addTakeOut(string name, string phoneNum)
+        public void addTakeOut(string name, string phoneNum, int pickUpHour, int pickUpMin)
         {
-            takeOut.Add(new Party(name, phoneNum));
+            DateTime pickUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, pickUpHour, pickUpMin, 0);
+            takeOut.Add(new Party(name, phoneNum, pickUpTime));
         }
 
 
@@ -157,15 +166,7 @@ namespace ReservationGUI
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-
-                using (StreamWriter file =
-                    File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-                {
-                    
-                    file.WriteLine(temp.managementOutput());
-                    
-                }
-
+                pastParties.Add(temp);
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -192,9 +193,32 @@ namespace ReservationGUI
             return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
         }
 
+        public LinkedList<Party> getWalkIns()
+        {
+            return walkIns;
+        }
+
+        /**
+         *  Puts management file onto dropbox
+         **/
+        public async Task toManagement()
+        {
+            string manString = "";
+
+            foreach (Party p in pastParties)
+            {
+                manString += (p.managementOutput() + "\n");
+            }
+
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Management/ReceptionManagement.txt",
+                    WriteMode.Overwrite.Instance, body: mem);
+            }
+        }
 
 
-       
         /*
          * cleanReportFromWaitstaff
          * 
