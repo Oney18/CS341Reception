@@ -29,10 +29,11 @@ namespace ReservationGUI
         /*add party to appropriate list for reservations, walkins, and take outs*/
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            string hour = "";          //time of reservation
-            string min = "";          //time of reservation
-            string contactNum = "";     //contact phone number for party
-            int check;                  //int to check if phone number is an int            
+            string hour = "";           //time of reservation
+            string min = "";            //time of reservation
+            string contactNum = "";     //contact phone number for party            
+            bool reservation = reservationRadioButton.Checked; //if reservation selected then true
+            bool takeout = takeOutRadioButton.Checked; //if takeout order then true
 
             //update party type
             if (walkInRadioButton.Checked) //if walk in
@@ -41,17 +42,17 @@ namespace ReservationGUI
                 wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
                 partyListBox.Items.Add(nameTextBox.Text); //add name to waitlist on GUI
             }
-            else if (reservationRadioButton.Checked) //if reservation
+            else if (reservation) //if reservation
             {
                 //get time of reservation
                 hour = hourTextBox.Text;
                 min = minTextBox.Text;
 
-                if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check)) {                    
+                if (checkTime(hour, min, reservation, takeout)) {                    
                     contactNum = contactTextBox.Text;           //contact phone number for party 
                     
                     //check if reservation is at an appropriate time and the phone number is a 7 digit number
-                    if ( checkTime(hour, min) && checkContact(contactNum))
+                    if (checkContact(contactNum))
                     {
                         //add party to reservation list
                         wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
@@ -65,19 +66,19 @@ namespace ReservationGUI
                 }
                 else //invalid inputs
                 {
-                    MessageBox.Show("You must fill in a contact number and reservation time! This reservation was not made, try again.");
+                    MessageBox.Show("You must fill in a reservation time! This reservation was not made, try again.");
                 }                
 
                 //reset time and contact input fields
                 resetTimeField();
                 resetContactField();
             }
-            else if (takeOutRadioButton.Checked) //if take out 
+            else if (takeout) //if take out 
             {
                 hour = hourTextBox.Text;
                 min = minTextBox.Text;    
                 contactNum = contactTextBox.Text;   //contact phone number for party                
-                if (checkTime(hour, min) && checkContact(contactNum))  //check for length of phone number and if a valid number
+                if (checkTime(hour, min, reservation, takeout) && checkContact(contactNum))  //check for length of phone number and if a valid number
                 {
                     wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
                 }
@@ -101,18 +102,28 @@ namespace ReservationGUI
             return validForm;                    
         }
 
-        private bool checkTime(string hour, string min)
+        /*check for appropriate time*/
+        private bool checkTime(string hour, string min, bool reservation, bool takeout)
         {
-            int check; //counter to check if value is an integer
-            bool timeInBounds = false; //time is not in restaurant operating hours unless proved otherwise
+            int check;                  //counter to check if value is an integer
+            bool timeInBounds = false;  //time is not in restaurant operating hours unless proved otherwise
+            int intHour = 0;            //hold int value of hour
+            int intMin = 0;             //hold int value of min
 
+            //check if there is a time 
             if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check))
             {
-                int resHour = Convert.ToInt32(hour);            //hour of reservation
-                int resMin = Convert.ToInt32(min);              //minute of reservation
+                intHour = Convert.ToInt32(hour);            //hour of reservation
+                intMin = Convert.ToInt32(min);              //minute of reservation
 
-                //check if reservation is at an appropriate time and the phone number is a 7 digit number
-                if (resHour - DateTime.Now.Hour > 0 && resHour < 21 && resHour > 10 && resMin > -1 && resMin < 61)
+                //check if reservation is at an appropriate time 
+                if (reservation && intHour - DateTime.Now.Hour > 0 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
+                {
+                    timeInBounds = true;
+                }
+
+                //check if takeout
+                if (takeout && intHour - DateTime.Now.Hour > -1 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
                 {
                     timeInBounds = true;
                 }
