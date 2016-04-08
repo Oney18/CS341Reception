@@ -106,13 +106,16 @@ namespace ReservationGUI
             }
         }
 
+        /*check if contact phone number is 7 digits*/
         private bool checkContact(string contactNum)
         {
-            int check; //counter to check if value is an integer
+            int check;              //counter to check if value is an integer
             bool validForm = false; //valid form is false unless proved correct
 
+            //set validForm to true if phone number is a 7 digit number
             if(contactNum.Length == 7 && int.TryParse(contactNum, out check)) { validForm = true; }
-            return validForm;                    
+
+            return validForm;                     
         }
 
         /*check for appropriate time*/
@@ -123,7 +126,7 @@ namespace ReservationGUI
             int intHour = 0;            //hold int value of hour
             int intMin = 0;             //hold int value of min
 
-            //check if there is a time 
+            //check if a time was given
             if (hour != "" && min != "" && int.TryParse(hour, out check) && int.TryParse(min, out check))
             {
                 intHour = Convert.ToInt32(hour);            //hour of reservation
@@ -136,7 +139,7 @@ namespace ReservationGUI
                 }
 
                 //check if takeout
-                if (takeout && intHour - DateTime.Now.Hour > -1 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
+                if (takeout && intHour - DateTime.Now.Hour > -1 && intHour < 21 && intHour > 10 && intMin > DateTime.Now.Minute && intMin < 61)
                 {
                     timeInBounds = true;
                 }
@@ -148,36 +151,37 @@ namespace ReservationGUI
         /*hides the reservation time input fields*/
         private void resetTimeField()
         {
-            hourTextBox.Text = "";
-            minTextBox.Text = "";
-            timeLabel.Visible = false;
-            timeDescriptionLabel.Visible = false;
-            hourTextBox.Visible = false;
-            minTextBox.Visible = false;
+            hourTextBox.Text = "";                  //clear hour input field
+            minTextBox.Text = "";                   //clear minute input field
+            timeLabel.Visible = false;              //hide time label
+            timeDescriptionLabel.Visible = false;   //hide time description label
+            hourTextBox.Visible = false;            //hide hour input field
+            minTextBox.Visible = false;             //hide minute input field
         }
 
         /*hides and clears the contact input fields*/
         private void resetContactField()
         {
-            contactTextBox.Text = ""; 
-            contactLabel.Visible = false;
-            contactTextBox.Visible = false;
+            contactTextBox.Text = "";               //clear contact phone number input field
+            contactLabel.Visible = false;           //hide contact label
+            contactTextBox.Visible = false;         //hide contact phone number input field
         }
 
         /*estimates wait time based on tables available and party size*/
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)
         {
             string guestNum = guestNumTextBox.Text; //get number of guests in party
-            int check; //int to check if string is an int
+            int check;                              //int to check if string is an int
 
             //check for integer
             if(int.TryParse(guestNum, out check))
             {
+
                 addPartyButton.Enabled = true;
-            //if all tables are full show wait time
-            //No wait time for party of 4 or less if all tables are empty
-            waitEstimateTextBox.Text = wait.getWaitTime(); 
-        }
+                //if all tables are full show wait time
+                //No wait time for party of 4 or less if all tables are empty
+                waitEstimateTextBox.Text = wait.getWaitTime(Convert.ToInt32(guestNum)); 
+            }
             else
             {
                 addPartyButton.Enabled = false;

@@ -196,13 +196,20 @@ namespace ReservationGUI
         /**
          *  Gives the estimated waiting time for a party
          **/
-        public string getWaitTime()
+        public string getWaitTime(int guestNum)
         {
             foreach (Table t in tableList) //finds an empty table 
             {
                 if(!t.getInUse())
                 {
-                    return "None";
+                    if(guestNum > 4)
+                    {
+                        return "5 Minutes";
+                    }
+                    else
+                    {
+                        return "None";
+                    }                    
                 }
             }
 
