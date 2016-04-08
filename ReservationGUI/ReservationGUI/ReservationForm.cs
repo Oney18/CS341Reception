@@ -303,5 +303,12 @@ namespace ReservationGUI
         {
             infoFromWaitStaff_updateTakeOutListView();
         }
+
+        private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //get selected name in party wait list
+            string selected = partyListBox.GetItemText(partyListBox.SelectedItem);
+
+        }
     }
 }
