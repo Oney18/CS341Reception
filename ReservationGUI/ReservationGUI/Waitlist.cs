@@ -56,9 +56,10 @@ namespace ReservationGUI
         /**
          *  Constructor for adding in a takeout order
          **/
-        public void addTakeOut(string name, string phoneNum)
+        public void addTakeOut(string name, string phoneNum, int pickUpHour, int pickUpMin)
         {
-            takeOut.Add(new Party(name, phoneNum));
+            DateTime pickUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, pickUpHour, pickUpMin, 0);
+            takeOut.Add(new Party(name, phoneNum, pickUpTime));
         }
 
 
@@ -192,6 +193,10 @@ namespace ReservationGUI
             return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
         }
 
+        public LinkedList<Party> getWalkIns()
+        {
+            return walkIns;
+        }
 
 
        
