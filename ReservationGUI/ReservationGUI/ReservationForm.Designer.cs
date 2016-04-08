@@ -110,7 +110,7 @@
             this.requestsTextBox.Multiline = true;
             this.requestsTextBox.Name = "requestsTextBox";
             this.requestsTextBox.Size = new System.Drawing.Size(218, 56);
-            this.requestsTextBox.TabIndex = 5;
+            this.requestsTextBox.TabIndex = 4;
             // 
             // pagerNumTextBox
             // 
@@ -127,7 +127,7 @@
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
             this.waitEstimateTextBox.ReadOnly = true;
             this.waitEstimateTextBox.Size = new System.Drawing.Size(99, 25);
-            this.waitEstimateTextBox.TabIndex = 4;
+            this.waitEstimateTextBox.TabIndex = 40;
             // 
             // waitEstimateLabel
             // 
@@ -288,7 +288,7 @@
             this.hourTextBox.Location = new System.Drawing.Point(439, 320);
             this.hourTextBox.Name = "hourTextBox";
             this.hourTextBox.Size = new System.Drawing.Size(58, 25);
-            this.hourTextBox.TabIndex = 17;
+            this.hourTextBox.TabIndex = 6;
             this.hourTextBox.Visible = false;
             // 
             // contactLabel
@@ -308,7 +308,7 @@
             this.contactTextBox.Location = new System.Drawing.Point(439, 276);
             this.contactTextBox.Name = "contactTextBox";
             this.contactTextBox.Size = new System.Drawing.Size(131, 25);
-            this.contactTextBox.TabIndex = 19;
+            this.contactTextBox.TabIndex = 5;
             this.contactTextBox.Visible = false;
             // 
             // minTextBox
@@ -317,7 +317,7 @@
             this.minTextBox.Location = new System.Drawing.Point(512, 319);
             this.minTextBox.Name = "minTextBox";
             this.minTextBox.Size = new System.Drawing.Size(58, 25);
-            this.minTextBox.TabIndex = 20;
+            this.minTextBox.TabIndex = 7;
             this.minTextBox.Visible = false;
             // 
             // timeDescriptionLabel

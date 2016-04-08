@@ -17,6 +17,11 @@ namespace ReservationGUI
         private SeatingForm seat = new SeatingForm();                 //creates seating form
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
 
+        //determine type of guest to check input fields
+        private int CHECK_WALKIN = 0;
+        private int CHECK_RESERVATION = 1;
+        private int CHECK_TAKEOUT = 2;
+
         public ReservationsForm()
         {
             InitializeComponent();
@@ -30,80 +35,117 @@ namespace ReservationGUI
         /*add party to appropriate list for reservations, walkins, and take outs*/
         private void addPartyButton_Click(object sender, EventArgs e)
         {
-            string hour = "";           //time of reservation
-            string min = "";            //time of reservation
-            string contactNum = "";     //contact phone number for party            
-            bool reservation = reservationRadioButton.Checked;  //if reservation selected then true
-            bool takeout = takeOutRadioButton.Checked;          //if takeout order then true
+            string hour = hourTextBox.Text;              //time of reservation
+            string min = minTextBox.Text;                //time of reservation
+            string contactNum = contactTextBox.Text;     //contact phone number for party  
+            bool fullReset = true;      //after execution, reset all input fields        
 
             //update party type
             if (walkInRadioButton.Checked) //if walk in
             {
-                //add walk in party to waitlist
-                wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
-                partyListBox.Items.Add(nameTextBox.Text); //add name to waitlist on GUI
+                if (checkInput(CHECK_WALKIN))
+                {
+                    //add walk in party to waitlist
+                    wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
+                    partyListBox.Items.Add(nameTextBox.Text); //add name to waitlist on GUI
+                }
             }
-            else if (reservation) //if reservation
+            else if (reservationRadioButton.Checked) //if reservation
             {
-                //get time of reservation and contact phone number
-                hour = hourTextBox.Text;
-                min = minTextBox.Text;
-                contactNum = contactTextBox.Text; 
+                if (checkInput(CHECK_RESERVATION))
+                {                  
+                    //add party to reservation list
+                    wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
+                    reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list                       
+                }
+            }
+            else if (takeOutRadioButton.Checked) //if take out 
+            {
+                if (checkInput(CHECK_TAKEOUT))
+                {
+                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
+                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list                       
+                }           
+            }
+            resetReservationForm(fullReset); //reset input fields             
+        }
 
-                //check if time is in proper form
-                if (checkTime(hour, min, reservation, takeout)) {                    
-                                        
-                    //check if the phone number is in proper form
-                    if (checkContact(contactNum))
+        /*checks input fields relevant to the type of guest*/      
+        private bool checkInput(int guestType)
+        {
+            bool inputValid = false;        //input is false unless proven otherwise
+
+            if(guestType == CHECK_WALKIN)   //if walk in guest
+            {
+                if (checkName()) //check valid party name
+                {
+                    if (checkGuestNum()) //check valid guest number
                     {
-                        //add party to reservation list
-                        wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
-                        reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list
-                    }
-                    else //invalid phone number form
-                    {
-                         MessageBox.Show("The contact number must be 7 digits with no special characters. " +
-                            "This reservation was not made, try again.");
+                        inputValid = true; //input proven valid
                     }
                 }
-                else //invalid inputs
-                {
-                    MessageBox.Show("You must fill in a valid reservation time " +
-                        "between 11:00 and 21:00 and more than an hour prior to dining! This reservation was not made, try again.");
-                }                
-
-                //reset time and contact input fields
-                resetTimeField();
-                resetContactField();
             }
-            else if (takeout) //if take out 
+            else if (guestType == CHECK_RESERVATION) //if reservation guest
             {
-                hour = hourTextBox.Text;            //order pick up hour
-                min = minTextBox.Text;              //order pick up minute
-                contactNum = contactTextBox.Text;   //contact phone number for party   
-                             
-                if (checkTime(hour, min, reservation, takeout))  //check if pick up time is valid
+                if (checkName()) //check valid party name
                 {
-                    if (checkContact(contactNum)) //check phone number is in valid form
+                    if (checkGuestNum()) //check valid guest number
                     {
-                        takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
-                        wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
-                    }
-                    else
-                    {
-                        MessageBox.Show("The contact number must be 7 digits with no special characters. " +
-                            "This order was not placed, try again.");
+                        //check if time is in proper form
+                        if (checkTime(hourTextBox.Text, minTextBox.Text, CHECK_RESERVATION))
+                        {
+                            //check if the phone number is in proper form
+                            if (checkContact(contactTextBox.Text))
+                            {
+                                inputValid = true; //reservation input has been proven valid
+                            }
+                        }
+                        else //invalid reservation time
+                        {
+                            MessageBox.Show("You must fill in a valid reservation time " +
+                                "between 11:00 and 21:00 and more than an hour prior to dining! This reservation was not made, try again.");
+                        }
                     }
                 }
-                else
-                {
-                    MessageBox.Show("That isn't a vaild time to pick up the order. The order was not placed. Try again.");
-                }                
-
-                //hide contact and time input fields
-                resetContactField();
-                resetTimeField(); 
             }
+            else if (guestType == CHECK_TAKEOUT) //if take out order guest
+            {
+                if (checkName()) //check valid order name
+                {
+                    if (checkTime(hourTextBox.Text, minTextBox.Text, CHECK_TAKEOUT))  //check if pick up time is valid
+                    {
+                        if (checkContact(contactTextBox.Text)) //check phone number is in valid form
+                        {
+                            inputValid = true; //take out order information is valid
+                        }
+                    }
+                    else //order pick up time is not valid
+                    {
+                        MessageBox.Show("That isn't a vaild time to pick up the order. The order was not placed. Try again.");
+                    }
+                }                
+            }
+
+            return inputValid; //true if input field for guest type is valid
+        }
+
+        /*checks if there is input for a name*/
+        private bool checkName()
+        {
+            bool validInput = false;            //true if there is a name
+            string name = nameTextBox.Text;     //gets name from GUI
+
+            name = name.Replace(" ", "");       //get rid of spaces
+
+            if(nameTextBox.Text != "") {
+                validInput = true; //true if there is some sort of name
+            }
+            else //there is no name
+            {
+                MessageBox.Show("You need to enter a name.");
+            }
+
+            return validInput; //true if there is a name
         }
 
         /*check if contact phone number is 7 digits*/
@@ -113,13 +155,20 @@ namespace ReservationGUI
             bool validForm = false; //valid form is false unless proved correct
 
             //set validForm to true if phone number is a 7 digit number
-            if(contactNum.Length == 7 && int.TryParse(contactNum, out check)) { validForm = true; }
+            if(contactNum.Length == 7 && int.TryParse(contactNum, out check)) {
+                validForm = true;
+            }
+            else //phone number is not valid
+            {
+                MessageBox.Show("The contact number must be 7 digits with no special characters. " +
+                           "Try again.");
+            }
 
-            return validForm;                     
+            return validForm; //true if phone number is 7 digits        
         }
 
         /*check for appropriate time*/
-        private bool checkTime(string hour, string min, bool reservation, bool takeout)
+        private bool checkTime(string hour, string min, int guestType)
         {
             int check;                  //counter to check if value is an integer
             bool timeInBounds = false;  //time is not in restaurant operating hours unless proved otherwise
@@ -133,58 +182,103 @@ namespace ReservationGUI
                 intMin = Convert.ToInt32(min);              //minute of reservation
 
                 //check if reservation is at an appropriate time 
-                if (reservation && intHour - DateTime.Now.Hour > 0 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
+                if (guestType == CHECK_RESERVATION)
                 {
-                    timeInBounds = true;
+                    if (intHour - DateTime.Now.Hour == 1 && intHour < 21 && intHour > 10 && intMin - DateTime.Now.Minute > -1 && intMin < 61) {
+                        timeInBounds = true;
+                    }
+                    else if(intHour - DateTime.Now.Hour > 1 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
+                    {
+                        timeInBounds = true;
+                    }
                 }
 
                 //check if takeout
-                if (takeout && intHour - DateTime.Now.Hour > -1 && intHour < 21 && intHour > 10 && intMin > DateTime.Now.Minute && intMin < 61)
+                if (guestType == CHECK_TAKEOUT)
                 {
-                    timeInBounds = true;
+                    if (intHour - DateTime.Now.Hour == 0 && intHour < 21 && intHour > 10 && intMin >= DateTime.Now.Minute && intMin < 61)
+                    {
+                        timeInBounds = true;
+                    }
+                    else if(intHour - DateTime.Now.Hour > 0 && intHour < 21 && intHour > 10 && intMin > -1 && intMin < 61)
+                    {
+                        timeInBounds = true;
+                    }
                 }
             }
 
             return timeInBounds; //true if time is during restaurant hours of operation
         }
 
-        /*hides the reservation time input fields*/
-        private void resetTimeField()
+        /*hides and clears the contact and time input fields, clears other input fields*/
+        private void resetReservationForm(bool fullReset)
         {
+            contactTextBox.Text = "";               //clear contact phone number input field
+            contactLabel.Visible = false;           //hide contact label
+            contactTextBox.Visible = false;         //hide contact phone number input field
             hourTextBox.Text = "";                  //clear hour input field
             minTextBox.Text = "";                   //clear minute input field
             timeLabel.Visible = false;              //hide time label
             timeDescriptionLabel.Visible = false;   //hide time description label
             hourTextBox.Visible = false;            //hide hour input field
             minTextBox.Visible = false;             //hide minute input field
+            
+            if (fullReset)
+            {
+                nameTextBox.Text = "";                  //clear input fields
+                guestNumTextBox.Text = "";
+                pagerNumTextBox.Text = "";
+                waitEstimateTextBox.Text = "";
+                requestsTextBox.Text = "";
+                walkInRadioButton.Checked = true;       //reset radio button selection to walk in
+            }
         }
 
-        /*hides and clears the contact input fields*/
-        private void resetContactField()
+        /*checks if the number of guests is valid*/
+        private bool checkGuestNum()
         {
-            contactTextBox.Text = "";               //clear contact phone number input field
-            contactLabel.Visible = false;           //hide contact label
-            contactTextBox.Visible = false;         //hide contact phone number input field
+            string guestNum = guestNumTextBox.Text; //get number of guests in party
+            int check;                              //int to check if string is an int
+            bool inputValid = false;                //true if guest number is valid  
+            int num = 0;                            //hold guest number in integer form
+
+            guestNum = guestNum.Replace(" ", ""); //take out spaces
+
+            //check for integer
+            if (int.TryParse(guestNum, out check))
+            {
+                num = Convert.ToInt32(guestNum); //convert guestnum to an integer
+                if ( num < 64 && num > 0)
+                {
+                    inputValid = true; //valid number of guests
+                }
+                else //not a valid number of guests, too many people or negative people or no people
+                {
+                    MessageBox.Show("You need to enter a valid number of guests.");
+                }
+            }
+            else //not a valid number of guests, could be letters
+            {
+                MessageBox.Show("You need to put the number of guests.");
+            }
+
+            return inputValid; //true if valid number of guests
         }
 
         /*estimates wait time based on tables available and party size*/
         private void guestNumTextBox_TextChanged(object sender, EventArgs e)
         {
             string guestNum = guestNumTextBox.Text; //get number of guests in party
-            int check;                              //int to check if string is an int
+            int check;                              //int to check if string is an int         
+
+            guestNum = guestNum.Replace(" ", ""); //take out spaces
 
             //check for integer
-            if(int.TryParse(guestNum, out check))
+            if (int.TryParse(guestNum, out check))
             {
-                addPartyButton.Enabled = true;
                 //if all tables are full show wait time
                 //No wait time for party of 4 or less if all tables are empty
-                waitEstimateTextBox.Text = wait.getWaitTime(Convert.ToInt32(guestNum)); 
-            }
-            else
-            {
-                addPartyButton.Enabled = false;
-                MessageBox.Show("You need to put the number of guests.");
+                waitEstimateTextBox.Text = wait.getWaitTime(Convert.ToInt32(guestNum));
             }
         }
 
@@ -201,8 +295,8 @@ namespace ReservationGUI
         private void takeOutRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             timeLabel.Text = "Pick Up Time:";    //change time label
-            showTimeFields();                               //show time fields
-            showContact();                                  //show contact input fields to get input
+            showTimeFields();                    //show time fields
+            showContact();                       //show contact input fields to get input
         }
 
         /*show the time fields so can get input*/
@@ -284,10 +378,9 @@ namespace ReservationGUI
 
         /*hide and clear contact and time input fields when walk in*/
         private void walkInRadioButton_CheckedChanged(object sender, EventArgs e)
-        {          
-            resetContactField();
-            resetTimeField();
-
+        {
+            bool fullReset = false;
+            resetReservationForm(fullReset);
         }
 
         /*Display the seat form GUI*/
