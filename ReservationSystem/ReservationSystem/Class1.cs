@@ -38,6 +38,8 @@ namespace ReservationSystem
         private LinkedList<int> tablesSeated;
         private DropboxClient dropbox;
 
+        private Party partyToSend; //hacky fix to Tasks not allowing params
+
         /**
          *  Ctor for the waitlist
          *  
@@ -61,6 +63,7 @@ namespace ReservationSystem
                 Directory.CreateDirectory(@"C:\ReceptionFiles");
             }
 
+            //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
 
 
@@ -169,6 +172,25 @@ namespace ReservationSystem
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
                 tablesSeated.AddLast(tableNum);
+
+                partyToSend = temp;
+                var task = Task.Run(toWaitStaff);
+                task.Wait();
+
+            }
+        }
+
+
+        /**
+         *  Sends a .txt file to WaitStaff with party info
+         **/
+        public async Task toWaitStaff()
+        {
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(partyToSend.waitstaffOutput())))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Waitstaff/ReceptionWaitstaff.txt",
+                    WriteMode.Add.Instance, true, body: mem);
             }
         }
 
@@ -267,10 +289,9 @@ namespace ReservationSystem
         }
 
     }
-}
 
 
-class Table
+    class Table
     {
         private bool inUse;
         private int peopleSeated;
@@ -425,6 +446,20 @@ class Table
             return seatedTime;
         }
 
+        /**
+         *  Creates the message to put to waitstaff
+         **/
+        public string waitstaffOutput()
+        {
+            string temp = "";
+
+            temp += tableNum + "\n";
+            temp += partySize + "\n";
+            temp += name + "\n";
+            temp += specialReq + "\n";
+
+            return temp;
+        }
 
         /**
          *  Outputs a string describing the associated times/tableNum with each party
@@ -446,3 +481,4 @@ class Table
         }
 
     }
+}

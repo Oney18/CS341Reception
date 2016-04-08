@@ -85,6 +85,18 @@ namespace ReservationGUI
             isSeated = seated;
         }
 
+        public bool isBigParty()
+        {
+            if (Int32.Parse(partySize) > 4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /**
          *  Called when a reservation arrives in restaurant
          *  Input is pager number given to the party
@@ -116,6 +128,21 @@ namespace ReservationGUI
             return seatedTime;
         }
 
+
+        /**
+         *  Creates the message to put to waitstaff
+         **/
+        public string waitstaffOutput()
+        {
+            string temp = "";
+
+            temp += tableNum + "\n";
+            temp += partySize + "\n";
+            temp += name + "\n";
+            temp += specialReq + "\n";
+
+            return temp;
+        }
 
 
         /**
