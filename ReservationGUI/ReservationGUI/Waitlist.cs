@@ -48,7 +48,7 @@ namespace ReservationGUI
 
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
-
+            
 
         }
 
@@ -251,6 +251,35 @@ namespace ReservationGUI
                 var updated = await dropbox.Files.UploadAsync(
                     "/CS 341/Management/ReceptionManagement.txt",
                     WriteMode.Overwrite.Instance, body: mem);
+            }
+        }
+
+
+        /**
+         *  NEED TO TEST THOUROUGHLY
+         **/
+        public async Task searchAndAct()
+        {
+            var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
+            if(results.Matches.Count > 0)
+            {
+                using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/WaitlistReception.txt"))
+                {
+                    resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+                }
+
+                await dropbox.Files.DeleteAsync("/CS 341/Reception/WaitlistReception.txt");
+                
+            }
+        }
+
+
+        public async Task testDownload()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/test.txt.txt"))
+            {
+                Console.WriteLine(await response.GetContentAsStringAsync());
+                Console.ReadKey();
             }
         }
 
