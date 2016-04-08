@@ -176,7 +176,6 @@ namespace ReservationGUI
             //check for integer
             if(int.TryParse(guestNum, out check))
             {
-
                 addPartyButton.Enabled = true;
                 //if all tables are full show wait time
                 //No wait time for party of 4 or less if all tables are empty
@@ -187,14 +186,13 @@ namespace ReservationGUI
                 addPartyButton.Enabled = false;
                 MessageBox.Show("You need to put the number of guests.");
             }
-
         }
 
         /*makes contact and time input fields visible when reservation radio button is selected*/
         private void reservationRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            //show reservation boxes to get time and contact for reservation
-            timeDescriptionLabel.Text = "Reservation Time:";
+            //show input fields to get time and contact info for reservation
+            timeLabel.Text = "Reservation Time:";
             showTimeFields();
             showContact();
         }
@@ -202,11 +200,12 @@ namespace ReservationGUI
         /*makes contact input fields visible when takeout radio button is selected*/
         private void takeOutRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            timeDescriptionLabel.Text = "Pick Up Time:";    //change time label
+            timeLabel.Text = "Pick Up Time:";    //change time label
             showTimeFields();                               //show time fields
             showContact();                                  //show contact input fields to get input
         }
 
+        /*show the time fields so can get input*/
         private void showTimeFields()
         {
             timeLabel.Visible = true;
