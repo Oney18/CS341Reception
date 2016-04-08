@@ -157,7 +157,15 @@ namespace ReservationGUI
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-                pastParties.Add(temp);
+
+                using (StreamWriter file =
+                    File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+                {
+                    
+                    file.WriteLine(temp.managementOutput());
+                    
+                }
+
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -185,22 +193,7 @@ namespace ReservationGUI
         }
 
 
-        /**
-         *  Creates a file under C:\Reception files to be outputted to Management
-         * 
-         *  Needs to be put into dropbox
-         **/
-        public void ToManagement()
-        { 
-            using (StreamWriter file =
-            File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-            {
-                foreach (Party party in pastParties)
-                {
-                    file.WriteLine(party.managementOutput());
-                }
-            }
-        }
+
        
         /*
          * cleanReportFromWaitstaff

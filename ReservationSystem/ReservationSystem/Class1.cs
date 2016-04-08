@@ -20,7 +20,6 @@ namespace ReservationSystem
             ws.seatNextParty(9);
             ws.resetTable(5);
             ws.resetTable(9);
-            ws.ToManagement();
         }
 
     }
@@ -173,7 +172,13 @@ namespace ReservationSystem
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
                 Party temp = tableList[tableNum].leave();
-                pastParties.Add(temp);
+
+                using (StreamWriter file =
+            File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
+                {
+                    file.WriteLine(temp.managementOutput());
+                }
+
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -200,23 +205,6 @@ namespace ReservationSystem
             return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1) * 45) - DateTime.Now).ToString();
         }
 
-
-        /**
-         *  Creates a file under C:\Reception files to be outputted to Management
-         * 
-         *  Needs to be put into dropbox
-         **/
-        public void ToManagement()
-        {
-            using (StreamWriter file =
-            File.AppendText(@"C:\ReceptionFiles\ReceptionManagement.txt"))
-            {
-                foreach (Party party in pastParties)
-                {
-                    file.WriteLine(party.managementOutput());
-                }
-            }
-        }
 
         /*
          * cleanReportFromWaitstaff
