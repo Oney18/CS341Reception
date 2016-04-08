@@ -80,6 +80,7 @@ namespace ReservationGUI
                 contactNum = contactTextBox.Text;   //contact phone number for party                
                 if (checkTime(hour, min) && checkContact(contactNum))  //check for length of phone number and if a valid number
                 {
+                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
                     wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
                 }
                 else
