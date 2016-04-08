@@ -48,11 +48,11 @@
             this.addPartyButton = new System.Windows.Forms.Button();
             this.reservationFormTitleLabel = new System.Windows.Forms.Label();
             this.seeTablesButton = new System.Windows.Forms.Button();
-            this.reservationTimeLabel = new System.Windows.Forms.Label();
-            this.reservationHourTextBox = new System.Windows.Forms.TextBox();
+            this.timeLabel = new System.Windows.Forms.Label();
+            this.hourTextBox = new System.Windows.Forms.TextBox();
             this.contactLabel = new System.Windows.Forms.Label();
             this.contactTextBox = new System.Windows.Forms.TextBox();
-            this.reservationMinTextBox = new System.Windows.Forms.TextBox();
+            this.minTextBox = new System.Windows.Forms.TextBox();
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
@@ -133,7 +133,7 @@
             this.waitEstimateTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.waitEstimateTextBox.Name = "waitEstimateTextBox";
             this.waitEstimateTextBox.ReadOnly = true;
-            this.waitEstimateTextBox.Size = new System.Drawing.Size(173, 30);
+            this.waitEstimateTextBox.Size = new System.Drawing.Size(131, 25);
             this.waitEstimateTextBox.TabIndex = 4;
             // 
             // waitEstimateLabel
@@ -289,9 +289,9 @@
             this.seeTablesButton.TabIndex = 10;
             this.seeTablesButton.Text = "See Tables";
             this.seeTablesButton.UseVisualStyleBackColor = false;
-            this.seeTablesButton.Click += new System.EventHandler(this.seatPartyButton_Click);
+            this.seeTablesButton.Click += new System.EventHandler(this.seeTablesButton_Click);
             // 
-            // reservationTimeLabel
+            // timeLabel
             // 
             this.reservationTimeLabel.AutoSize = true;
             this.reservationTimeLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -303,7 +303,7 @@
             this.reservationTimeLabel.Text = "Reservation Time:";
             this.reservationTimeLabel.Visible = false;
             // 
-            // reservationHourTextBox
+            // hourTextBox
             // 
             this.reservationHourTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.reservationHourTextBox.Location = new System.Drawing.Point(585, 394);
@@ -335,7 +335,7 @@
             this.contactTextBox.TabIndex = 19;
             this.contactTextBox.Visible = false;
             // 
-            // reservationMinTextBox
+            // minTextBox
             // 
             this.reservationMinTextBox.Font = new System.Drawing.Font("Monotype Corsiva", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.reservationMinTextBox.Location = new System.Drawing.Point(683, 393);
@@ -429,11 +429,11 @@
             this.Controls.Add(this.reservationsGroupBox);
             this.Controls.Add(this.takeOutGroupBox);
             this.Controls.Add(this.timeDescriptionLabel);
-            this.Controls.Add(this.reservationMinTextBox);
+            this.Controls.Add(this.minTextBox);
             this.Controls.Add(this.contactTextBox);
             this.Controls.Add(this.contactLabel);
-            this.Controls.Add(this.reservationHourTextBox);
-            this.Controls.Add(this.reservationTimeLabel);
+            this.Controls.Add(this.hourTextBox);
+            this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.seeTablesButton);
             this.Controls.Add(this.reservationFormTitleLabel);
             this.Controls.Add(this.addPartyButton);
@@ -485,11 +485,11 @@
         private System.Windows.Forms.Button addPartyButton;
         private System.Windows.Forms.Label reservationFormTitleLabel;
         private System.Windows.Forms.Button seeTablesButton;
-        private System.Windows.Forms.Label reservationTimeLabel;
-        private System.Windows.Forms.TextBox reservationHourTextBox;
+        private System.Windows.Forms.Label timeLabel;
+        private System.Windows.Forms.TextBox hourTextBox;
         private System.Windows.Forms.Label contactLabel;
         private System.Windows.Forms.TextBox contactTextBox;
-        private System.Windows.Forms.TextBox reservationMinTextBox;
+        private System.Windows.Forms.TextBox minTextBox;
         private System.Windows.Forms.Label timeDescriptionLabel;
         private System.Windows.Forms.GroupBox takeOutGroupBox;
         private System.Windows.Forms.GroupBox reservationsGroupBox;
