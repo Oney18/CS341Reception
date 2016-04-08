@@ -115,6 +115,21 @@ namespace ReservationGUI
         }
 
 
+        /**
+         *  Creates the message to put to waitstaff
+         **/
+        public string waitstaffOutput()
+        {
+            string temp = "";
+
+            temp += tableNum + "\n";
+            temp += partySize + "\n";
+            temp += name + "\n";
+            temp += specialReq + "\n";
+
+            return temp;
+        }
+
 
         /**
          *  Outputs a string describing the associated times/tableNum with each party

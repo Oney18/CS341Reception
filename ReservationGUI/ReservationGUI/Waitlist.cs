@@ -21,6 +21,8 @@ namespace ReservationGUI
         private LinkedList<int> tablesSeated;
         private DropboxClient dropbox;
 
+        private Party partyToSend; //hacky fix to Tasks not wanting params
+
         /**
          *  Ctor for the waitlist
          *  
@@ -153,6 +155,25 @@ namespace ReservationGUI
                 Party temp = getNextParty();
                 tableList[tableNum].seat(temp);
                 tablesSeated.AddLast(tableNum);
+
+                partyToSend = temp;
+                var task = Task.Run(toWaitStaff);
+                task.Wait();
+
+            }
+        }
+
+
+        /**
+         *  Sends a .txt file to WaitStaff with party info
+         **/
+        public async Task toWaitStaff()
+        {
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(partyToSend.waitstaffOutput())))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Waitstaff/ReceptionWaitstaff.txt",
+                    WriteMode.Add.Instance, true, body: mem);
             }
         }
 
