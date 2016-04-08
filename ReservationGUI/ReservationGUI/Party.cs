@@ -80,6 +80,11 @@ namespace ReservationGUI
             return isSeated;
         }
 
+        public void setIsSeated(bool seated)
+        {
+            isSeated = seated;
+        }
+
         /**
          *  Called when a reservation arrives in restaurant
          *  Input is pager number given to the party
@@ -110,6 +115,7 @@ namespace ReservationGUI
         {
             return seatedTime;
         }
+
 
 
         /**
