@@ -165,44 +165,72 @@ namespace ReservationGUI
          * 
          * reads through each line in recWait.txt in order to find names (not a number)
          * once we find a currently existing legal name, color it green
-         */ 
-        private void infoFromWaitStaff_updateTakeOutListBox()
+         */
+        private void infoFromWaitStaff_updateTakeOutListView()
         {
-            foreach(string line in File.ReadLines(@"C:\ReceptionFiles\recWait.txt"))
+            //color every name red to start off
+            foreach(ListViewItem item in takeOutListBox.Items)
             {
-                //if the line is not a number corresponding to a table
-                if (!(line.Contains("0") ||
-                   line.Contains("1") ||
-                   line.Contains("2") ||
-                   line.Contains("3") ||
-                   line.Contains("4") ||
-                   line.Contains("5") ||
-                   line.Contains("6") ||
-                   line.Contains("7") ||
-                   line.Contains("8") ||
-                   line.Contains("9") ||
-                   line.Contains("10") ||
-                   line.Contains("11") ||
-                   line.Contains("12") ||
-                   line.Contains("13") ||
-                   line.Contains("14") ||
-                   line.Contains("15")))
+                item.BackColor = Color.Red;
+            }
+
+            //read through the file given to us by waitstaff
+            string line = null;
+            using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
+            {
+                using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
                 {
-                    line.Trim(); //removes excess whitespace so that we only have the name
-                    //line.ToLower(); //converts to all lowercase
-                    if(takeOutListBox.Items.Contains(line)) //check to make sure we are editing a legal name
+                    // While not eof
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        int index = takeOutListBox.Items.IndexOf(line); //get index
-                        //TODO: takeOutListBox.Items[index]
+                        //if the line is not a number corresponding to a table, then it must be a name
+                        if (!(line.Contains("1") ||
+                               line.Contains("2") ||
+                               line.Contains("3") ||
+                               line.Contains("4") ||
+                               line.Contains("5") ||
+                               line.Contains("6") ||
+                               line.Contains("7") ||
+                               line.Contains("8") ||
+                               line.Contains("9") ||
+                               line.Contains("10") ||
+                               line.Contains("11") ||
+                               line.Contains("12") ||
+                               line.Contains("13") ||
+                               line.Contains("14") ||
+                               line.Contains("15") ||
+                               line.Contains("16")))
+                        {
+                            line.Trim(); //removes excess whitespace so that we only have the name
+                            foreach (ListViewItem item in takeOutListBox.Items)  //look through every item
+                            {
+                                if (item.ToString().Equals(line))   //if the item == line (the name we are looking for)
+                                {
+                                    //set Item.BackColor = Green
+                                    item.BackColor = Color.Green;
+                                    continue;   //continue here so that the already handled names are erased
+                                }
+                            }
+                        }
+                        writer.WriteLine(line); //write every line that contains a number back into the file,
+                                                //thereby erasing already handled names
                     }
                 }
             }
         }
+
         /*hide contact and time input fields when walk in*/
         private void walkInRadioButton_CheckedChanged(object sender, EventArgs e)
         {          
             hideContact();
             hideTime();
+        }
+
+        //called when reservation list is selected
+        //calls an IO function so might cause slowdown/hang **untested TODO**
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            infoFromWaitStaff_updateTakeOutListView();
         }
     }
 }

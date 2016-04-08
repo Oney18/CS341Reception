@@ -121,7 +121,7 @@ namespace ReservationGUI
 
 
         /**
-         *  Returns the enxt party to be seated
+         *  Returns the next party to be seated
          **/
         public Party getNextParty()
         {
@@ -192,8 +192,20 @@ namespace ReservationGUI
             return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
         }
 
-
-
+        /*
+         *cleanTableCheck
+         * 
+         * One minute after this function is called, cleanReportFromWaitstaff is called
+         * to check if any spots have opened up
+         * 
+         * Use this whenever
+         */
+        public async void cleanTableCheck()
+        {
+            int one_minute_in_ms = 60000;
+            await Task.Delay(one_minute_in_ms);
+            cleanReportFromWaitstaff();
+        }
        
         /*
          * cleanReportFromWaitstaff
@@ -205,30 +217,38 @@ namespace ReservationGUI
          */
         public void cleanReportFromWaitstaff()
         {
-            foreach (string line in File.ReadLines(@"C:\ReceptionFiles\recWait.txt"))
+            string line = null;
+            using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
             {
-                if(line.Contains("0") ||
-                   line.Contains("1") ||
-                   line.Contains("2") ||
-                   line.Contains("3") ||
-                   line.Contains("4") ||
-                   line.Contains("5") ||
-                   line.Contains("6") ||
-                   line.Contains("7") ||
-                   line.Contains("8") ||
-                   line.Contains("9") ||
-                   line.Contains("10") ||
-                   line.Contains("11") ||
-                   line.Contains("12") ||
-                   line.Contains("13") ||
-                   line.Contains("14") ||
-                   line.Contains("15"))
+                using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
                 {
-                    int tableNum = Int32.Parse(line);
-                    resetTable(tableNum);
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.Contains("1") ||
+                            line.Contains("2") ||
+                            line.Contains("3") ||
+                            line.Contains("4") ||
+                            line.Contains("5") ||
+                            line.Contains("6") ||
+                            line.Contains("7") ||
+                            line.Contains("8") ||
+                            line.Contains("9") ||
+                            line.Contains("10") ||
+                            line.Contains("11") ||
+                            line.Contains("12") ||
+                            line.Contains("13") ||
+                            line.Contains("14") ||
+                            line.Contains("15") ||
+                            line.Contains("16"))
+                            {
+                                int tableNum = int.Parse(line);
+                                resetTable(tableNum);
+                                continue;
+                            }
+                        writer.WriteLine(line);
+                    }
                 }
             }
         }
-
     }
 }
