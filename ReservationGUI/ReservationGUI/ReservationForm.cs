@@ -42,8 +42,18 @@ namespace ReservationGUI
             string contactNum = contactTextBox.Text;     //contact phone number for party  
             bool fullReset = true;      //after execution, reset all input fields        
 
-            //update party type
-            if (walkInRadioButton.Checked) //if walk in
+            //update party lists by guest type
+            if(walkInRadioButton.Checked && seatResCheckBox.Checked) //if reservation party is checking in
+            {
+                wait.checkIn(reservationsListBox.GetItemText(reservationsListBox.SelectedItem)); //check in reservation guest
+
+                //reset reservation check in check box option
+                seatResCheckBox.Checked = false;
+                seatResCheckBox.Visible = false;
+
+                resetFromSelected(); //reset form so new party can be selected or entered in
+            }
+            else if (walkInRadioButton.Checked) //if walk in
             {
                 if (checkInput(CHECK_WALKIN))
                 {
@@ -214,7 +224,7 @@ namespace ReservationGUI
 
         /*hides and clears the contact and time input fields, clears other input fields*/
         private void resetReservationForm(bool fullReset)
-        {
+        {            
             contactTextBox.Text = "";               //clear contact phone number input field
             contactLabel.Visible = false;           //hide contact label
             contactTextBox.Visible = false;         //hide contact phone number input field
@@ -402,12 +412,16 @@ namespace ReservationGUI
 
         private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool fullReset = true; //indicates full form reset
+
             //get selected name in party wait list
             string selected = partyListBox.GetItemText(partyListBox.SelectedItem);
 
-            walkIns = wait.getWalkIns();
+            walkIns = wait.getWalkIns(); //get walk in party list
 
             newPartyButton.Visible = true; //if user wants to add a new new party
+
+            resetReservationForm(fullReset); //reset form
 
             foreach (Party p in walkIns)
             {
@@ -416,21 +430,30 @@ namespace ReservationGUI
 
                     readOnlyFields(); //make input fields ready only and do not add to list
 
-                    showPartyInfo(p, selected); //show party info
+                    showPartyInfo(p, selected, CHECK_WALKIN); //show party info
                 }
             }
 
         }
 
-        private void showPartyInfo(Party p, string name)
+        private void showPartyInfo(Party p, string name, int guestType)
         {
             //fill in party info
             nameTextBox.Text = name;
             guestNumTextBox.Text = p.getPartySize() + "";
-            pagerNumTextBox.Text = p.getPagerNum() + "";
-            waitEstimateLabel.Text = "Party Arrived At: ";
-            waitEstimateTextBox.Text = p.getArrivalTime() + "";
+            pagerNumTextBox.Text = p.getPagerNum() + "";            
             requestsTextBox.Text = p.getSpecialReq();
+
+            if (guestType == CHECK_WALKIN)
+            {
+                waitEstimateLabel.Text = "Party Arrived At: ";
+                waitEstimateTextBox.Text = p.getArrivalTime() + "";
+            }
+            else
+            {
+                waitEstimateLabel.Visible = false;   //hide wait label
+                waitEstimateTextBox.Visible = false; //hide wait time
+            }
         }
 
         private void reservationsListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -440,18 +463,20 @@ namespace ReservationGUI
 
             selected = selected.Remove(selected.IndexOf(" ")); //crops string so only has name
 
+            seatResCheckBox.Visible = true; //allow user to select the reservation party 
+
             newPartyButton.Visible = true; //if user wants to add a new new party
 
-            reservations = wait.getReservations(); 
+            reservations = wait.getReservations(); //get parties that made reservations
 
-            foreach (Party p in reservations)
+            foreach (Party p in reservations) //check the parties in the reservation list
             {
-                if (p.getName().Equals(selected))
+                if (p.getName().Equals(selected)) //find selected party to get correct information
                 {
 
                     readOnlyFields(); //make input fields read only and do not readd to list
                     seatResCheckBox.Visible = true;
-                    showPartyInfo(p, selected); //show party info
+                    showPartyInfo(p, selected, CHECK_RESERVATION); //show party info
                     showTimeFields(); //show time input fields
                     showContact(); //show contact fields
                     contactTextBox.ReadOnly = true;
@@ -476,7 +501,13 @@ namespace ReservationGUI
         }
 
         private void newPartyButton_Click(object sender, EventArgs e)
-        {            
+        {
+            resetFromSelected();
+        }
+
+        /*resets form after having selected a name from the waitlist or reservation listboxes*/
+        private void resetFromSelected()
+        {
             resetReservationForm(true);    //reset reservation form to add new party
             addPartyButton.Enabled = true; //allow new party to be added
 
@@ -490,6 +521,14 @@ namespace ReservationGUI
             hourTextBox.ReadOnly = false;
 
             newPartyButton.Visible = false; //hide new party button
+            waitEstimateLabel.Visible = true; //show wait time
+            waitEstimateTextBox.Visible = true; //show wait time
+        }
+
+        private void seatResCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            pagerNumTextBox.ReadOnly = false; //allow pager number to be entered 
+            addPartyButton.Enabled = true; //allow party to be added
         }
     }
 }

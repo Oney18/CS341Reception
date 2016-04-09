@@ -139,7 +139,7 @@ namespace ReservationGUI
             if (walkIns.Count() > 0)
             {
                 Party temp = walkIns.First();
-                walkIns.RemoveFirst();
+                walkIns.RemoveFirst();                
                 return temp;
             }
             return null;

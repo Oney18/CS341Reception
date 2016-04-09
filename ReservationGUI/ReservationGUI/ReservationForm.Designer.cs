@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -346,7 +346,7 @@
             // takeOutListBox
             // 
             this.takeOutListBox.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
+            listViewItem2});
             this.takeOutListBox.LabelWrap = false;
             this.takeOutListBox.Location = new System.Drawing.Point(6, 22);
             this.takeOutListBox.Name = "takeOutListBox";
@@ -382,11 +382,12 @@
             this.seatResCheckBox.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seatResCheckBox.Location = new System.Drawing.Point(177, 235);
             this.seatResCheckBox.Name = "seatResCheckBox";
-            this.seatResCheckBox.Size = new System.Drawing.Size(171, 26);
+            this.seatResCheckBox.Size = new System.Drawing.Size(164, 26);
             this.seatResCheckBox.TabIndex = 22;
-            this.seatResCheckBox.Text = "seat reservation next";
+            this.seatResCheckBox.Text = "reservation check in";
             this.seatResCheckBox.UseVisualStyleBackColor = true;
             this.seatResCheckBox.Visible = false;
+            this.seatResCheckBox.CheckedChanged += new System.EventHandler(this.seatResCheckBox_CheckedChanged);
             // 
             // newPartyButton
             // 
