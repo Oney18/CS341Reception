@@ -246,14 +246,14 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(71, 20);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(70, 20);
             this.toolStripMenuItem1.Text = "Edit Table";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.editTable_Click);
             // 
             // seatTableToolStripMenuItem
             // 
             this.seatTableToolStripMenuItem.Name = "seatTableToolStripMenuItem";
-            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.seatTableToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.seatTableToolStripMenuItem.Text = "Seat Table";
             this.seatTableToolStripMenuItem.Click += new System.EventHandler(this.seatParty_Click);
             // 

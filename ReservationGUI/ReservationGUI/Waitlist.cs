@@ -51,7 +51,7 @@ namespace ReservationGUI
 
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
-
+            
             //waitCheck = Task.Run(waitstaffCheck); //I am not sure if this will persist after the constructor is called
             //IT DOES NOT
         }
@@ -214,7 +214,7 @@ namespace ReservationGUI
                     else
                     {
                         return "None";
-                    }
+                    }                    
                 }
             }
 
@@ -239,6 +239,11 @@ namespace ReservationGUI
             int one_minute_in_ms = 60000;
             await Task.Delay(one_minute_in_ms);
             cleanReportFromWaitstaff();
+	}
+
+        public ArrayList getReservations()
+        {
+            return reservations;
         }
 
         public LinkedList<Party> getWalkIns()
@@ -261,7 +266,7 @@ namespace ReservationGUI
             if (results.Matches.Count > 0) //checks to see if we need to append or create
             {
                 using (var response = await dropbox.Files.DownloadAsync("/CS 341/Management/ReceptionManagement.txt"))
-                {
+            {
                     manString += await response.GetContentAsStringAsync();
                 }
 
@@ -286,20 +291,20 @@ namespace ReservationGUI
         public async Task waitstaffCheck()
         {
             while (true) //this thread will never cease
-            {
+        {
 
-                var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
+            var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
                 if (results.Matches.Count > 0)
-                {
+            {
                     using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/WaitstaffReception.txt"))
-                    {
-                        resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
-                    }
+                {
+                    resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+                }
 
                     await dropbox.Files.DeleteAsync("/CS 341/Reception/WaitstaffReception.txt");
-
-                }
+                
             }
+        }
         }
 
 
@@ -345,11 +350,11 @@ namespace ReservationGUI
                             line.Contains("14") ||
                             line.Contains("15") ||
                             line.Contains("16"))
-                        {
-                            int tableNum = int.Parse(line);
-                            resetTable(tableNum);
-                            continue;
-                        }
+                            {
+                                int tableNum = int.Parse(line);
+                                resetTable(tableNum);
+                                continue;
+                            }
                         writer.WriteLine(line);
                     }
                 }
