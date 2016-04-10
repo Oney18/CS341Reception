@@ -22,6 +22,9 @@ namespace ReservationGUI
         private DropboxClient dropbox;
 
         private Party partyToSend; //hacky fix to Tasks not wanting params
+        private Party partyToLeave;
+
+        private Task waitCheck;
 
         /**
          *  Ctor for the waitlist
@@ -48,8 +51,9 @@ namespace ReservationGUI
 
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
-            
 
+            //waitCheck = Task.Run(waitstaffCheck); //I am not sure if this will persist after the constructor is called
+            //IT DOES NOT
         }
 
 
@@ -112,7 +116,7 @@ namespace ReservationGUI
          **/
         public void removeTakeOut(string name)
         {
-            foreach(Party p in takeOut)
+            foreach (Party p in takeOut)
             {
                 if (p.getName().Equals(name))
                 {
@@ -186,8 +190,9 @@ namespace ReservationGUI
         {
             if (tableList[tableNum].getInUse()) //checks to make sure table is in use
             {
-                Party temp = tableList[tableNum].leave();
-                pastParties.Add(temp);
+                partyToLeave = tableList[tableNum].leave();
+                var task = Task.Run(toManagement);
+                task.Wait();
                 tablesSeated.Remove(tableNum);
             }
         }
@@ -200,16 +205,16 @@ namespace ReservationGUI
         {
             foreach (Table t in tableList) //finds an empty table 
             {
-                if(!t.getInUse())
+                if (!t.getInUse())
                 {
-                    if(guestNum > 4)
+                    if (guestNum > 4)
                     {
                         return "5 Minutes";
                     }
                     else
                     {
                         return "None";
-                    }                    
+                    }
                 }
             }
 
@@ -218,7 +223,7 @@ namespace ReservationGUI
             int cyles = amtWaiting / 16; //represents amount of cyles of people neding to be seated
             amtWaiting = amtWaiting % 16;
 
-            return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1)*45) - DateTime.Now).ToString();
+            return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1) * 45) - DateTime.Now).ToString();
         }
 
         /*
@@ -234,7 +239,7 @@ namespace ReservationGUI
             int one_minute_in_ms = 60000;
             await Task.Delay(one_minute_in_ms);
             cleanReportFromWaitstaff();
-	}
+        }
 
         public LinkedList<Party> getWalkIns()
         {
@@ -248,10 +253,23 @@ namespace ReservationGUI
         {
             string manString = "";
 
-            foreach (Party p in pastParties)
+
+            var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
+
+            Console.WriteLine(results.Matches.Count);
+
+            if (results.Matches.Count > 0) //checks to see if we need to append or create
             {
-                manString += (p.managementOutput() + "\n");
+                using (var response = await dropbox.Files.DownloadAsync("/CS 341/Management/ReceptionManagement.txt"))
+                {
+                    manString += await response.GetContentAsStringAsync();
+                }
+
+                await dropbox.Files.DeleteAsync("/CS 341/management/ReceptionManagement.txt");
             }
+
+            //create the file
+            manString += partyToLeave.managementOutput() + "\n";
 
             using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
             {
@@ -265,18 +283,22 @@ namespace ReservationGUI
         /**
          *  NEED TO TEST THOUROUGHLY
          **/
-        public async Task searchAndAct()
+        public async Task waitstaffCheck()
         {
-            var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
-            if(results.Matches.Count > 0)
+            while (true) //this thread will never cease
             {
-                using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/WaitlistReception.txt"))
-                {
-                    resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
-                }
 
-                await dropbox.Files.DeleteAsync("/CS 341/Reception/WaitlistReception.txt");
-                
+                var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
+                if (results.Matches.Count > 0)
+                {
+                    using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/WaitstaffReception.txt"))
+                    {
+                        resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+                    }
+
+                    await dropbox.Files.DeleteAsync("/CS 341/Reception/WaitstaffReception.txt");
+
+                }
             }
         }
 
@@ -323,11 +345,11 @@ namespace ReservationGUI
                             line.Contains("14") ||
                             line.Contains("15") ||
                             line.Contains("16"))
-                            {
-                                int tableNum = int.Parse(line);
-                                resetTable(tableNum);
-                                continue;
-                            }
+                        {
+                            int tableNum = int.Parse(line);
+                            resetTable(tableNum);
+                            continue;
+                        }
                         writer.WriteLine(line);
                     }
                 }

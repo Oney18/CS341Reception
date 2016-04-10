@@ -8,6 +8,7 @@ using System.Text;
 using Dropbox.Api;
 using Dropbox.Api.Files;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ReservationSystem
 {
@@ -16,21 +17,16 @@ namespace ReservationSystem
         public static void Main()
         {
             Waitlist ws = new Waitlist(16);
-            /* ws.addWalkIn("3", "Oney", "food", "5");
-             ws.addWalkIn("2", "Somebody", "more food", "6");
-             ws.seatNextParty(5);
-             ws.seatNextParty(9);
-             ws.resetTable(5);
-             ws.resetTable(9);
-             var task = Task.Run(ws.toManagement);
-             task.Wait();*/
 
-            var task = Task.Run(ws.testDownload);
-            task.Wait();
-
-
+            ws.addWalkIn("3", "Oney", "food", "5");
+            ws.addWalkIn("2", "Somebody", "more food", "6");
+            ws.seatNextParty(7);
+            ws.seatNextParty(2);
+            Console.WriteLine("Add the files for 5 and 9!");
+            Console.ReadKey();
 
         }
+    }
 
         class Waitlist
         {
@@ -42,7 +38,10 @@ namespace ReservationSystem
             private LinkedList<int> tablesSeated;
             private DropboxClient dropbox;
 
-            private Party partyToSend; //hacky fix to Tasks not allowing params
+            private Party partyToSend; //hacky fix to Tasks not wanting params
+            private Party partyToLeave;
+
+            private Task waitCheck = Task.Run(waitstaffCheck);
 
             /**
              *  Ctor for the waitlist
@@ -62,7 +61,6 @@ namespace ReservationSystem
                     tableList[i] = new Table(i);
                 }
 
-
                 if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
                 {
                     Directory.CreateDirectory(@"C:\ReceptionFiles");
@@ -70,9 +68,7 @@ namespace ReservationSystem
 
                 //DO NOT MODIFY THIS LINE
                 dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
-
-
-            }
+        }
 
 
             /**
@@ -88,9 +84,10 @@ namespace ReservationSystem
             /**
              *  Constructor for adding in a takeout order
              **/
-            public void addTakeOut(string name, string phoneNum)
+            public void addTakeOut(string name, string phoneNum, int pickUpHour, int pickUpMin)
             {
-                takeOut.Add(new Party(name, phoneNum));
+                DateTime pickUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, pickUpHour, pickUpMin, 0);
+                takeOut.Add(new Party(name, phoneNum, pickUpTime));
             }
 
 
@@ -153,7 +150,7 @@ namespace ReservationSystem
 
 
             /**
-             *  Returns the enxt party to be seated
+             *  Returns the next party to be seated
              **/
             public Party getNextParty()
             {
@@ -178,9 +175,9 @@ namespace ReservationSystem
                     tableList[tableNum].seat(temp);
                     tablesSeated.AddLast(tableNum);
 
-                    partyToSend = temp;
-                    var task = Task.Run(toWaitStaff);
-                    task.Wait();
+                    //partyToSend = temp;
+                    //var task = Task.Run(toWaitStaff);
+                    //task.Wait();
 
                 }
             }
@@ -199,22 +196,6 @@ namespace ReservationSystem
                 }
             }
 
-            public async Task searchAndAct()
-            {
-                var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
-
-            }
-
-            public async Task testDownload()
-            {
-                using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/test.txt.txt"))
-                {
-                    Console.WriteLine(await response.GetContentAsStringAsync());
-                    Console.ReadKey();
-                    await dropbox.Files.DeleteAsync("/CS 341/Reception/test.txt.txt");
-                }
-            }
-
 
             /**
              *  Resets the table value and adds party to the list to be output to management
@@ -223,8 +204,9 @@ namespace ReservationSystem
             {
                 if (tableList[tableNum].getInUse()) //checks to make sure table is in use
                 {
-                    Party temp = tableList[tableNum].leave();
-                    pastParties.Add(temp);
+                    partyToLeave = tableList[tableNum].leave();
+                    var task = Task.Run(toManagement);
+                    task.Wait();
                     tablesSeated.Remove(tableNum);
                 }
             }
@@ -233,13 +215,20 @@ namespace ReservationSystem
             /**
              *  Gives the estimated waiting time for a party
              **/
-            public string getWaitTime()
+            public string getWaitTime(int guestNum)
             {
                 foreach (Table t in tableList) //finds an empty table 
                 {
                     if (!t.getInUse())
                     {
-                        return "None";
+                        if (guestNum > 4)
+                        {
+                            return "5 Minutes";
+                        }
+                        else
+                        {
+                            return "None";
+                        }
                     }
                 }
 
@@ -251,6 +240,25 @@ namespace ReservationSystem
                 return (tableList[amtWaiting].getParty().getSeatTime().AddMinutes((cyles + 1) * 45) - DateTime.Now).ToString();
             }
 
+            /*
+             *cleanTableCheck
+             * 
+             * One minute after this function is called, cleanReportFromWaitstaff is called
+             * to check if any spots have opened up
+             * 
+             * Use this whenever is necessary
+             */
+            public async void cleanTableCheck()
+            {
+                int one_minute_in_ms = 60000;
+                await Task.Delay(one_minute_in_ms);
+                cleanReportFromWaitstaff();
+            }
+
+            public LinkedList<Party> getWalkIns()
+            {
+                return walkIns;
+            }
 
             /**
              *  Puts management file onto dropbox
@@ -259,10 +267,23 @@ namespace ReservationSystem
             {
                 string manString = "";
 
-                foreach (Party p in pastParties)
+
+                var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
+
+                Console.WriteLine(results.Matches.Count);
+
+                if (results.Matches.Count > 0) //checks to see if we need to append or create
                 {
-                    manString += (p.managementOutput() + "\n");
+                    using (var response = await dropbox.Files.DownloadAsync("/CS 341/Management/ReceptionManagement.txt"))
+                    {
+                        manString += await response.GetContentAsStringAsync();
+                    }
+
+                    await dropbox.Files.DeleteAsync("/CS 341/management/ReceptionManagement.txt");
                 }
+
+                //create the file
+                manString += partyToLeave.managementOutput() + "\n";
 
                 using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
                 {
@@ -272,6 +293,38 @@ namespace ReservationSystem
                 }
             }
 
+
+            /**
+             *  NEED TO TEST THOUROUGHLY
+             **/
+            public async Task waitstaffCheck()
+            {
+                while (true) //this thread will never cease
+                {
+
+                    var results = await dropbox.Files.SearchAsync("/CS 341/Reception", "WaitstaffReception.txt");
+                    if (results.Matches.Count > 0)
+                    {
+                        using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/WaitstaffReception.txt"))
+                        {
+                            resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+                        }
+
+                        await dropbox.Files.DeleteAsync("/CS 341/Reception/WaitstaffReception.txt");
+
+                    }
+                }
+            }
+
+
+            public async Task testDownload()
+            {
+                using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/test.txt.txt"))
+                {
+                    Console.WriteLine(await response.GetContentAsStringAsync());
+                    Console.ReadKey();
+                }
+            }
 
             /*
              * cleanReportFromWaitstaff
@@ -283,32 +336,39 @@ namespace ReservationSystem
              */
             public void cleanReportFromWaitstaff()
             {
-                foreach (string line in File.ReadLines(@"C:\ReceptionFiles\recWait.txt"))
+                string line = null;
+                using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
                 {
-                    if (line.Contains("0") ||
-                       line.Contains("1") ||
-                       line.Contains("2") ||
-                       line.Contains("3") ||
-                       line.Contains("4") ||
-                       line.Contains("5") ||
-                       line.Contains("6") ||
-                       line.Contains("7") ||
-                       line.Contains("8") ||
-                       line.Contains("9") ||
-                       line.Contains("10") ||
-                       line.Contains("11") ||
-                       line.Contains("12") ||
-                       line.Contains("13") ||
-                       line.Contains("14") ||
-                       line.Contains("15") ||
-                       line.Contains("16"))
+                    using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
                     {
-                        int tableNum = Int32.Parse(line);
-                        resetTable(tableNum);
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            if (line.Contains("1") ||
+                                line.Contains("2") ||
+                                line.Contains("3") ||
+                                line.Contains("4") ||
+                                line.Contains("5") ||
+                                line.Contains("6") ||
+                                line.Contains("7") ||
+                                line.Contains("8") ||
+                                line.Contains("9") ||
+                                line.Contains("10") ||
+                                line.Contains("11") ||
+                                line.Contains("12") ||
+                                line.Contains("13") ||
+                                line.Contains("14") ||
+                                line.Contains("15") ||
+                                line.Contains("16"))
+                            {
+                                int tableNum = int.Parse(line);
+                                resetTable(tableNum);
+                                continue;
+                            }
+                            writer.WriteLine(line);
+                        }
                     }
                 }
             }
-
         }
 
 
@@ -378,6 +438,7 @@ namespace ReservationSystem
             public DateTime seatedTime;
             private DateTime reservationTime;
             public DateTime leaveTime;
+            private DateTime pickUpTime;
 
             // Walk-In Constructor
             public Party(string partySize, string name, string specialReq, string pagerNum)
@@ -400,10 +461,11 @@ namespace ReservationSystem
             }
 
             //Takeout Constructor
-            public Party(string name, string phoneNum)
+            public Party(string name, string phoneNum, DateTime pickUptime)
             {
                 this.name = name;
                 this.phoneNum = phoneNum;
+                this.pickUpTime = pickUptime;
             }
 
             public string getPartySize()
@@ -434,6 +496,23 @@ namespace ReservationSystem
             public bool getIsSeated()
             {
                 return isSeated;
+            }
+
+            public void setIsSeated(bool seated)
+            {
+                isSeated = seated;
+            }
+
+            public bool isBigParty()
+            {
+                if (Int32.Parse(partySize) > 4)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             /**
@@ -467,6 +546,7 @@ namespace ReservationSystem
                 return seatedTime;
             }
 
+
             /**
              *  Creates the message to put to waitstaff
              **/
@@ -481,6 +561,7 @@ namespace ReservationSystem
 
                 return temp;
             }
+
 
             /**
              *  Outputs a string describing the associated times/tableNum with each party
@@ -502,5 +583,4 @@ namespace ReservationSystem
             }
 
         }
-    }
 }
