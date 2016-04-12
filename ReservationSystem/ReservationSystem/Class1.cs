@@ -301,7 +301,7 @@ namespace ReservationSystem
          **/
         public async Task toManagement()
         {
-            string manString = "";
+            string manString = "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\n";
 
 
             var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
@@ -312,10 +312,10 @@ namespace ReservationSystem
             {
                 using (var response = await dropbox.Files.DownloadAsync("/CS 341/Management/ReceptionManagement.txt"))
                 {
-                    manString += await response.GetContentAsStringAsync();
+                    manString = await response.GetContentAsStringAsync();
                 }
 
-                await dropbox.Files.DeleteAsync("/CS 341/management/ReceptionManagement.txt");
+                await dropbox.Files.DeleteAsync("/CS 341/Management/ReceptionManagement.txt");
             }
 
             //create the file

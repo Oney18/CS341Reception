@@ -110,6 +110,10 @@ namespace ReservationGUI
             takeOut.Add(new Party(name, phoneNum, pickUpTime));
         }
 
+        public ArrayList getReservations()
+        {
+            return reservations;
+        }
 
         /**
          *  Checks in the given party based on name
@@ -303,7 +307,7 @@ namespace ReservationGUI
             }
 
             //create the file
-            manString += partyToLeave.managementOutput() + "\n";
+            manString += "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\n" + partyToLeave.managementOutput() + "\n";
 
             using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
             {
