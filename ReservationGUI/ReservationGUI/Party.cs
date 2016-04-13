@@ -143,7 +143,7 @@ namespace ReservationGUI
 
             temp += tableNum + "\n";
             temp += partySize + "\n";
-            temp += specialReq + "\n";
+            temp += specialReq + "\n\n";
 
             return temp;
         }
