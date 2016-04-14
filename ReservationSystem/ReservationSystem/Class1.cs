@@ -317,7 +317,7 @@ namespace ReservationSystem
          **/
         public async Task toManagement()
         {
-            string manString = "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\n";
+            string manString = "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\r\n";
 
 
             var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
@@ -335,7 +335,7 @@ namespace ReservationSystem
             }
 
             //create the file
-            manString += partyToLeave.managementOutput() + "\n";
+            manString += partyToLeave.managementOutput() + "\r\n";
 
             using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
             {
@@ -544,9 +544,9 @@ namespace ReservationSystem
             {
                 string temp = "";
 
-                temp += tableNum + "\n";
-                temp += partySize + "\n";
-                temp += specialReq + "\n\n";
+                temp += tableNum + "\r\n";
+                temp += partySize + "\r\n";
+                temp += specialReq + "\r\n\r\n";
 
                 return temp;
             }

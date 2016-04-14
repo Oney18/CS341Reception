@@ -46,15 +46,9 @@ namespace ReservationGUI
                 tableList[i] = new Table(i);
             }
 
-            if (!Directory.Exists(@"C:\ReceptionFiles")) //Create the directory if it is not there
-            {
-                Directory.CreateDirectory(@"C:\ReceptionFiles");
-            }
-
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
 
-            prevWait = "";
             waitCheck = new Thread(waitCheckThread);
             waitCheck.Start();
         }
@@ -202,6 +196,7 @@ namespace ReservationGUI
                 tablesSeated.AddLast(tableNum);
 
                 partyToSend = temp;
+                prevWait = "";
 
                 try
                 {
@@ -299,7 +294,7 @@ namespace ReservationGUI
          **/
         public async Task toManagement()
         {
-            string manString = "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\n";
+            string manString = "Day,Time_In,Time_Seated,Time_Left_Table,Table_Number\r\n";
 
 
             var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
@@ -315,7 +310,7 @@ namespace ReservationGUI
             }
 
             //create the file
-            manString += partyToLeave.managementOutput() + "\n";
+            manString += partyToLeave.managementOutput() + "\r\n";
 
             using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(manString)))
             {
