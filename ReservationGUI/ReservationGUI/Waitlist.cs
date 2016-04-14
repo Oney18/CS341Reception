@@ -22,10 +22,11 @@ namespace ReservationGUI
         private LinkedList<int> tablesSeated;
         private DropboxClient dropbox;
 
-        private Party partyToSend; //hacky fix to Tasks not wanting params
+        private Party partyToSend; //hacky fixes to Tasks not wanting params
         private Party partyToLeave;
+        private string prevWait;
 
-        private Thread waitCheck;
+        private Thread waitCheck; //runs the task of looking for waitstaff's reports
 
         /**
          *  Ctor for the waitlist
@@ -53,6 +54,7 @@ namespace ReservationGUI
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
 
+            prevWait = "";
             waitCheck = new Thread(waitCheckThread);
             waitCheck.Start();
         }
@@ -76,7 +78,7 @@ namespace ReservationGUI
                     
                     //who cares, try again 
                 }
-                Thread.Sleep(20000); //sleep for 20 seconds
+                Thread.Sleep(10000); //sleep for 10 seconds
             }
 
         }
@@ -200,8 +202,20 @@ namespace ReservationGUI
                 tablesSeated.AddLast(tableNum);
 
                 partyToSend = temp;
+
+                try
+                {
+                    var download = Task.Run(downloadWaitStaff);
+                    download.Wait();
+                }
+                catch (AggregateException ae)
+                {
+                    //no previous file
+                }
+
                 var task = Task.Run(toWaitStaff);
                 task.Wait();
+                
 
             }
         }
@@ -212,11 +226,22 @@ namespace ReservationGUI
          **/
         public async Task toWaitStaff()
         {
-            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(partyToSend.waitstaffOutput())))
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(prevWait + partyToSend.waitstaffOutput())))
             {
                 var updated = await dropbox.Files.UploadAsync(
                     "/CS 341/Waitstaff/recWait.txt",
                     WriteMode.Overwrite.Instance, true, body: mem);
+            }
+        }
+
+        /**
+         *  Downloads the textfile we sent to waitstaff if it exists, causes exception if otherwise
+         **/
+         public async Task downloadWaitStaff()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Waitstaff/recWait.txt"))
+            {
+               prevWait = await response.GetContentAsStringAsync();
             }
         }
 
@@ -287,8 +312,6 @@ namespace ReservationGUI
                 {
                     manString = await response.GetContentAsStringAsync();
                 }
-
-                await dropbox.Files.DeleteAsync("/CS 341/Management/ReceptionManagement.txt");
             }
 
             //create the file
@@ -304,7 +327,7 @@ namespace ReservationGUI
 
 
         /**
-         *  Downloads the report from 
+         *  Downloads the report from waitstaff, if DNE then throws exception on the task
          **/
         public async Task waitstaffCheck()
         {
