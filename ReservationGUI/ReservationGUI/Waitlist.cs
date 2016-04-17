@@ -151,7 +151,7 @@ namespace ReservationGUI
          *
          *  Only allows parties that are within one hour to be checked in
          **/
-        public void checkIn(string name)
+        public void checkIn(string name, int num)
         {
             Party partyToCheck = null;
 
@@ -160,6 +160,7 @@ namespace ReservationGUI
                 if (res.getName().Equals(name))
                 {
                     partyToCheck = res;
+                    res.arrive(""+num);
                     break;
                 }
             }
@@ -236,6 +237,11 @@ namespace ReservationGUI
                 return temp;
             }
             return null;
+        }
+
+        public ArrayList getTakeout()
+        {
+            return this.takeOut;
         }
 
 
@@ -356,8 +362,6 @@ namespace ReservationGUI
 
 
             var results = await dropbox.Files.SearchAsync("/CS 341/Management", "ReceptionManagement.txt");
-
-            Console.WriteLine(results.Matches.Count);
 
             if (results.Matches.Count > 0) //checks to see if we need to append or create
             {
