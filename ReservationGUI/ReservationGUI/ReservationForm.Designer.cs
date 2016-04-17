@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -55,11 +54,11 @@
             this.minTextBox = new System.Windows.Forms.TextBox();
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
-            this.takeOutListBox = new System.Windows.Forms.ListView();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.newPartyButton = new System.Windows.Forms.Button();
+            this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -343,18 +342,6 @@
             this.takeOutGroupBox.TabStop = false;
             this.takeOutGroupBox.Text = "Take Out Orders";
             // 
-            // takeOutListBox
-            // 
-            this.takeOutListBox.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-            this.takeOutListBox.LabelWrap = false;
-            this.takeOutListBox.Location = new System.Drawing.Point(6, 22);
-            this.takeOutListBox.Name = "takeOutListBox";
-            this.takeOutListBox.Size = new System.Drawing.Size(145, 94);
-            this.takeOutListBox.TabIndex = 11;
-            this.takeOutListBox.UseCompatibleStateImageBehavior = false;
-            this.takeOutListBox.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
             // reservationsGroupBox
             // 
             this.reservationsGroupBox.Controls.Add(this.reservationsListBox);
@@ -406,6 +393,15 @@
             this.newPartyButton.UseVisualStyleBackColor = false;
             this.newPartyButton.Visible = false;
             this.newPartyButton.Click += new System.EventHandler(this.newPartyButton_Click);
+            // 
+            // takeOutListBox
+            // 
+            this.takeOutListBox.FormattingEnabled = true;
+            this.takeOutListBox.ItemHeight = 22;
+            this.takeOutListBox.Location = new System.Drawing.Point(3, 24);
+            this.takeOutListBox.Name = "takeOutListBox";
+            this.takeOutListBox.Size = new System.Drawing.Size(147, 92);
+            this.takeOutListBox.TabIndex = 0;
             // 
             // ReservationsForm
             // 
@@ -483,8 +479,8 @@
         private System.Windows.Forms.GroupBox reservationsGroupBox;
         private System.Windows.Forms.ListBox reservationsListBox;
         private System.Windows.Forms.CheckBox seatResCheckBox;
-        private System.Windows.Forms.ListView takeOutListBox;
         private System.Windows.Forms.Button newPartyButton;
+        private System.Windows.Forms.ListBox takeOutListBox;
     }
 }
 
