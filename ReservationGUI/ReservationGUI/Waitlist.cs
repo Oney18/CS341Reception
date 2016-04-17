@@ -183,16 +183,9 @@ namespace ReservationGUI
         /**
          * Removes a party from the takeout list based on the name inputted
          **/
-        public void removeTakeOut(string name)
+        public void removeTakeOut()
         {
-            foreach (Party p in takeOut)
-            {
-                if (p.getName().Equals(name))
-                {
-                    takeOut.Remove(p);
-                    break;
-                }
-            }
+            takeOut.RemoveAt(0);
 
             if(takeOut.Count > 0)
             {

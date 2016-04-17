@@ -141,7 +141,7 @@ namespace ReservationGUI
         {
             string temp = "";
 
-            temp += tableNum + "\r\n";
+            temp += (tableNum+1) + "\r\n";
             temp += partySize + "\r\n";
             temp += specialReq + "\r\n\r\n";
 

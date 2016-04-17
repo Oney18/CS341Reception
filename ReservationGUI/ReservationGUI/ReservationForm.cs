@@ -33,7 +33,6 @@ namespace ReservationGUI
 
         public ReservationsForm()
         {
-            InitializeComponent();
 
             //start the thread to check for 
             waitNumCheck = new Thread(waitCheckNumThread);
@@ -41,6 +40,8 @@ namespace ReservationGUI
 
             waitNameCheck = new Thread(waitCheckNameThread);
             waitNameCheck.Start();
+
+            InitializeComponent();           
         }
 
         private void ReservationsForm_Load(object sender, EventArgs e)
@@ -76,18 +77,21 @@ namespace ReservationGUI
          **/
          private void waitCheckNameThread()
         {
-            try
+            while (true)
             {
-                var task = Task.Run(waitstaffNameCheck);
-                task.Wait();
-                task.Dispose();
-            }
-            catch (AggregateException)
-            {
+                try
+                {
+                    var task = Task.Run(waitstaffNameCheck);
+                    task.Wait();
+                    task.Dispose();
+                }
+                catch (AggregateException)
+                {
 
-                //who cares, try again 
+                    //who cares, try again 
+                }
+                Thread.Sleep(10000); //sleep for 10 seconds
             }
-            Thread.Sleep(10000); //sleep for 10 seconds
         }
 
 
@@ -113,8 +117,11 @@ namespace ReservationGUI
             using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecName.txt"))
             {
 
-                //DO THE GET TAKEOUT READY STUFF
-                wait.removeTakeOut(await response.GetContentAsStringAsync());
+                string temp = await response.GetContentAsStringAsync();
+                MessageBox.Show("ToGo Order for " + temp + " is ready.");
+                temp.Trim();
+                takeOutListBox.Items.Remove(temp);
+                wait.removeTakeOut();
             }
 
             await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
@@ -162,8 +169,8 @@ namespace ReservationGUI
             {
                 if (checkInput(CHECK_TAKEOUT))
                 {
-                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
-                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView                 
+                    wait.addTakeOut(nameTextBox.Text.Trim(), contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
+                    takeOutListBox.Items.Add(nameTextBox.Text.Trim()); //add just the name into the take out ListView               
                 }           
             }
             resetReservationForm(fullReset); //reset input fields             
