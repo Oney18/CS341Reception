@@ -162,8 +162,8 @@ namespace ReservationGUI
             {
                 if (checkInput(CHECK_TAKEOUT))
                 {
-                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
-                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list                       
+                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
+                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead                   
                 }           
             }
             resetReservationForm(fullReset); //reset input fields             
