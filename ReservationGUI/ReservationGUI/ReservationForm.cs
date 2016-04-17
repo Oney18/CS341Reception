@@ -266,27 +266,23 @@ namespace ReservationGUI
         {
             bool validInput = false;            //true if there is a name
             string name = nameTextBox.Text;     //gets name from GUI
-            LinkedList<Party> currentList;
+            LinkedList<Party> currentList = wait.getWalkIns();
             ArrayList specialList; 
             name = name.Replace(" ", "");       //get rid of spaces
 
             if(nameTextBox.Text != "") {
-                if (partyType == CHECK_WALKIN)
+                if (partyType == CHECK_WALKIN || partyType == CHECK_RESERVATION)
                 {
-                    currentList = wait.getWalkIns();
+                    specialList = wait.getReservations();
                     foreach (Party p in currentList)
                     {
                         if (p.getName().Equals(name))
                         {
                             MessageBox.Show("You need to enter a different name.");
                             return false;
-                        }
+                        }                        
                     }
-                    validInput = true; //true if there is some sort of name
-                }
-                else if (partyType == CHECK_RESERVATION)
-                {
-                    specialList = wait.getReservations();
+
                     foreach (Party p in specialList)
                     {
                         if (p.getName().Equals(name))
@@ -295,6 +291,7 @@ namespace ReservationGUI
                             return false;
                         }
                     }
+
                     validInput = true; //true if there is some sort of name
                 }
                 else if (partyType == CHECK_TAKEOUT)
