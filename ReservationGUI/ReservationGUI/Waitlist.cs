@@ -144,6 +144,11 @@ namespace ReservationGUI
 
         }
 
+        public Table[] getTables()
+        {
+            return tableList; 
+        }
+
 
         /**
          * Removes a party from the takeout list based on the name inputted

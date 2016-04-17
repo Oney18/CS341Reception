@@ -14,10 +14,10 @@ namespace ReservationGUI
 {
     public partial class ReservationsForm : Form
     {
-        private Waitlist wait = new Waitlist(16);                     //lists for current and past reservations, walk ins
-        private SeatingForm seat = new SeatingForm();                 //creates seating form
+        private Waitlist wait = new Waitlist(16);                     //lists for current and past reservations, walk ins        
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
         private ArrayList reservations = new ArrayList();
+        private Table[] tables;
 
         //determine type of guest to check input fields
         private int CHECK_WALKIN = 0;
@@ -399,7 +399,16 @@ namespace ReservationGUI
         /*Display the seat form GUI*/
         private void seeTablesButton_Click(object sender, EventArgs e)
         {
-            seat.Show();
+            tables = wait.getTables();
+            tablesComboBox.Items.Clear();
+            foreach (Table table in tables) {
+                if (table.getInUse()) { continue; }
+                tablesComboBox.Items.Add(table.getTableNum());
+            }          
+
+            resetReservationForm(true); //reset reservation form
+            tablesLabel.Visible = true;
+            tablesComboBox.Visible = true;               
         }
 
         //called when reservation list is selected
@@ -529,6 +538,14 @@ namespace ReservationGUI
         {
             pagerNumTextBox.ReadOnly = false; //allow pager number to be entered 
             addPartyButton.Enabled = true; //allow party to be added
+        }
+
+        private void tablesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int table = (int) tablesComboBox.SelectedItem;
+            tablesComboBox.Items.Clear();
+            tablesComboBox.Visible = false;
+            tablesLabel.Visible = false;
         }
     }
 }
