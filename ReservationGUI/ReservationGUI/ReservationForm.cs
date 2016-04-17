@@ -405,10 +405,10 @@ namespace ReservationGUI
         //called when reservation list is selected
         //calls an IO function so might cause slowdown/hang **untested TODO**
         //Might want to use the inner function of this when the Take Out Radio button is selected
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            infoFromWaitStaff_updateTakeOutListView();
-        }
+        //private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    infoFromWaitStaff_updateTakeOutListView();
+        //}
 
         private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
