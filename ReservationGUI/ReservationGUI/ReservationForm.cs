@@ -28,10 +28,6 @@ namespace ReservationGUI
 
         private DropboxClient dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K"); //dropbox client
 
-        private Party partyToSend; //hacky fixes to Tasks not wanting params
-        private Party partyToLeave;
-        private string prevWait;
-
         private Thread waitNumCheck;  //runs the task of looking for waitstaff's reports for numbers
         private Thread waitNameCheck; //runs the task of looking for waitstaff's reports for togo names
 
@@ -65,7 +61,7 @@ namespace ReservationGUI
                     task.Wait();
                     task.Dispose();
                 }
-                catch (AggregateException ae)
+                catch (AggregateException)
                 {
 
                     //who cares, try again 
@@ -86,7 +82,7 @@ namespace ReservationGUI
                 task.Wait();
                 task.Dispose();
             }
-            catch (AggregateException ae)
+            catch (AggregateException)
             {
 
                 //who cares, try again 

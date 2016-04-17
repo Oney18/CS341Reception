@@ -24,6 +24,7 @@ namespace ReservationGUI
 
         private Party partyToSend; //hacky fixes to Tasks not wanting params
         private Party partyToLeave;
+        private Party prevTakeout;
         private string prevWait;
 
         //private Thread waitCheck; //runs the task of looking for waitstaff's reports
@@ -67,7 +68,7 @@ namespace ReservationGUI
                     task.Wait();
                     task.Dispose();                   
                 }
-                catch (AggregateException ae)
+                catch (AggregateException)
                 {
                     
                     //who cares, try again 
@@ -103,7 +104,41 @@ namespace ReservationGUI
         public void addTakeOut(string name, string phoneNum, int pickUpHour, int pickUpMin)
         {
             DateTime pickUpTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, pickUpHour, pickUpMin, 0);
-            takeOut.Add(new Party(name, phoneNum, pickUpTime));
+            Party temp = new Party(name, phoneNum, pickUpTime);
+
+            takeOut.Add(temp);
+            if (takeOut.Count == 1) //initial takeout!
+            {
+                prevTakeout = temp;
+
+                try
+                {
+                    var download = Task.Run(downloadWaitStaff);
+                    download.Wait();
+                }
+                catch (AggregateException)
+                {
+                    //no previous file
+                }
+
+                var task = Task.Run(toWaitStaffTogo);
+                task.Wait();
+
+            }
+            
+        }
+
+        /** 
+         *  Sends a togo order to Waitstaff
+         **/
+        public async Task toWaitStaffTogo()
+        {
+            using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(prevWait + prevTakeout.waitstaffOutputTogo())))
+            {
+                var updated = await dropbox.Files.UploadAsync(
+                    "/CS 341/Waitstaff/recWait.txt",
+                    WriteMode.Overwrite.Instance, true, body: mem);
+            }
         }
 
         public ArrayList getReservations()
@@ -155,7 +190,27 @@ namespace ReservationGUI
                 if (p.getName().Equals(name))
                 {
                     takeOut.Remove(p);
+                    break;
                 }
+            }
+
+            if(takeOut.Count > 0)
+            {
+                prevTakeout = (Party) takeOut[0];
+
+                try
+                {
+                    var download = Task.Run(downloadWaitStaff);
+                    download.Wait();
+                }
+                catch (AggregateException)
+                {
+                    //no previous file
+                }
+
+                var task = Task.Run(toWaitStaffTogo);
+                task.Wait();
+
             }
         }
 
@@ -203,7 +258,7 @@ namespace ReservationGUI
                     var download = Task.Run(downloadWaitStaff);
                     download.Wait();
                 }
-                catch (AggregateException ae)
+                catch (AggregateException)
                 {
                     //no previous file
                 }
