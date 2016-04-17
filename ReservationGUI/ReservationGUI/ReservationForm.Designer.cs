@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -55,13 +54,14 @@
             this.minTextBox = new System.Windows.Forms.TextBox();
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
+            this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.newPartyButton = new System.Windows.Forms.Button();
             this.tablesComboBox = new System.Windows.Forms.ComboBox();
             this.tablesLabel = new System.Windows.Forms.Label();
-            this.takeOutListBox = new System.Windows.Forms.ListBox();
+            this.resetTakeoutOrders = new System.Windows.Forms.Button();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -239,9 +239,9 @@
             this.addPartyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addPartyButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.addPartyButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.addPartyButton.Location = new System.Drawing.Point(434, 395);
+            this.addPartyButton.Location = new System.Drawing.Point(445, 395);
             this.addPartyButton.Name = "addPartyButton";
-            this.addPartyButton.Size = new System.Drawing.Size(136, 32);
+            this.addPartyButton.Size = new System.Drawing.Size(125, 32);
             this.addPartyButton.TabIndex = 7;
             this.addPartyButton.Text = "Add Party";
             this.addPartyButton.UseVisualStyleBackColor = false;
@@ -266,9 +266,9 @@
             this.seatTablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.seatTablesButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.seatTablesButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.seatTablesButton.Location = new System.Drawing.Point(242, 395);
+            this.seatTablesButton.Location = new System.Drawing.Point(314, 395);
             this.seatTablesButton.Name = "seatTablesButton";
-            this.seatTablesButton.Size = new System.Drawing.Size(136, 32);
+            this.seatTablesButton.Size = new System.Drawing.Size(125, 32);
             this.seatTablesButton.TabIndex = 10;
             this.seatTablesButton.Text = "Seat Tables";
             this.seatTablesButton.UseVisualStyleBackColor = false;
@@ -345,6 +345,14 @@
             this.takeOutGroupBox.TabStop = false;
             this.takeOutGroupBox.Text = "Take Out Orders";
             // 
+            // takeOutListBox
+            // 
+            this.takeOutListBox.ItemHeight = 22;
+            this.takeOutListBox.Location = new System.Drawing.Point(6, 24);
+            this.takeOutListBox.Name = "takeOutListBox";
+            this.takeOutListBox.Size = new System.Drawing.Size(144, 92);
+            this.takeOutListBox.TabIndex = 0;
+            // 
             // reservationsGroupBox
             // 
             this.reservationsGroupBox.Controls.Add(this.reservationsListBox);
@@ -418,12 +426,30 @@
             this.tablesLabel.Text = "Avalible Tables:";
             this.tablesLabel.Visible = false;
             // 
+            // resetTakeoutOrders
+            // 
+            this.resetTakeoutOrders.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.resetTakeoutOrders.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.resetTakeoutOrders.FlatAppearance.BorderSize = 2;
+            this.resetTakeoutOrders.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.resetTakeoutOrders.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.resetTakeoutOrders.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetTakeoutOrders.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.resetTakeoutOrders.Location = new System.Drawing.Point(183, 366);
+            this.resetTakeoutOrders.Name = "resetTakeoutOrders";
+            this.resetTakeoutOrders.Size = new System.Drawing.Size(125, 61);
+            this.resetTakeoutOrders.TabIndex = 44;
+            this.resetTakeoutOrders.Text = "Reset Take Out List";
+            this.resetTakeoutOrders.UseVisualStyleBackColor = false;
+            this.resetTakeoutOrders.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ReservationsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(608, 439);
+            this.Controls.Add(this.resetTakeoutOrders);
             this.Controls.Add(this.tablesLabel);
             this.Controls.Add(this.tablesComboBox);
             this.Controls.Add(this.newPartyButton);
@@ -500,6 +526,7 @@
         private System.Windows.Forms.ComboBox tablesComboBox;
         private System.Windows.Forms.Label tablesLabel;
         private System.Windows.Forms.ListBox takeOutListBox;
+        private System.Windows.Forms.Button resetTakeoutOrders;
     }
 }
 

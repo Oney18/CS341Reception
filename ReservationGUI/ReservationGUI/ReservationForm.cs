@@ -20,6 +20,7 @@ namespace ReservationGUI
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
         private ArrayList reservations = new ArrayList();
         private Table[] tables;
+        private Hashtable togoTable;
 
         //determine type of guest to check input fields
         private int CHECK_WALKIN = 0;
@@ -33,7 +34,6 @@ namespace ReservationGUI
 
         public ReservationsForm()
         {
-            InitializeComponent();
 
             //start the thread to check for 
             waitNumCheck = new Thread(waitCheckNumThread);
@@ -41,6 +41,8 @@ namespace ReservationGUI
 
             waitNameCheck = new Thread(waitCheckNameThread);
             waitNameCheck.Start();
+
+            InitializeComponent();           
         }
 
         private void ReservationsForm_Load(object sender, EventArgs e)
@@ -76,18 +78,21 @@ namespace ReservationGUI
          **/
          private void waitCheckNameThread()
         {
-            try
+            while (true)
             {
-                var task = Task.Run(waitstaffNameCheck);
-                task.Wait();
-                task.Dispose();
-            }
-            catch (AggregateException)
-            {
+                try
+                {
+                    var task = Task.Run(waitstaffNameCheck);
+                    task.Wait();
+                    task.Dispose();
+                }
+                catch (AggregateException)
+                {
 
-                //who cares, try again 
+                    //who cares, try again 
+                }
+                Thread.Sleep(10000); //sleep for 10 seconds
             }
-            Thread.Sleep(10000); //sleep for 10 seconds
         }
 
 
@@ -98,7 +103,7 @@ namespace ReservationGUI
         {
             using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecNumber.txt"))
             {
-                wait.resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+                wait.resetTable(Convert.ToInt32((await response.GetContentAsStringAsync()))-1);
             }
 
             await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecNumber.txt");
@@ -113,11 +118,13 @@ namespace ReservationGUI
             using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecName.txt"))
             {
 
-                //DO THE GET TAKEOUT READY STUFF
-                wait.removeTakeOut(await response.GetContentAsStringAsync());
-            }
-
-            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
+                string temp = await response.GetContentAsStringAsync();
+                temp.Trim();
+                MessageBox.Show("ToGo Order for " + temp + " is ready.");
+                wait.removeTakeOut();
+                await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
+                
+            }         
         }
 
 
@@ -132,15 +139,22 @@ namespace ReservationGUI
             //update party lists by guest type
             if(walkInRadioButton.Checked && seatResCheckBox.Checked) //if reservation party is checking in
             {
-                int selectedIndex = reservationsListBox.SelectedIndex;
-                string item = reservationsListBox.GetItemText(reservationsListBox.SelectedItem);
-                item = item.Remove(item.IndexOf(" "));          //only get name of party
-                wait.checkIn(item);                             //check in reservation guest
+                if (checkPagerNum())
+                {
+                    int selectedIndex = reservationsListBox.SelectedIndex;
+                    string item = reservationsListBox.GetItemText(reservationsListBox.SelectedItem);
+                    item = item.Remove(item.IndexOf(" "));                  //only get name of party
+                    wait.checkIn(item, Int32.Parse(pagerNumTextBox.Text));  //check in reservation guest
 
-                reservationsListBox.Items.RemoveAt(selectedIndex); //remove party from reservation listbox
-                partyListBox.Items.Insert(0, item);                //add party to top of walkins
+                    reservationsListBox.Items.RemoveAt(selectedIndex);      //remove party from reservation listbox
+                    partyListBox.Items.Insert(0, item);                     //add party to top of walkins
 
-                resetFromSelected(); //reset form so new party can be selected or entered in
+                    resetFromSelected(); //reset form so new party can be selected or entered in
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a numerical pager number.");
+                }
             }
             else if (walkInRadioButton.Checked) //if walk in
             {
@@ -164,11 +178,25 @@ namespace ReservationGUI
             {
                 if (checkInput(CHECK_TAKEOUT))
                 {
-                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
-                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView                 
+                    wait.addTakeOut(nameTextBox.Text.Trim(), contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
+                    resetTakeout();                               
                 }           
             }
             resetReservationForm(fullReset); //reset input fields             
+        }
+
+        /* Checks to make sure pagerNum is valid */
+        private bool checkPagerNum()
+        {
+            int temp;
+            if (Int32.TryParse(pagerNumTextBox.Text, out temp)) //Is a number
+            {
+                return true;
+            }
+            else //Not a number
+            {
+                return false;
+            }
         }
 
         /*checks input fields relevant to the type of guest*/      
@@ -576,6 +604,30 @@ namespace ReservationGUI
             tablesLabel.Visible = false;                        //hid the tables label
             string partyName = wait.seatNextParty(table);       //seat the party at the selected table
             partyListBox.Items.Remove(partyName);               //remove party name from walkins
+        }
+
+
+        /**
+         *  Button to manually reset takeout lsit
+         **/
+        private void button1_Click(object sender, EventArgs e)
+        {
+            resetTakeout();
+        }
+        
+
+        /**
+         *  Resets the takeout list
+         **/
+        private void resetTakeout()
+        {
+            takeOutListBox.Items.Clear();
+            ArrayList temp = wait.getTakeout();
+
+            foreach (Party p in temp)
+            {
+                takeOutListBox.Items.Add(p.getName());
+            }
         }
     }
 }

@@ -141,7 +141,9 @@ namespace ReservationGUI
         {
             string temp = "";
 
-            temp += tableNum + "\r\n";
+            int num = Int32.Parse(tableNum) + 1;
+
+            temp += num + "\r\n";
             temp += partySize + "\r\n";
             temp += specialReq + "\r\n\r\n";
 
@@ -177,7 +179,7 @@ namespace ReservationGUI
             temp += ",";
             temp += leaveTime.ToString("HH", CultureInfo.CreateSpecificCulture("en-US")) + leaveTime.ToString("mm", CultureInfo.CreateSpecificCulture("en-US"));
             temp += ",";
-            temp += tableNum;
+            temp += (Int32.Parse(tableNum)+1);
 
             return temp;
         }
