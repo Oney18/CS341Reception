@@ -457,7 +457,6 @@ namespace ReservationGUI
             {
                 if(p.getName().Equals(selected))
                 {                                           
-
                     readOnlyFields(); //make input fields ready only and do not add to list
 
                     showPartyInfo(p, selected, CHECK_WALKIN); //show party info

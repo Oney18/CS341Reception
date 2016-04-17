@@ -166,6 +166,8 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
+                walkIns.AddFirst(partyToCheck);   //delete for actual use: line used to show how would work
+                reservations.Remove(partyToCheck);//delete for actual use: used to show how would work
                 if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
                     walkIns.AddFirst(partyToCheck);
