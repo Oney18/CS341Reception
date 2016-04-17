@@ -55,6 +55,11 @@ namespace ReservationGUI
             return arrivalTime;
         }
 
+        public DateTime getPickUpTime()
+        {
+            return pickUpTime;
+        }
+
         public string getPartySize()
         {
             return partySize;

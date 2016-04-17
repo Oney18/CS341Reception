@@ -352,6 +352,7 @@
             this.takeOutListBox.Name = "takeOutListBox";
             this.takeOutListBox.Size = new System.Drawing.Size(144, 92);
             this.takeOutListBox.TabIndex = 0;
+            this.takeOutListBox.SelectedIndexChanged += new System.EventHandler(this.takeOutListBox_SelectedIndexChanged);
             // 
             // reservationsGroupBox
             // 

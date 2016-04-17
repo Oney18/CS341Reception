@@ -19,6 +19,7 @@ namespace ReservationGUI
         private Waitlist wait = new Waitlist(16);                     //lists for current and past reservations, walk ins        
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
         private ArrayList reservations = new ArrayList();
+        private ArrayList takeout = new ArrayList();
         private Table[] tables;
         private Hashtable togoTable;
 
@@ -545,7 +546,7 @@ namespace ReservationGUI
             if (guestType == CHECK_WALKIN)
             {
                 waitEstimateLabel.Text = "Party Arrived At: ";
-                waitEstimateTextBox.Text = p.getArrivalTime() + "";
+                waitEstimateTextBox.Text = p.getArrivalTime().ToString("HH:mm:ss");
             }
             else
             {
@@ -668,6 +669,47 @@ namespace ReservationGUI
             foreach (Party p in temp)
             {
                 takeOutListBox.Items.Add(p.getName());
+            }
+        }
+
+
+        /**
+         * Show the takeout order's information
+         **/
+        private void takeOutListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //get selected name in resevation waitlist
+            string selected = takeOutListBox.GetItemText(takeOutListBox.SelectedItem);
+
+            if (selected != "")
+            {
+
+                selected.Trim(); //crops string so only has name
+
+                seatResCheckBox.Visible = false; //allow user to select the reservation party 
+
+                newPartyButton.Visible = true; //if user wants to add a new new party
+
+                takeout = wait.getTakeout(); //get parties that made takeout orders
+
+                foreach (Party p in takeout) //check the parties in the reservation list
+                {
+                    if (p.getName().Equals(selected)) //find selected party to get correct information
+                    {
+
+                        readOnlyFields(); //make input fields read only and do not readd to list
+                        seatResCheckBox.Visible = false;
+                        showPartyInfo(p, selected, CHECK_RESERVATION); //show party info
+                        showTimeFields(); //show time input fields
+                        showContact(); //show contact fields
+                        contactTextBox.ReadOnly = true;
+                        contactTextBox.Text = p.getPhoneNum();
+                        hourTextBox.ReadOnly = true;
+                        hourTextBox.ReadOnly = true;
+                        hourTextBox.Text = p.getPickUpTime().Hour + "";
+                        minTextBox.Text = p.getPickUpTime().Minute + "";
+                    }
+                }
             }
         }
     }
