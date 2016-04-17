@@ -163,6 +163,7 @@ namespace ReservationGUI
                     //add walk in party to waitlist
                     wait.addWalkIn(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, pagerNumTextBox.Text);
                     partyListBox.Items.Add(nameTextBox.Text); //add name to waitlist on GUI
+                    resetReservationForm(fullReset); //reset input fields   
                 }
             }
             else if (reservationRadioButton.Checked) //if reservation
@@ -171,7 +172,8 @@ namespace ReservationGUI
                 {                  
                     //add party to reservation list
                     wait.addReservation(guestNumTextBox.Text, nameTextBox.Text, requestsTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min));
-                    reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list                       
+                    reservationsListBox.Items.Add(nameTextBox.Text + " at " + hour + ":" + min); //add name to reservation list       
+                    resetReservationForm(fullReset); //reset input fields                   
                 }
             }
             else if (takeOutRadioButton.Checked) //if take out 
@@ -179,10 +181,10 @@ namespace ReservationGUI
                 if (checkInput(CHECK_TAKEOUT))
                 {
                     wait.addTakeOut(nameTextBox.Text.Trim(), contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list
-                    resetTakeout();                               
+                    resetTakeout();
+                    resetReservationForm(fullReset); //reset input fields                                  
                 }           
-            }
-            resetReservationForm(fullReset); //reset input fields             
+            }          
         }
 
         /* Checks to make sure pagerNum is valid */
