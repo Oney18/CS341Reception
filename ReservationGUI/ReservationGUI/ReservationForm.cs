@@ -206,7 +206,7 @@ namespace ReservationGUI
 
             if(guestType == CHECK_WALKIN)   //if walk in guest
             {
-                if (checkName()) //check valid party name
+                if (checkName(CHECK_WALKIN)) //check valid party name
                 {
                     if (checkGuestNum()) //check valid guest number
                     {
@@ -216,7 +216,7 @@ namespace ReservationGUI
             }
             else if (guestType == CHECK_RESERVATION) //if reservation guest
             {
-                if (checkName()) //check valid party name
+                if (checkName(CHECK_RESERVATION)) //check valid party name
                 {
                     if (checkGuestNum()) //check valid guest number
                     {
@@ -239,7 +239,7 @@ namespace ReservationGUI
             }
             else if (guestType == CHECK_TAKEOUT) //if take out order guest
             {
-                if (checkName()) //check valid order name
+                if (checkName(CHECK_TAKEOUT)) //check valid order name
                 {
                     if (checkTime(hourTextBox.Text, minTextBox.Text, CHECK_TAKEOUT))  //check if pick up time is valid
                     {
@@ -259,15 +259,54 @@ namespace ReservationGUI
         }
 
         /*checks if there is input for a name*/
-        private bool checkName()
+        private bool checkName(int partyType)
         {
             bool validInput = false;            //true if there is a name
             string name = nameTextBox.Text;     //gets name from GUI
-
+            LinkedList<Party> currentList;
+            ArrayList specialList; 
             name = name.Replace(" ", "");       //get rid of spaces
 
             if(nameTextBox.Text != "") {
-                validInput = true; //true if there is some sort of name
+                if (partyType == CHECK_WALKIN)
+                {
+                    currentList = wait.getWalkIns();
+                    foreach (Party p in currentList)
+                    {
+                        if (p.getName().Equals(name))
+                        {
+                            MessageBox.Show("You need to enter a different name.");
+                            return false;
+                        }
+                    }
+                    validInput = true; //true if there is some sort of name
+                }
+                else if (partyType == CHECK_RESERVATION)
+                {
+                    specialList = wait.getReservations();
+                    foreach (Party p in specialList)
+                    {
+                        if (p.getName().Equals(name))
+                        {
+                            MessageBox.Show("You need to enter a different name.");
+                            return false;
+                        }
+                    }
+                    validInput = true; //true if there is some sort of name
+                }
+                else if (partyType == CHECK_TAKEOUT)
+                {
+                    specialList = wait.getTakeout();
+                    foreach (Party p in specialList)
+                    {
+                        if (p.getName().Equals(name))
+                        {
+                            MessageBox.Show("You need to enter a different name.");
+                            return false;
+                        }
+                    }
+                    validInput = true; //true if there is some sort of name
+                }
             }
             else //there is no name
             {
