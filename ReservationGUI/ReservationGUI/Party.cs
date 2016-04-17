@@ -141,7 +141,9 @@ namespace ReservationGUI
         {
             string temp = "";
 
-            temp += (tableNum+1) + "\r\n";
+            int num = Int32.Parse(tableNum) + 1;
+
+            temp += num + "\r\n";
             temp += partySize + "\r\n";
             temp += specialReq + "\r\n\r\n";
 

@@ -20,6 +20,7 @@ namespace ReservationGUI
         private LinkedList<Party> walkIns = new LinkedList<Party>();  //used to access the walkin list from wait
         private ArrayList reservations = new ArrayList();
         private Table[] tables;
+        private Hashtable togoTable;
 
         //determine type of guest to check input fields
         private int CHECK_WALKIN = 0;
@@ -118,13 +119,38 @@ namespace ReservationGUI
             {
 
                 string temp = await response.GetContentAsStringAsync();
-                MessageBox.Show("ToGo Order for " + temp + " is ready.");
                 temp.Trim();
-                takeOutListBox.Items.Remove(temp);
+                MessageBox.Show("ToGo Order for " + temp + " is ready.");
                 wait.removeTakeOut();
-            }
+                await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
 
-            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
+
+                for (int n = takeOutListBox.Items.Count - 1; n >= 0; --n)
+                {
+                    if (takeOutListBox.Items[n].ToString().Contains(temp))
+                    {
+                        try {
+                            takeOutListBox.Items.RemoveAt(n);
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Data.ToString());
+                        }
+
+                    }
+                }
+
+                takeOutListBox.Update();
+                
+            }         
+        }
+
+        private void togoRemove(string name)
+        {
+            if (takeOutListBox.Items.Count > 0)
+            {
+                
+            }
         }
 
 
@@ -172,7 +198,7 @@ namespace ReservationGUI
                 if (checkInput(CHECK_TAKEOUT))
                 {
                     wait.addTakeOut(nameTextBox.Text.Trim(), contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
-                    takeOutListBox.Items.Add(nameTextBox.Text.Trim()); //add just the name into the take out ListView               
+                    takeOutListBox.Items.Add(nameTextBox.Text.Trim()); //add just the name into the take out ListView              
                 }           
             }
             resetReservationForm(fullReset); //reset input fields             

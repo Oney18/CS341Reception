@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -55,13 +54,13 @@
             this.minTextBox = new System.Windows.Forms.TextBox();
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
+            this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.newPartyButton = new System.Windows.Forms.Button();
             this.tablesComboBox = new System.Windows.Forms.ComboBox();
             this.tablesLabel = new System.Windows.Forms.Label();
-            this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -344,6 +343,14 @@
             this.takeOutGroupBox.TabIndex = 13;
             this.takeOutGroupBox.TabStop = false;
             this.takeOutGroupBox.Text = "Take Out Orders";
+            // 
+            // takeOutListBox
+            // 
+            this.takeOutListBox.ItemHeight = 22;
+            this.takeOutListBox.Location = new System.Drawing.Point(6, 24);
+            this.takeOutListBox.Name = "takeOutListBox";
+            this.takeOutListBox.Size = new System.Drawing.Size(144, 92);
+            this.takeOutListBox.TabIndex = 0;
             // 
             // reservationsGroupBox
             // 
