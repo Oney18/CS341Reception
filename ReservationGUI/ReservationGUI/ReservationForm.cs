@@ -45,11 +45,13 @@ namespace ReservationGUI
             //update party lists by guest type
             if(walkInRadioButton.Checked && seatResCheckBox.Checked) //if reservation party is checking in
             {
-                wait.checkIn(reservationsListBox.GetItemText(reservationsListBox.SelectedItem)); //check in reservation guest
+                int selectedIndex = reservationsListBox.SelectedIndex;
+                string item = reservationsListBox.GetItemText(reservationsListBox.SelectedItem);
+                item = item.Remove(item.IndexOf(" "));          //only get name of party
+                wait.checkIn(item);                             //check in reservation guest
 
-                //reset reservation check in check box option
-                seatResCheckBox.Checked = false;
-                seatResCheckBox.Visible = false;
+                reservationsListBox.Items.RemoveAt(selectedIndex); //remove party from reservation listbox
+                partyListBox.Items.Insert(0, item);                //add party to top of walkins
 
                 resetFromSelected(); //reset form so new party can be selected or entered in
             }
@@ -399,16 +401,15 @@ namespace ReservationGUI
         /*Display the seat form GUI*/
         private void seeTablesButton_Click(object sender, EventArgs e)
         {
-            tables = wait.getTables();
-            tablesComboBox.Items.Clear();
-            foreach (Table table in tables) {
+            tables = wait.getTables();              //get tables
+            foreach (Table table in tables) {       //add ready tables to combobox
                 if (table.getInUse()) { continue; }
                 tablesComboBox.Items.Add(table.getTableNum());
             }          
 
             resetReservationForm(true); //reset reservation form
-            tablesLabel.Visible = true;
-            tablesComboBox.Visible = true;               
+            tablesLabel.Visible = true; //show the tables label
+            tablesComboBox.Visible = true; //show the combo box
         }
 
         //called when reservation list is selected
@@ -422,6 +423,7 @@ namespace ReservationGUI
         private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool fullReset = true; //indicates full form reset
+            resetFromSelected();
 
             //get selected name in party wait list
             string selected = partyListBox.GetItemText(partyListBox.SelectedItem);
@@ -470,30 +472,34 @@ namespace ReservationGUI
             //get selected name in resevation waitlist
             string selected = reservationsListBox.GetItemText(reservationsListBox.SelectedItem);
 
-            selected = selected.Remove(selected.IndexOf(" ")); //crops string so only has name
-
-            seatResCheckBox.Visible = true; //allow user to select the reservation party 
-
-            newPartyButton.Visible = true; //if user wants to add a new new party
-
-            reservations = wait.getReservations(); //get parties that made reservations
-
-            foreach (Party p in reservations) //check the parties in the reservation list
+            if (selected != "")
             {
-                if (p.getName().Equals(selected)) //find selected party to get correct information
-                {
 
-                    readOnlyFields(); //make input fields read only and do not readd to list
-                    seatResCheckBox.Visible = true;
-                    showPartyInfo(p, selected, CHECK_RESERVATION); //show party info
-                    showTimeFields(); //show time input fields
-                    showContact(); //show contact fields
-                    contactTextBox.ReadOnly = true;
-                    contactTextBox.Text = p.getPhoneNum();
-                    hourTextBox.ReadOnly = true;
-                    hourTextBox.ReadOnly = true;
-                    hourTextBox.Text = p.getResTime().Hour + "";
-                    minTextBox.Text = p.getResTime().Minute + "";
+                selected = selected.Remove(selected.IndexOf(" ")); //crops string so only has name
+
+                seatResCheckBox.Visible = true; //allow user to select the reservation party 
+
+                newPartyButton.Visible = true; //if user wants to add a new new party
+
+                reservations = wait.getReservations(); //get parties that made reservations
+
+                foreach (Party p in reservations) //check the parties in the reservation list
+                {
+                    if (p.getName().Equals(selected)) //find selected party to get correct information
+                    {
+
+                        readOnlyFields(); //make input fields read only and do not readd to list
+                        seatResCheckBox.Visible = true;
+                        showPartyInfo(p, selected, CHECK_RESERVATION); //show party info
+                        showTimeFields(); //show time input fields
+                        showContact(); //show contact fields
+                        contactTextBox.ReadOnly = true;
+                        contactTextBox.Text = p.getPhoneNum();
+                        hourTextBox.ReadOnly = true;
+                        hourTextBox.ReadOnly = true;
+                        hourTextBox.Text = p.getResTime().Hour + "";
+                        minTextBox.Text = p.getResTime().Minute + "";
+                    }
                 }
             }
         }
@@ -520,6 +526,10 @@ namespace ReservationGUI
             resetReservationForm(true);    //reset reservation form to add new party
             addPartyButton.Enabled = true; //allow new party to be added
 
+            //reset reservation check in check box option
+            seatResCheckBox.Checked = false;
+            seatResCheckBox.Visible = false;
+
             //make input fields editable
             nameTextBox.ReadOnly = false;
             guestNumTextBox.ReadOnly = false;
@@ -542,10 +552,12 @@ namespace ReservationGUI
 
         private void tablesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int table = (int) tablesComboBox.SelectedItem;
-            tablesComboBox.Items.Clear();
-            tablesComboBox.Visible = false;
-            tablesLabel.Visible = false;
+            int table = (int) tablesComboBox.SelectedItem;      //get selected table number
+            tablesComboBox.Items.Clear();                       //clear the combobox
+            tablesComboBox.Visible = false;                     //hid the combobox
+            tablesLabel.Visible = false;                        //hid the tables label
+            string partyName = wait.seatNextParty(table);       //seat the party at the selected table
+            partyListBox.Items.Remove(partyName);               //remove party name from walkins
         }
     }
 }

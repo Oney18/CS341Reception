@@ -192,11 +192,13 @@ namespace ReservationGUI
         /**
          *  Seats the next party at the indicated table
          **/
-        public void seatNextParty(int tableNum)
+        public string seatNextParty(int tableNum)
         {
+            string partyName = "";
             if (!tableList[tableNum].getInUse()) //checks to make sure not already being used
-            {
+            {                
                 Party temp = getNextParty();
+                partyName = temp.getName();
                 tableList[tableNum].seat(temp);
                 tablesSeated.AddLast(tableNum);
 
@@ -218,6 +220,7 @@ namespace ReservationGUI
                 
 
             }
+            return partyName;
         }
 
 
