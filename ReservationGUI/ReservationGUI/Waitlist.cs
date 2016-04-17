@@ -26,7 +26,7 @@ namespace ReservationGUI
         private Party partyToLeave;
         private string prevWait;
 
-        private Thread waitCheck; //runs the task of looking for waitstaff's reports
+        //private Thread waitCheck; //runs the task of looking for waitstaff's reports
 
         /**
          *  Ctor for the waitlist
@@ -49,21 +49,21 @@ namespace ReservationGUI
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
 
-            waitCheck = new Thread(waitCheckThread);
-            waitCheck.Start();
+            //waitCheck = new Thread(waitCheckNumThread);
+            //waitCheck.Start();
         }
 
 
         /**
          * This thread will house the task to check the waitstaff input
          **/
-        private void waitCheckThread()
+        private void waitCheckNumThread()
         {
             while (true)
             {
                 try
                 {
-                    var task = Task.Run(waitstaffCheck);
+                    var task = Task.Run(waitstaffNumCheck);
                     task.Wait();
                     task.Dispose();                   
                 }
@@ -83,7 +83,7 @@ namespace ReservationGUI
          **/
         public void killThread()
         {
-            waitCheck.Abort();
+            //waitCheck.Abort();
         }
 
 
@@ -324,7 +324,7 @@ namespace ReservationGUI
         /**
          *  Downloads the report from waitstaff, if DNE then throws exception on the task
          **/
-        public async Task waitstaffCheck()
+        public async Task waitstaffNumCheck()
         {
             using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecNumber.txt"))
             {

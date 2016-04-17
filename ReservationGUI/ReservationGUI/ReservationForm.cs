@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using Dropbox.Api;
 
 namespace ReservationGUI
 {
@@ -24,15 +26,104 @@ namespace ReservationGUI
         private int CHECK_RESERVATION = 1;
         private int CHECK_TAKEOUT = 2;
 
+        private DropboxClient dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K"); //dropbox client
+
+        private Party partyToSend; //hacky fixes to Tasks not wanting params
+        private Party partyToLeave;
+        private string prevWait;
+
+        private Thread waitNumCheck;  //runs the task of looking for waitstaff's reports for numbers
+        private Thread waitNameCheck; //runs the task of looking for waitstaff's reports for togo names
+
         public ReservationsForm()
         {
             InitializeComponent();
+
+            //start the thread to check for 
+            waitNumCheck = new Thread(waitCheckNumThread);
+            waitNumCheck.Start();
+
+            waitNameCheck = new Thread(waitCheckNameThread);
+            waitNameCheck.Start();
         }
 
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
             
-        }        
+        }
+
+        /**
+         * This thread will house the task to check the waitstaff input
+         **/
+        private void waitCheckNumThread()
+        {
+            while (true)
+            {
+                try
+                {
+                    var task = Task.Run(waitstaffNumCheck);
+                    task.Wait();
+                    task.Dispose();
+                }
+                catch (AggregateException ae)
+                {
+
+                    //who cares, try again 
+                }
+                Thread.Sleep(10000); //sleep for 10 seconds
+            }
+
+        }
+
+        /**
+         * Tgus tgread will house the task to check the waitstaff input for togo names
+         **/
+         private void waitCheckNameThread()
+        {
+            try
+            {
+                var task = Task.Run(waitstaffNameCheck);
+                task.Wait();
+                task.Dispose();
+            }
+            catch (AggregateException ae)
+            {
+
+                //who cares, try again 
+            }
+            Thread.Sleep(10000); //sleep for 10 seconds
+        }
+
+
+        /**
+         *  Downloads the report from waitstaff, if DNE then throws exception on the task
+         **/
+        public async Task waitstaffNumCheck()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecNumber.txt"))
+            {
+                wait.resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+            }
+
+            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecNumber.txt");
+        }
+
+
+        /** 
+         *  Downloads report from waitstaff, if DNE throws exception on the task
+         **/
+         public async Task waitstaffNameCheck()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecName.txt"))
+            {
+
+                //DO THE GET TAKEOUT READY STUFF
+                wait.removeTakeOut(await response.GetContentAsStringAsync());
+            }
+
+            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecNumber.txt");
+        }
+
 
         /*add party to appropriate list for reservations, walkins, and take outs*/
         private void addPartyButton_Click(object sender, EventArgs e)
