@@ -43,6 +43,11 @@ namespace ReservationGUI
             return temp;
         }
 
+        public int getTableNum()
+        {
+            return tableNum;
+        }
+
         public bool getInUse()
         {
             return inUse;

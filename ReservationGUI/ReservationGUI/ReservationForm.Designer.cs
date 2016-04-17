@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("TakeOutOrders");
             this.seatingQueue = new System.Windows.Forms.GroupBox();
             this.partyListBox = new System.Windows.Forms.ListBox();
             this.nameTextBox = new System.Windows.Forms.TextBox();
@@ -46,7 +47,7 @@
             this.walkInRadioButton = new System.Windows.Forms.RadioButton();
             this.addPartyButton = new System.Windows.Forms.Button();
             this.reservationFormTitleLabel = new System.Windows.Forms.Label();
-            this.seeTablesButton = new System.Windows.Forms.Button();
+            this.seatTablesButton = new System.Windows.Forms.Button();
             this.timeLabel = new System.Windows.Forms.Label();
             this.hourTextBox = new System.Windows.Forms.TextBox();
             this.contactLabel = new System.Windows.Forms.Label();
@@ -58,6 +59,8 @@
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.newPartyButton = new System.Windows.Forms.Button();
+            this.tablesComboBox = new System.Windows.Forms.ComboBox();
+            this.tablesLabel = new System.Windows.Forms.Label();
             this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
@@ -254,22 +257,22 @@
             this.reservationFormTitleLabel.TabIndex = 14;
             this.reservationFormTitleLabel.Text = "Waitlist Handler";
             // 
-            // seeTablesButton
+            // seatTablesButton
             // 
-            this.seeTablesButton.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.seeTablesButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.seeTablesButton.FlatAppearance.BorderSize = 2;
-            this.seeTablesButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.seeTablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.seeTablesButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.seeTablesButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.seeTablesButton.Location = new System.Drawing.Point(242, 395);
-            this.seeTablesButton.Name = "seeTablesButton";
-            this.seeTablesButton.Size = new System.Drawing.Size(136, 32);
-            this.seeTablesButton.TabIndex = 10;
-            this.seeTablesButton.Text = "See Tables";
-            this.seeTablesButton.UseVisualStyleBackColor = false;
-            this.seeTablesButton.Click += new System.EventHandler(this.seeTablesButton_Click);
+            this.seatTablesButton.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.seatTablesButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.seatTablesButton.FlatAppearance.BorderSize = 2;
+            this.seatTablesButton.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.seatTablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.seatTablesButton.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.seatTablesButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.seatTablesButton.Location = new System.Drawing.Point(242, 395);
+            this.seatTablesButton.Name = "seatTablesButton";
+            this.seatTablesButton.Size = new System.Drawing.Size(136, 32);
+            this.seatTablesButton.TabIndex = 10;
+            this.seatTablesButton.Text = "Seat Tables";
+            this.seatTablesButton.UseVisualStyleBackColor = false;
+            this.seatTablesButton.Click += new System.EventHandler(this.seeTablesButton_Click);
             // 
             // timeLabel
             // 
@@ -394,14 +397,26 @@
             this.newPartyButton.Visible = false;
             this.newPartyButton.Click += new System.EventHandler(this.newPartyButton_Click);
             // 
-            // takeOutListBox
+            // tablesComboBox
             // 
-            this.takeOutListBox.FormattingEnabled = true;
-            this.takeOutListBox.ItemHeight = 22;
-            this.takeOutListBox.Location = new System.Drawing.Point(3, 24);
-            this.takeOutListBox.Name = "takeOutListBox";
-            this.takeOutListBox.Size = new System.Drawing.Size(147, 92);
-            this.takeOutListBox.TabIndex = 0;
+            this.tablesComboBox.FormattingEnabled = true;
+            this.tablesComboBox.Location = new System.Drawing.Point(352, 289);
+            this.tablesComboBox.Name = "tablesComboBox";
+            this.tablesComboBox.Size = new System.Drawing.Size(121, 21);
+            this.tablesComboBox.TabIndex = 42;
+            this.tablesComboBox.Visible = false;
+            this.tablesComboBox.SelectedIndexChanged += new System.EventHandler(this.tablesComboBox_SelectedIndexChanged);
+            // 
+            // tablesLabel
+            // 
+            this.tablesLabel.AutoSize = true;
+            this.tablesLabel.Font = new System.Drawing.Font("Monotype Corsiva", 14.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tablesLabel.Location = new System.Drawing.Point(318, 264);
+            this.tablesLabel.Name = "tablesLabel";
+            this.tablesLabel.Size = new System.Drawing.Size(121, 22);
+            this.tablesLabel.TabIndex = 43;
+            this.tablesLabel.Text = "Avalible Tables:";
+            this.tablesLabel.Visible = false;
             // 
             // ReservationsForm
             // 
@@ -409,6 +424,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(608, 439);
+            this.Controls.Add(this.tablesLabel);
+            this.Controls.Add(this.tablesComboBox);
             this.Controls.Add(this.newPartyButton);
             this.Controls.Add(this.seatResCheckBox);
             this.Controls.Add(this.reservationsGroupBox);
@@ -419,7 +436,7 @@
             this.Controls.Add(this.contactLabel);
             this.Controls.Add(this.hourTextBox);
             this.Controls.Add(this.timeLabel);
-            this.Controls.Add(this.seeTablesButton);
+            this.Controls.Add(this.seatTablesButton);
             this.Controls.Add(this.reservationFormTitleLabel);
             this.Controls.Add(this.addPartyButton);
             this.Controls.Add(this.partyTypeGroupBox);
@@ -468,7 +485,7 @@
         private System.Windows.Forms.RadioButton walkInRadioButton;
         private System.Windows.Forms.Button addPartyButton;
         private System.Windows.Forms.Label reservationFormTitleLabel;
-        private System.Windows.Forms.Button seeTablesButton;
+        private System.Windows.Forms.Button seatTablesButton;
         private System.Windows.Forms.Label timeLabel;
         private System.Windows.Forms.TextBox hourTextBox;
         private System.Windows.Forms.Label contactLabel;
@@ -480,6 +497,8 @@
         private System.Windows.Forms.ListBox reservationsListBox;
         private System.Windows.Forms.CheckBox seatResCheckBox;
         private System.Windows.Forms.Button newPartyButton;
+        private System.Windows.Forms.ComboBox tablesComboBox;
+        private System.Windows.Forms.Label tablesLabel;
         private System.Windows.Forms.ListBox takeOutListBox;
     }
 }

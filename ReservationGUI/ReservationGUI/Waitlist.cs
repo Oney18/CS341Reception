@@ -166,6 +166,8 @@ namespace ReservationGUI
 
             if (partyToCheck != null)
             {
+                walkIns.AddFirst(partyToCheck);   //delete for actual use: line used to show how would work
+                reservations.Remove(partyToCheck);//delete for actual use: used to show how would work
                 if ((partyToCheck.getResTime() - DateTime.Now).TotalHours <= 0) //within 1 hour before res time
                 {
                     walkIns.AddFirst(partyToCheck);
@@ -177,6 +179,11 @@ namespace ReservationGUI
                 Console.WriteLine("Could not find party under name {0}.", name); //could not find reservation
             }
 
+        }
+
+        public Table[] getTables()
+        {
+            return tableList; 
         }
 
 
@@ -235,11 +242,13 @@ namespace ReservationGUI
         /**
          *  Seats the next party at the indicated table
          **/
-        public void seatNextParty(int tableNum)
+        public string seatNextParty(int tableNum)
         {
+            string partyName = "";
             if (!tableList[tableNum].getInUse()) //checks to make sure not already being used
-            {
+            {                
                 Party temp = getNextParty();
+                partyName = temp.getName();
                 tableList[tableNum].seat(temp);
                 tablesSeated.AddLast(tableNum);
 
@@ -261,6 +270,7 @@ namespace ReservationGUI
                 
 
             }
+            return partyName;
         }
 
 
