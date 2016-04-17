@@ -121,7 +121,7 @@ namespace ReservationGUI
                 wait.removeTakeOut(await response.GetContentAsStringAsync());
             }
 
-            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecNumber.txt");
+            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
         }
 
 
