@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using Dropbox.Api;
 
 namespace ReservationGUI
 {
@@ -24,15 +26,100 @@ namespace ReservationGUI
         private int CHECK_RESERVATION = 1;
         private int CHECK_TAKEOUT = 2;
 
+        private DropboxClient dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K"); //dropbox client
+
+        private Thread waitNumCheck;  //runs the task of looking for waitstaff's reports for numbers
+        private Thread waitNameCheck; //runs the task of looking for waitstaff's reports for togo names
+
         public ReservationsForm()
         {
             InitializeComponent();
+
+            //start the thread to check for 
+            waitNumCheck = new Thread(waitCheckNumThread);
+            waitNumCheck.Start();
+
+            waitNameCheck = new Thread(waitCheckNameThread);
+            waitNameCheck.Start();
         }
 
         private void ReservationsForm_Load(object sender, EventArgs e)
         {
             
-        }        
+        }
+
+        /**
+         * This thread will house the task to check the waitstaff input
+         **/
+        private void waitCheckNumThread()
+        {
+            while (true)
+            {
+                try
+                {
+                    var task = Task.Run(waitstaffNumCheck);
+                    task.Wait();
+                    task.Dispose();
+                }
+                catch (AggregateException)
+                {
+
+                    //who cares, try again 
+                }
+                Thread.Sleep(10000); //sleep for 10 seconds
+            }
+
+        }
+
+        /**
+         * Tgus tgread will house the task to check the waitstaff input for togo names
+         **/
+         private void waitCheckNameThread()
+        {
+            try
+            {
+                var task = Task.Run(waitstaffNameCheck);
+                task.Wait();
+                task.Dispose();
+            }
+            catch (AggregateException)
+            {
+
+                //who cares, try again 
+            }
+            Thread.Sleep(10000); //sleep for 10 seconds
+        }
+
+
+        /**
+         *  Downloads the report from waitstaff, if DNE then throws exception on the task
+         **/
+        public async Task waitstaffNumCheck()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecNumber.txt"))
+            {
+                wait.resetTable(Convert.ToInt32(await response.GetContentAsStringAsync()));
+            }
+
+            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecNumber.txt");
+        }
+
+
+        /** 
+         *  Downloads report from waitstaff, if DNE throws exception on the task
+         **/
+         public async Task waitstaffNameCheck()
+        {
+            using (var response = await dropbox.Files.DownloadAsync("/CS 341/Reception/waitRecName.txt"))
+            {
+
+                //DO THE GET TAKEOUT READY STUFF
+                wait.removeTakeOut(await response.GetContentAsStringAsync());
+            }
+
+            await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
+        }
+
 
         /*add party to appropriate list for reservations, walkins, and take outs*/
         private void addPartyButton_Click(object sender, EventArgs e)
@@ -77,8 +164,8 @@ namespace ReservationGUI
             {
                 if (checkInput(CHECK_TAKEOUT))
                 {
-                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView **TODO: Might want to change this to add parties instead
-                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list                       
+                    wait.addTakeOut(nameTextBox.Text, contactNum, Convert.ToInt32(hour), Convert.ToInt32(min)); //add party to take out list    
+                    takeOutListBox.Items.Add(nameTextBox.Text); //add just the name into the take out ListView                 
                 }           
             }
             resetReservationForm(fullReset); //reset input fields             
@@ -331,66 +418,6 @@ namespace ReservationGUI
             contactTextBox.Visible = true;
         }
 
-        /*
-         * infoFromWaitStaff_updateTakeOutListBox()
-         * 
-         * reads through each line in recWait.txt in order to find names (not a number)
-         * once we find a currently existing legal name, color it green
-         */
-        private void infoFromWaitStaff_updateTakeOutListView()
-        {
-            //color every name red to start off
-            foreach(ListViewItem item in takeOutListBox.Items)
-            {
-                item.BackColor = Color.Red;
-            }
-
-            //read through the file given to us by waitstaff
-            string line = null;
-            using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
-            {
-                using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
-                {
-                    // While not eof
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        //if the line is not a number corresponding to a table, then it must be a name
-                        if (!(line.Contains("1") ||
-                               line.Contains("2") ||
-                               line.Contains("3") ||
-                               line.Contains("4") ||
-                               line.Contains("5") ||
-                               line.Contains("6") ||
-                               line.Contains("7") ||
-                               line.Contains("8") ||
-                               line.Contains("9") ||
-                               line.Contains("10") ||
-                               line.Contains("11") ||
-                               line.Contains("12") ||
-                               line.Contains("13") ||
-                               line.Contains("14") ||
-                               line.Contains("15") ||
-                               line.Contains("16")))
-                        {
-                            line.Trim(); //removes excess whitespace so that we only have the name
-                            foreach (ListViewItem item in takeOutListBox.Items)  //look through every item
-                            {
-                                if (item.ToString().Equals(line))   //if the item == line (the name we are looking for)
-                                {
-                                    //set Item.BackColor = Green
-                                    item.BackColor = Color.Green;
-                                    continue;   //continue here so that the already handled names are erased
-                                }
-                            }
-                        }
-                        writer.WriteLine(line); //write every line that contains a number back into the file,
-                                                //thereby erasing already handled names
-                    }
-                }
-            }
-        }
-
-
         /*hide and clear contact and time input fields when walk in*/
         private void walkInRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -410,14 +437,6 @@ namespace ReservationGUI
             resetReservationForm(true); //reset reservation form
             tablesLabel.Visible = true; //show the tables label
             tablesComboBox.Visible = true; //show the combo box
-        }
-
-        //called when reservation list is selected
-        //calls an IO function so might cause slowdown/hang **untested TODO**
-        //Might want to use the inner function of this when the Take Out Radio button is selected
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            infoFromWaitStaff_updateTakeOutListView();
         }
 
         private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)

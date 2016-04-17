@@ -150,6 +150,20 @@ namespace ReservationGUI
 
 
         /**
+         *  Creates the message to put to waitstaff
+         **/
+        public string waitstaffOutputTogo()
+        {
+            string temp = "";
+
+            temp += "17" + "\r\n";
+            temp += name + "\r\n\r\n";
+
+            return temp;
+        }
+
+
+        /**
          *  Outputs a string describing the associated times/tableNum with each party
          **/
         public string managementOutput()

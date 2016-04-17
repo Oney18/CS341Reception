@@ -55,13 +55,13 @@
             this.minTextBox = new System.Windows.Forms.TextBox();
             this.timeDescriptionLabel = new System.Windows.Forms.Label();
             this.takeOutGroupBox = new System.Windows.Forms.GroupBox();
-            this.takeOutListBox = new System.Windows.Forms.ListView();
             this.reservationsGroupBox = new System.Windows.Forms.GroupBox();
             this.reservationsListBox = new System.Windows.Forms.ListBox();
             this.seatResCheckBox = new System.Windows.Forms.CheckBox();
             this.newPartyButton = new System.Windows.Forms.Button();
             this.tablesComboBox = new System.Windows.Forms.ComboBox();
             this.tablesLabel = new System.Windows.Forms.Label();
+            this.takeOutListBox = new System.Windows.Forms.ListBox();
             this.seatingQueue.SuspendLayout();
             this.partyTypeGroupBox.SuspendLayout();
             this.takeOutGroupBox.SuspendLayout();
@@ -345,18 +345,6 @@
             this.takeOutGroupBox.TabStop = false;
             this.takeOutGroupBox.Text = "Take Out Orders";
             // 
-            // takeOutListBox
-            // 
-            this.takeOutListBox.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.takeOutListBox.LabelWrap = false;
-            this.takeOutListBox.Location = new System.Drawing.Point(6, 22);
-            this.takeOutListBox.Name = "takeOutListBox";
-            this.takeOutListBox.Size = new System.Drawing.Size(145, 94);
-            this.takeOutListBox.TabIndex = 11;
-            this.takeOutListBox.UseCompatibleStateImageBehavior = false;
-            this.takeOutListBox.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
             // reservationsGroupBox
             // 
             this.reservationsGroupBox.Controls.Add(this.reservationsListBox);
@@ -508,10 +496,10 @@
         private System.Windows.Forms.GroupBox reservationsGroupBox;
         private System.Windows.Forms.ListBox reservationsListBox;
         private System.Windows.Forms.CheckBox seatResCheckBox;
-        private System.Windows.Forms.ListView takeOutListBox;
         private System.Windows.Forms.Button newPartyButton;
         private System.Windows.Forms.ComboBox tablesComboBox;
         private System.Windows.Forms.Label tablesLabel;
+        private System.Windows.Forms.ListBox takeOutListBox;
     }
 }
 
