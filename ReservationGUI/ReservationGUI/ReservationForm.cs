@@ -420,66 +420,6 @@ namespace ReservationGUI
             contactTextBox.Visible = true;
         }
 
-        /*
-         * infoFromWaitStaff_updateTakeOutListBox()
-         * 
-         * reads through each line in recWait.txt in order to find names (not a number)
-         * once we find a currently existing legal name, color it green
-         */
-        private void infoFromWaitStaff_updateTakeOutListView()
-        {
-            //color every name red to start off
-            foreach(ListViewItem item in takeOutListBox.Items)
-            {
-                item.BackColor = Color.Red;
-            }
-
-            //read through the file given to us by waitstaff
-            string line = null;
-            using (StreamReader reader = new StreamReader(@"C:\ReceptionFiles\recWait.txt"))
-            {
-                using (StreamWriter writer = new StreamWriter(@"C:\ReceptionFiles\recWait.txt"))
-                {
-                    // While not eof
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        //if the line is not a number corresponding to a table, then it must be a name
-                        if (!(line.Contains("1") ||
-                               line.Contains("2") ||
-                               line.Contains("3") ||
-                               line.Contains("4") ||
-                               line.Contains("5") ||
-                               line.Contains("6") ||
-                               line.Contains("7") ||
-                               line.Contains("8") ||
-                               line.Contains("9") ||
-                               line.Contains("10") ||
-                               line.Contains("11") ||
-                               line.Contains("12") ||
-                               line.Contains("13") ||
-                               line.Contains("14") ||
-                               line.Contains("15") ||
-                               line.Contains("16")))
-                        {
-                            line.Trim(); //removes excess whitespace so that we only have the name
-                            foreach (ListViewItem item in takeOutListBox.Items)  //look through every item
-                            {
-                                if (item.ToString().Equals(line))   //if the item == line (the name we are looking for)
-                                {
-                                    //set Item.BackColor = Green
-                                    item.BackColor = Color.Green;
-                                    continue;   //continue here so that the already handled names are erased
-                                }
-                            }
-                        }
-                        writer.WriteLine(line); //write every line that contains a number back into the file,
-                                                //thereby erasing already handled names
-                    }
-                }
-            }
-        }
-
-
         /*hide and clear contact and time input fields when walk in*/
         private void walkInRadioButton_CheckedChanged(object sender, EventArgs e)
         {
