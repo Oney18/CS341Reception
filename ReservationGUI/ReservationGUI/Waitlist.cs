@@ -50,43 +50,7 @@ namespace ReservationGUI
             //DO NOT MODIFY THIS LINE
             dropbox = new DropboxClient("y6msKo4rz3AAAAAAAAAACGNSf5KM4CZh-mw4McAEU-3dStDkeEeTHWvELs2br12K");
 
-            //waitCheck = new Thread(waitCheckNumThread);
-            //waitCheck.Start();
         }
-
-
-        /**
-         * This thread will house the task to check the waitstaff input
-         **/
-        private void waitCheckNumThread()
-        {
-            while (true)
-            {
-                try
-                {
-                    var task = Task.Run(waitstaffNumCheck);
-                    task.Wait();
-                    task.Dispose();                   
-                }
-                catch (AggregateException)
-                {
-                    
-                    //who cares, try again 
-                }
-                Thread.Sleep(10000); //sleep for 10 seconds
-            }
-
-        }
-
-
-        /**
-         * As a result of creating an infinithread, this method MUST be called when the user wants to terminate the program
-         **/
-        public void killThread()
-        {
-            //waitCheck.Abort();
-        }
-
 
         /**
          * Constructor for adding a reservation
@@ -194,6 +158,7 @@ namespace ReservationGUI
          **/
         public void removeTakeOut()
         {
+            if(takeOut.Count > 0)
             takeOut.RemoveAt(0);
 
             if(takeOut.Count > 0)

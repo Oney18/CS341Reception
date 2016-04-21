@@ -21,7 +21,6 @@ namespace ReservationGUI
         private ArrayList reservations = new ArrayList();
         private ArrayList takeout = new ArrayList();
         private Table[] tables;
-        private Hashtable togoTable;
 
         //determine type of guest to check input fields
         private int CHECK_WALKIN = 0;
@@ -134,13 +133,10 @@ namespace ReservationGUI
                 string temp = await response.GetContentAsStringAsync();
                 await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
                 temp.Trim();
-                ArrayList takeout = wait.getTakeout();
 
-                if (takeout.Count > 0) //takes care of extra files from previous days
-                {
-                    MessageBox.Show("ToGo Order for " + temp + " is ready.");
-                    wait.removeTakeOut();
-                }
+                MessageBox.Show("ToGo Order for " + temp + " is ready.");
+                wait.removeTakeOut();
+
                 
             }         
         }
