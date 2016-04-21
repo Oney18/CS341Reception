@@ -135,16 +135,11 @@ namespace ReservationGUI
                 await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
                 temp.Trim();
                 ArrayList takeout = wait.getTakeout();
-                Party p;
 
                 if (takeout.Count > 0) //takes care of extra files from previous days
                 {
-                    p = (Party)takeout[0];
-                    if (p.getName().Equals(temp))
-                    {
-                        MessageBox.Show("ToGo Order for " + temp + " is ready.");
-                        wait.removeTakeOut();
-                    }
+                    MessageBox.Show("ToGo Order for " + temp + " is ready.");
+                    wait.removeTakeOut();
                 }
                 
             }         
