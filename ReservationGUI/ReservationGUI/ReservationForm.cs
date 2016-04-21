@@ -120,10 +120,20 @@ namespace ReservationGUI
             {
 
                 string temp = await response.GetContentAsStringAsync();
-                temp.Trim();
-                MessageBox.Show("ToGo Order for " + temp + " is ready.");
-                wait.removeTakeOut();
                 await dropbox.Files.DeleteAsync("/CS 341/Reception/waitRecName.txt");
+                temp.Trim();
+                ArrayList takeout = wait.getTakeout();
+                Party p;
+
+                if (takeout.Count > 0) //takes care of extra files from previous days
+                {
+                    p = (Party)takeout[0];
+                    if (p.getName().Equals(temp))
+                    {
+                        MessageBox.Show("ToGo Order for " + temp + " is ready.");
+                        wait.removeTakeOut();
+                    }
+                }
                 
             }         
         }
@@ -495,15 +505,20 @@ namespace ReservationGUI
         /*Display the seat form GUI*/
         private void seeTablesButton_Click(object sender, EventArgs e)
         {
-            tables = wait.getTables();              //get tables
-            foreach (Table table in tables) {       //add ready tables to combobox
-                if (table.getInUse()) { continue; }
-                tablesComboBox.Items.Add(table.getTableNum());
-            }          
+            LinkedList<Party> res = wait.getWalkIns();
+            if (res.Count > 0) //checks to make sure theres a party to seat
+            {
+                tables = wait.getTables();              //get tables
+                foreach (Table table in tables)
+                {       //add ready tables to combobox
+                    if (table.getInUse()) { continue; }
+                    tablesComboBox.Items.Add(table.getTableNum());
+                }
 
-            resetReservationForm(true); //reset reservation form
-            tablesLabel.Visible = true; //show the tables label
-            tablesComboBox.Visible = true; //show the combo box
+                resetReservationForm(true); //reset reservation form
+                tablesLabel.Visible = true; //show the tables label
+                tablesComboBox.Visible = true; //show the combo box
+            }
         }
 
         private void partyListBox_SelectedIndexChanged(object sender, EventArgs e)
