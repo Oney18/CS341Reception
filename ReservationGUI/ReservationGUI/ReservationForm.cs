@@ -52,6 +52,18 @@ namespace ReservationGUI
         }
 
         /**
+         *  Threads do not have a finish state, will be zombies on closing on Windows 7 computers
+         **/
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+           
+            waitNumCheck.Abort();
+            waitNameCheck.Abort();
+        
+            base.OnFormClosing(e);
+        }
+
+        /**
          * This thread will house the task to check the waitstaff input
          **/
         private void waitCheckNumThread()
